@@ -41,7 +41,7 @@ namespace TripMaker.Web.Host.Startup
             IdentityRegistrar.Register(services);
             AuthConfigurer.Configure(services, _appConfiguration);
 
-            services.AddSignalR();
+            //services.AddSignalR();
 
             // Configure CORS for angular2 UI
             services.AddCors(
@@ -101,10 +101,10 @@ namespace TripMaker.Web.Host.Startup
             app.UseAbpRequestLocalization();
 
 
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<AbpCommonHub>("/signalr");
-            });
+            //app.UseSignalR(routes =>
+            //{
+            //    routes.MapHub<AbpCommonHub>("/signalr");
+            //});
 
             app.UseMvc(routes =>
             {

@@ -47,5 +47,6 @@ namespace TripMaker.Web.Host.Controllers
 
             return Content("Sent notification: " + message);
         }
+
     }
 }

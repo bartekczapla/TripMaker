@@ -14,6 +14,7 @@ using TripMaker.EntityFrameworkCore;
 using TripMaker.EntityFrameworkCore.Seed.Host;
 using TripMaker.EntityFrameworkCore.Seed.Tenants;
 using TripMaker.MultiTenancy;
+using TripMaker.EntityFrameworkCore.Seed.Tuturial;
 
 namespace TripMaker.Tests
 {
@@ -34,6 +35,8 @@ namespace TripMaker.Tests
             {
                 NormalizeDbContext(context);
                 new InitialHostDbBuilder(context).Create();
+                //-----------------mySeed
+                new InitialSimpleTaskBuilder(context).Create();
                 new DefaultTenantBuilder(context).Create();
             });
 

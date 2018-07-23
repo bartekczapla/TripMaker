@@ -16,6 +16,7 @@ namespace TripMaker.EntityFrameworkCore.Seed.Host
             return new List<ApplicationLanguage>
             {
                 new ApplicationLanguage(null, "en", "English", "famfamfam-flags gb"),
+                new ApplicationLanguage(null, "pl", "Polski", "famfamfam-flags pl"),
                 new ApplicationLanguage(null, "ar", "العربية", "famfamfam-flags sa"),
                 new ApplicationLanguage(null, "de", "German", "famfamfam-flags de"),
                 new ApplicationLanguage(null, "it", "Italiano", "famfamfam-flags it"),

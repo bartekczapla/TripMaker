@@ -7,6 +7,7 @@ using Abp.EntityFrameworkCore.Uow;
 using Abp.MultiTenancy;
 using TripMaker.EntityFrameworkCore.Seed.Host;
 using TripMaker.EntityFrameworkCore.Seed.Tenants;
+using TripMaker.EntityFrameworkCore.Seed.Tuturial;
 
 namespace TripMaker.EntityFrameworkCore.Seed
 {
@@ -27,6 +28,9 @@ namespace TripMaker.EntityFrameworkCore.Seed
             // Default tenant seed (in host database).
             new DefaultTenantBuilder(context).Create();
             new TenantRoleAndUserBuilder(context, 1).Create();
+
+            //Tuturial seeds
+           // new InitialSimpleTaskBuilder(context).Create();
         }
 
         private static void WithDbContext<TDbContext>(IIocResolver iocResolver, Action<TDbContext> contextAction)

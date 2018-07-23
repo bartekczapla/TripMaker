@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TripMaker.EntityFrameworkCore;
 
 namespace TripMaker.Migrations
 {
     [DbContext(typeof(TripMakerDbContext))]
-    partial class TripMakerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180721090650_SeedSimpleTasks2")]
+    partial class SeedSimpleTasks2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1056,28 +1058,11 @@ namespace TripMaker.Migrations
                     b.ToTable("AbpTenants");
                 });
 
-            modelBuilder.Entity("TripMaker.Tutorial.Person", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(32);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AppPerson");
-                });
-
             modelBuilder.Entity("TripMaker.Tutorial.SimpleTask", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("AssignedPersonId");
 
                     b.Property<DateTime>("CreationTime");
 
@@ -1091,8 +1076,6 @@ namespace TripMaker.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AssignedPersonId");
 
                     b.ToTable("AppTasks");
                 });
@@ -1265,13 +1248,6 @@ namespace TripMaker.Migrations
                     b.HasOne("TripMaker.Authorization.Users.User", "LastModifierUser")
                         .WithMany()
                         .HasForeignKey("LastModifierUserId");
-                });
-
-            modelBuilder.Entity("TripMaker.Tutorial.SimpleTask", b =>
-                {
-                    b.HasOne("TripMaker.Tutorial.Person", "AssignedPerson")
-                        .WithMany()
-                        .HasForeignKey("AssignedPersonId");
                 });
 
             modelBuilder.Entity("Abp.Application.Features.EditionFeatureSetting", b =>
