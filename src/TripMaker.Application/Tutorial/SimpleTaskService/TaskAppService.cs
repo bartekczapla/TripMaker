@@ -15,10 +15,12 @@ namespace TripMaker.Tutorial
     public class TaskAppService : TripMakerAppServiceBase, ITaskAppService
     {
         private readonly IRepository<SimpleTask> _taskRepository;
+        private readonly IRepository<Person> _personRepository;
 
-        public TaskAppService(IRepository<SimpleTask> taskRepository)
+        public TaskAppService(IRepository<SimpleTask> taskRepository, IRepository<Person> personRepository)
         {
             _taskRepository = taskRepository;
+            _personRepository = personRepository;
         }
 
 
@@ -40,6 +42,22 @@ namespace TripMaker.Tutorial
         {
             var task = ObjectMapper.Map<SimpleTask>(input);
             await _taskRepository.InsertAsync(task);
+        }
+
+        public async Task Update(UpdateTaskInput input)
+        {
+            Logger.Info("Updating a task for input" + input);
+
+            var task = await _taskRepository.GetAsync(input.SimplaTaskId);
+            if (input.AssignedPersonId.HasValue)
+            {
+                task.AssignedPersonId = input.AssignedPersonId;
+            }
+            if (input.AssignedPersonId.HasValue)
+            {
+                task.AssignedPerson = _personRepository.Load(input.AssignedPersonId.Value);
+            }
+
         }
     }
 }

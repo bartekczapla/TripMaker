@@ -10,8 +10,10 @@ namespace TripMaker.EntityFrameworkCore
     public class TripMakerDbContext : AbpZeroDbContext<Tenant, Role, User, TripMakerDbContext>
     {
         /* Define a DbSet for each entity of the application */
-        public DbSet<Person> People { get; set; }
-        public DbSet<SimpleTask> Tasks { get; set; }
+        public virtual DbSet<Person> People { get; set; }
+        public virtual DbSet<SimpleTask> Tasks { get; set; }
+        public virtual DbSet<Event> Events { get; set; }
+        public virtual DbSet<EventRegistration> EventRegistrations { get; set; }
 
         public TripMakerDbContext(DbContextOptions<TripMakerDbContext> options)
             : base(options)
