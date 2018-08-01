@@ -10,6 +10,7 @@ using TripMaker.Authorization.Users;
 
 namespace TripMaker.Tutorial
 {
+    [Table("AppEventRegistration")]
     public class EventRegistration : CreationAuditedEntity
     {
 

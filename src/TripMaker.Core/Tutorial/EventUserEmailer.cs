@@ -53,24 +53,24 @@ namespace TripMaker.Tutorial
 
 
 
-            //var registeredUsers = AsyncHelper.RunSync(() => _eventManager.GetRegisteredUsersAsync(eventData.Entity));  <--------------------cos  z tym?
-            //foreach (var user in registeredUsers)
-            //{
-            //    var message = eventData.Entity.Title + " event's date is changed! New date is: " + eventData.Entity.Date;
-            //    Logger.Debug(string.Format("TODO: Send email to {0} -> {1}", user.EmailAddress, message));
-            //}
+            var registeredUsers = AsyncHelper.RunSync(() => _eventManager.GetRegisteredUsersAsync(eventData.Entity)); 
+            foreach (var user in registeredUsers)
+            {
+                var message = eventData.Entity.Title + " event's date is changed! New date is: " + eventData.Entity.Date;
+                Logger.Debug(string.Format("TODO: Send email to {0} -> {1}", user.EmailAddress, message));
+            }
         }
 
         public void HandleEvent(EventCancelledEvent eventData)
         {
             //TODO: Send email to all registered users!
 
-            //var registeredUsers = AsyncHelper.RunSync(() => _eventManager.GetRegisteredUsersAsync(eventData.Entity));
-            //foreach (var user in registeredUsers)
-            //{
-            //    var message = eventData.Entity.Title + " event is canceled!";
-            //    Logger.Debug(string.Format("TODO: Send email to {0} -> {1}", user.EmailAddress, message));
-            //}
+            var registeredUsers = AsyncHelper.RunSync(() => _eventManager.GetRegisteredUsersAsync(eventData.Entity));
+            foreach (var user in registeredUsers)
+            {
+                var message = eventData.Entity.Title + " event is canceled!";
+                Logger.Debug(string.Format("TODO: Send email to {0} -> {1}", user.EmailAddress, message));
+            }
         }
     }
 }
