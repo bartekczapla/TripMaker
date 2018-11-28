@@ -4,6 +4,7 @@ using TripMaker.Authorization.Roles;
 using TripMaker.Authorization.Users;
 using TripMaker.MultiTenancy;
 using TripMaker.Tutorial;
+using TripMaker.Plan;
 
 namespace TripMaker.EntityFrameworkCore
 {
@@ -14,6 +15,7 @@ namespace TripMaker.EntityFrameworkCore
         public virtual DbSet<SimpleTask> Tasks { get; set; }
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<EventRegistration> EventRegistrations { get; set; }
+        public virtual DbSet<Plan.Plan> Plans { get; set; } 
 
         public TripMakerDbContext(DbContextOptions<TripMakerDbContext> options)
             : base(options)
