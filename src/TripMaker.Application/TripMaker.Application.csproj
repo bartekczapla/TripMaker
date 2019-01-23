@@ -11,6 +11,7 @@
     <RootNamespace>TripMaker</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\TripMaker.ExternalServices\TripMaker.ExternalServices.csproj" />
     <ProjectReference Include="..\TripMaker.Core\TripMaker.Core.csproj" />
   </ItemGroup>
 </Project>

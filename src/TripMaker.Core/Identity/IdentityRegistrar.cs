@@ -13,6 +13,7 @@ namespace TripMaker.Identity
         public static IdentityBuilder Register(IServiceCollection services)
         {
             services.AddLogging();
+            
 
             return services.AddAbpIdentity<Tenant, User, Role>()
                 .AddAbpTenantManager<TenantManager>()

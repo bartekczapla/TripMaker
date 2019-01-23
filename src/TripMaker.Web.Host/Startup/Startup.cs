@@ -41,6 +41,7 @@ namespace TripMaker.Web.Host.Startup
             IdentityRegistrar.Register(services);
             AuthConfigurer.Configure(services, _appConfiguration);
 
+            HttpClientRegistrar.Register(services);
             //services.AddSignalR();
 
             // Configure CORS for angular2 UI

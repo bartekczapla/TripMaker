@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccess", "DataAccess", "{07F12504-7228-4FBD-BEEF-E7B7C06239FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripMaker.ExternalServices", "TripMaker.ExternalServices\TripMaker.ExternalServices.csproj", "{AB0271F0-54BB-41FE-9490-F91950BF6545}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{E0580562-F8F2-4EBB-B07A-ABFC6F2C314F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0580562-F8F2-4EBB-B07A-ABFC6F2C314F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0580562-F8F2-4EBB-B07A-ABFC6F2C314F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB0271F0-54BB-41FE-9490-F91950BF6545}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB0271F0-54BB-41FE-9490-F91950BF6545}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB0271F0-54BB-41FE-9490-F91950BF6545}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB0271F0-54BB-41FE-9490-F91950BF6545}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +79,7 @@ Global
 		{38E184BD-E874-4633-A947-AED4FDB73F40} = {351DBF9F-57BE-41AE-84E2-AFCA861C7DE8}
 		{22CFE0D2-8DCA-42D7-AD7D-784C3862493F} = {9B4C3763-C3EF-4907-974C-9DE55442CEAB}
 		{E0580562-F8F2-4EBB-B07A-ABFC6F2C314F} = {07F12504-7228-4FBD-BEEF-E7B7C06239FB}
+		{AB0271F0-54BB-41FE-9490-F91950BF6545} = {07F12504-7228-4FBD-BEEF-E7B7C06239FB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {66F66F3E-00CF-4E99-9C55-0A839E7B96F5}
