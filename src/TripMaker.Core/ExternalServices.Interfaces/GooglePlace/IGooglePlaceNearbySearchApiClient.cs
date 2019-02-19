@@ -13,6 +13,10 @@ namespace TripMaker.ExternalServices.Interfaces.GooglePlace
     {
         Task<GooglePlaceNearbySearchRootObject> GetAllAsync(Location location, int radius);
 
+        Task<GooglePlaceNearbySearchRootObject> GetAllNearestByKeyWordAsync(Location location, string keyword);
+
+        Task<GooglePlaceNearbySearchRootObject> GetAllNearestByTypeAsync(Location location, string type);
+
         Task<GooglePlaceNearbySearchRootObject> GetNextPageTokenAsync(string token);
     }
 }

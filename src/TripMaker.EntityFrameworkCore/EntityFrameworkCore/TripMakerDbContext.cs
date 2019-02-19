@@ -15,7 +15,8 @@ namespace TripMaker.EntityFrameworkCore
         public virtual DbSet<SimpleTask> Tasks { get; set; }
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<EventRegistration> EventRegistrations { get; set; }
-        public virtual DbSet<Plan.Plan> Plans { get; set; } 
+        public virtual DbSet<Plan.Plan> Plans { get; set; }
+        public virtual DbSet<SearchedPlace> SearchedPlace { get; set; }
 
         public TripMakerDbContext(DbContextOptions<TripMakerDbContext> options)
             : base(options)

@@ -23822,3 +23822,106 @@ INFO  2019-01-23 22:47:40,539 [16   ] ore.Mvc.Internal.ControllerActionInvoker -
 INFO  2019-01-23 22:47:40,746 [19   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
 INFO  2019-01-23 22:47:40,844 [19   ] ore.Mvc.Internal.ControllerActionInvoker - Executed action TripMaker.Plan.PlanAppService.GetPlanAsync (TripMaker.Application) in 167846.5916ms
 INFO  2019-01-23 22:47:40,865 [19   ] soft.AspNetCore.Hosting.Internal.WebHost - Request finished in 167964.0471ms 200 application/json; charset=utf-8
+DEBUG 2019-02-19 20:30:00,460 [1    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2019-02-19 20:30:00,998 [1    ] Abp.Modules.AbpModuleManager             - Found 15 ABP modules in total.
+DEBUG 2019-02-19 20:30:01,089 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: TripMaker.Web.Host.Startup.TripMakerWebHostModule, TripMaker.Web.Host, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2019-02-19 20:30:01,106 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: TripMaker.TripMakerWebCoreModule, TripMaker.Web.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2019-02-19 20:30:01,108 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: TripMaker.TripMakerApplicationModule, TripMaker.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2019-02-19 20:30:01,112 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: TripMaker.TripMakerCoreModule, TripMaker.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2019-02-19 20:30:01,113 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Zero.AbpZeroCoreModule, Abp.ZeroCore, Version=3.7.2.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2019-02-19 20:30:01,113 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Zero.AbpZeroCommonModule, Abp.Zero.Common, Version=3.7.2.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2019-02-19 20:30:01,152 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=3.7.2.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2019-02-19 20:30:01,154 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AutoMapper.AbpAutoMapperModule, Abp.AutoMapper, Version=3.7.2.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2019-02-19 20:30:01,155 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: TripMaker.EntityFrameworkCore.TripMakerEntityFrameworkModule, TripMaker.EntityFrameworkCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2019-02-19 20:30:01,155 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Zero.EntityFrameworkCore.AbpZeroCoreEntityFrameworkCoreModule, Abp.ZeroCore.EntityFrameworkCore, Version=3.7.2.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2019-02-19 20:30:01,159 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule, Abp.EntityFrameworkCore, Version=3.7.2.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2019-02-19 20:30:01,160 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkCommonModule, Abp.EntityFramework.Common, Version=3.7.2.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2019-02-19 20:30:01,163 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AspNetCore.AbpAspNetCoreModule, Abp.AspNetCore, Version=3.7.2.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2019-02-19 20:30:01,164 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Web.AbpWebCommonModule, Abp.Web.Common, Version=3.7.2.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2019-02-19 20:30:01,165 [1    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AspNetCore.SignalR.AbpAspNetCoreSignalRModule, Abp.AspNetCore.SignalR, Version=3.7.2.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2019-02-19 20:30:01,182 [1    ] Abp.Modules.AbpModuleManager             - 15 modules loaded.
+DEBUG 2019-02-19 20:30:01,657 [1    ] o.Configuration.LanguageManagementConfig - Converted Abp (Abp.Localization.Dictionaries.DictionaryBasedLocalizationSource) to MultiTenantLocalizationSource
+DEBUG 2019-02-19 20:30:01,657 [1    ] o.Configuration.LanguageManagementConfig - Converted AbpZero (Abp.Localization.Dictionaries.DictionaryBasedLocalizationSource) to MultiTenantLocalizationSource
+DEBUG 2019-02-19 20:30:01,657 [1    ] o.Configuration.LanguageManagementConfig - Converted TripMaker (Abp.Localization.Dictionaries.DictionaryBasedLocalizationSource) to MultiTenantLocalizationSource
+DEBUG 2019-02-19 20:30:01,657 [1    ] o.Configuration.LanguageManagementConfig - Converted AbpWeb (Abp.Localization.Dictionaries.DictionaryBasedLocalizationSource) to MultiTenantLocalizationSource
+DEBUG 2019-02-19 20:30:04,098 [1    ] ameworkCore.AbpEntityFrameworkCoreModule - Registering DbContext: TripMaker.EntityFrameworkCore.TripMakerDbContext, TripMaker.EntityFrameworkCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2019-02-19 20:30:07,711 [1    ] Abp.Localization.LocalizationManager     - Initializing 4 localization sources.
+DEBUG 2019-02-19 20:30:08,354 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2019-02-19 20:30:09,222 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpZero
+DEBUG 2019-02-19 20:30:09,490 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: TripMaker
+DEBUG 2019-02-19 20:30:09,837 [1    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpWeb
+DEBUG 2019-02-19 20:30:10,054 [1    ] Abp.BackgroundJobs.BackgroundJobManager  - Start background worker: Abp.BackgroundJobs.BackgroundJobManager
+DEBUG 2019-02-19 20:30:10,475 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - Found 15 classes define auto mapping attributes
+DEBUG 2019-02-19 20:30:10,475 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - TripMaker.Models.TokenAuth.ExternalLoginProviderInfoModel
+DEBUG 2019-02-19 20:30:10,520 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - TripMaker.Users.Dto.CreateUserDto
+DEBUG 2019-02-19 20:30:10,522 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - TripMaker.Users.Dto.UserDto
+DEBUG 2019-02-19 20:30:10,523 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - TripMaker.Tutorial.EventDetailOutput
+DEBUG 2019-02-19 20:30:10,523 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - TripMaker.Tutorial.EventListDto
+DEBUG 2019-02-19 20:30:10,523 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - TripMaker.Tutorial.EventRegistrationDto
+DEBUG 2019-02-19 20:30:10,523 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - TripMaker.Tutorial.Dto.CreateTaskInput
+DEBUG 2019-02-19 20:30:10,523 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - TripMaker.Tutorial.Dto.TaskListDto
+DEBUG 2019-02-19 20:30:10,523 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - TripMaker.Sessions.Dto.TenantLoginInfoDto
+DEBUG 2019-02-19 20:30:10,523 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - TripMaker.Sessions.Dto.UserLoginInfoDto
+DEBUG 2019-02-19 20:30:10,523 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - TripMaker.Roles.Dto.CreateRoleDto
+DEBUG 2019-02-19 20:30:10,523 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - TripMaker.Roles.Dto.PermissionDto
+DEBUG 2019-02-19 20:30:10,523 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - TripMaker.Roles.Dto.RoleDto
+DEBUG 2019-02-19 20:30:10,526 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - TripMaker.MultiTenancy.Dto.CreateTenantDto
+DEBUG 2019-02-19 20:30:10,526 [1    ] Abp.AutoMapper.AbpAutoMapperModule       - TripMaker.MultiTenancy.Dto.TenantDto
+INFO  2019-02-19 20:31:37,681 [13   ] soft.AspNetCore.Hosting.Internal.WebHost - Request starting HTTP/1.1 GET http://localhost:21021/  
+INFO  2019-02-19 20:33:38,023 [13   ] ore.Mvc.Internal.ControllerActionInvoker - Route matched with {action = "Index", controller = "Home", area = ""}. Executing action TripMaker.Web.Host.Controllers.HomeController.Index (TripMaker.Web.Host)
+INFO  2019-02-19 20:33:52,431 [13   ] ore.Mvc.Internal.ControllerActionInvoker - Executing action method TripMaker.Web.Host.Controllers.HomeController.Index (TripMaker.Web.Host) - Validation state: Valid
+INFO  2019-02-19 20:33:52,506 [13   ] ore.Mvc.Internal.ControllerActionInvoker - Executed action method TripMaker.Web.Host.Controllers.HomeController.Index (TripMaker.Web.Host), returned result Microsoft.AspNetCore.Mvc.RedirectResult in 16.2656ms.
+INFO  2019-02-19 20:33:54,135 [12   ] vc.Infrastructure.RedirectResultExecutor - Executing RedirectResult, redirecting to /swagger.
+INFO  2019-02-19 20:33:54,235 [12   ] ore.Mvc.Internal.ControllerActionInvoker - Executed action TripMaker.Web.Host.Controllers.HomeController.Index (TripMaker.Web.Host) in 16146.9352ms
+INFO  2019-02-19 20:33:54,577 [12   ] soft.AspNetCore.Hosting.Internal.WebHost - Request finished in 137008.04ms 302 
+INFO  2019-02-19 20:36:03,075 [7    ] soft.AspNetCore.Hosting.Internal.WebHost - Request starting HTTP/1.1 OPTIONS http://localhost:21021/AbpUserConfiguration/GetAll  
+INFO  2019-02-19 20:36:03,147 [7    ] pNetCore.Cors.Infrastructure.CorsService - Policy execution successful.
+INFO  2019-02-19 20:36:03,273 [7    ] soft.AspNetCore.Hosting.Internal.WebHost - Request finished in 219.6327ms 204 
+INFO  2019-02-19 20:36:03,395 [7    ] soft.AspNetCore.Hosting.Internal.WebHost - Request starting HTTP/1.1 GET http://localhost:21021/AbpUserConfiguration/GetAll application/json 
+INFO  2019-02-19 20:36:03,578 [7    ] pNetCore.Cors.Infrastructure.CorsService - Policy execution successful.
+INFO  2019-02-19 20:36:03,848 [7    ] uthentication.JwtBearer.JwtBearerHandler - JwtBearer was not authenticated. Failure message: No SecurityTokenValidator available for token: null
+WARN  2019-02-19 20:36:04,014 [7    ] calization.RequestLocalizationMiddleware - AbpLocalizationHeaderRequestCultureProvider returned the following unsupported cultures 'null'.
+WARN  2019-02-19 20:36:04,209 [7    ] calization.RequestLocalizationMiddleware - AbpLocalizationHeaderRequestCultureProvider returned the following unsupported UI Cultures 'null'.
+INFO  2019-02-19 20:36:04,429 [7    ] ore.Mvc.Internal.ControllerActionInvoker - Route matched with {action = "GetAll", controller = "AbpUserConfiguration", area = ""}. Executing action Abp.AspNetCore.Mvc.Controllers.AbpUserConfigurationController.GetAll (Abp.AspNetCore)
+INFO  2019-02-19 20:36:04,675 [7    ] pNetCore.Cors.Infrastructure.CorsService - Policy execution successful.
+INFO  2019-02-19 20:36:05,232 [7    ] ore.Mvc.Internal.ControllerActionInvoker - Executing action method Abp.AspNetCore.Mvc.Controllers.AbpUserConfigurationController.GetAll (Abp.AspNetCore) - Validation state: Valid
+INFO  2019-02-19 20:36:18,487 [7    ] ore.Mvc.Internal.ControllerActionInvoker - Executed action method Abp.AspNetCore.Mvc.Controllers.AbpUserConfigurationController.GetAll (Abp.AspNetCore), returned result Microsoft.AspNetCore.Mvc.JsonResult in 13078.5613ms.
+INFO  2019-02-19 20:36:19,871 [7    ] matters.Json.Internal.JsonResultExecutor - Executing JsonResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2019-02-19 20:36:20,471 [7    ] ore.Mvc.Internal.ControllerActionInvoker - Executed action Abp.AspNetCore.Mvc.Controllers.AbpUserConfigurationController.GetAll (Abp.AspNetCore) in 15821.754ms
+INFO  2019-02-19 20:36:20,697 [7    ] soft.AspNetCore.Hosting.Internal.WebHost - Request finished in 17183.1884ms 200 application/json; charset=utf-8
+INFO  2019-02-19 20:36:20,837 [17   ] soft.AspNetCore.Hosting.Internal.WebHost - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Session/GetCurrentLoginInformations  
+INFO  2019-02-19 20:36:20,866 [17   ] pNetCore.Cors.Infrastructure.CorsService - Policy execution successful.
+INFO  2019-02-19 20:36:21,068 [17   ] soft.AspNetCore.Hosting.Internal.WebHost - Request finished in 144.0986ms 204 
+INFO  2019-02-19 20:36:21,339 [7    ] soft.AspNetCore.Hosting.Internal.WebHost - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Session/GetCurrentLoginInformations application/json 
+INFO  2019-02-19 20:36:21,506 [7    ] pNetCore.Cors.Infrastructure.CorsService - Policy execution successful.
+INFO  2019-02-19 20:36:21,866 [7    ] ore.Mvc.Internal.ControllerActionInvoker - Route matched with {area = "app", action = "GetCurrentLoginInformations", controller = "Session"}. Executing action TripMaker.Sessions.SessionAppService.GetCurrentLoginInformations (TripMaker.Application)
+INFO  2019-02-19 20:36:22,079 [7    ] pNetCore.Cors.Infrastructure.CorsService - Policy execution successful.
+INFO  2019-02-19 20:36:30,290 [7    ] ore.Mvc.Internal.ControllerActionInvoker - Executing action method TripMaker.Sessions.SessionAppService.GetCurrentLoginInformations (TripMaker.Application) - Validation state: Valid
+INFO  2019-02-19 20:36:30,425 [7    ] ore.Mvc.Internal.ControllerActionInvoker - Executed action method TripMaker.Sessions.SessionAppService.GetCurrentLoginInformations (TripMaker.Application), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 21.4718ms.
+INFO  2019-02-19 20:36:30,585 [7    ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2019-02-19 20:36:30,772 [7    ] ore.Mvc.Internal.ControllerActionInvoker - Executed action TripMaker.Sessions.SessionAppService.GetCurrentLoginInformations (TripMaker.Application) in 8783.6147ms
+INFO  2019-02-19 20:36:30,990 [7    ] soft.AspNetCore.Hosting.Internal.WebHost - Request finished in 9682.6074ms 200 application/json; charset=utf-8
+INFO  2019-02-19 20:38:41,816 [11   ] soft.AspNetCore.Hosting.Internal.WebHost - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Plan/GetPlanAsync?PlaceInfo.FormattedAddress=Krak%C3%B3w%2C%20Polska&PlaceInfo.Locality=Krak%C3%B3w&PlaceInfo.AdminArea=ma%C5%82opolskie&PlaceInfo.Country=Polska&PlaceInfo.PlaceId=ChIJ0RhONcBEFkcRv4pHdrW2a7Q&StartDate=2019-02-19T23%3A00%3A00.000Z&EndDate=2019-02-22T23%3A00%3A00.000Z  
+INFO  2019-02-19 20:38:41,835 [11   ] pNetCore.Cors.Infrastructure.CorsService - Policy execution successful.
+INFO  2019-02-19 20:38:41,841 [11   ] soft.AspNetCore.Hosting.Internal.WebHost - Request finished in 27.7844ms 204 
+INFO  2019-02-19 20:38:41,860 [11   ] soft.AspNetCore.Hosting.Internal.WebHost - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Plan/GetPlanAsync?PlaceInfo.FormattedAddress=Krak%C3%B3w%2C%20Polska&PlaceInfo.Locality=Krak%C3%B3w&PlaceInfo.AdminArea=ma%C5%82opolskie&PlaceInfo.Country=Polska&PlaceInfo.PlaceId=ChIJ0RhONcBEFkcRv4pHdrW2a7Q&StartDate=2019-02-19T23%3A00%3A00.000Z&EndDate=2019-02-22T23%3A00%3A00.000Z application/json 
+INFO  2019-02-19 20:38:41,864 [11   ] pNetCore.Cors.Infrastructure.CorsService - Policy execution successful.
+INFO  2019-02-19 20:38:41,932 [11   ] ore.Mvc.Internal.ControllerActionInvoker - Route matched with {area = "app", action = "GetPlanAsync", controller = "Plan"}. Executing action TripMaker.Plan.PlanAppService.GetPlanAsync (TripMaker.Application)
+INFO  2019-02-19 20:38:41,935 [11   ] pNetCore.Cors.Infrastructure.CorsService - Policy execution successful.
+INFO  2019-02-19 20:38:42,981 [11   ] ore.Mvc.Internal.ControllerActionInvoker - Executing action method TripMaker.Plan.PlanAppService.GetPlanAsync (TripMaker.Application) with arguments (TripMaker.Plan.GetPlanInput) - Validation state: Valid
+INFO  2019-02-19 20:38:46,216 [11   ] ore.Mvc.Internal.ControllerActionInvoker - Executed action method TripMaker.Plan.PlanAppService.GetPlanAsync (TripMaker.Application), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 3231.6327ms.
+INFO  2019-02-19 20:38:46,405 [7    ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2019-02-19 20:38:46,422 [7    ] ore.Mvc.Internal.ControllerActionInvoker - Executed action TripMaker.Plan.PlanAppService.GetPlanAsync (TripMaker.Application) in 4484.4287ms
+INFO  2019-02-19 20:38:46,428 [7    ] soft.AspNetCore.Hosting.Internal.WebHost - Request finished in 4565.3608ms 200 application/json; charset=utf-8
+INFO  2019-02-19 20:39:11,679 [7    ] soft.AspNetCore.Hosting.Internal.WebHost - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Plan/GetPlanAsync?PlaceInfo.FormattedAddress=38-505%20Nag%C3%B3rzany%2C%20Polska&PlaceInfo.Locality=Nag%C3%B3rzany&PlaceInfo.AdminArea=Wojew%C3%B3dztwo%20podkarpackie&PlaceInfo.Country=Polska&PlaceInfo.PlaceId=ChIJFaTSgngUPEcR1hOE8XeFQMY&StartDate=2019-02-20T23%3A00%3A00.000Z&EndDate=2019-02-27T23%3A00%3A00.000Z  
+INFO  2019-02-19 20:39:11,687 [7    ] pNetCore.Cors.Infrastructure.CorsService - Policy execution successful.
+INFO  2019-02-19 20:39:11,694 [7    ] soft.AspNetCore.Hosting.Internal.WebHost - Request finished in 13.2466ms 204 
+INFO  2019-02-19 20:39:11,719 [11   ] soft.AspNetCore.Hosting.Internal.WebHost - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Plan/GetPlanAsync?PlaceInfo.FormattedAddress=38-505%20Nag%C3%B3rzany%2C%20Polska&PlaceInfo.Locality=Nag%C3%B3rzany&PlaceInfo.AdminArea=Wojew%C3%B3dztwo%20podkarpackie&PlaceInfo.Country=Polska&PlaceInfo.PlaceId=ChIJFaTSgngUPEcR1hOE8XeFQMY&StartDate=2019-02-20T23%3A00%3A00.000Z&EndDate=2019-02-27T23%3A00%3A00.000Z application/json 
+INFO  2019-02-19 20:39:11,727 [11   ] pNetCore.Cors.Infrastructure.CorsService - Policy execution successful.
+INFO  2019-02-19 20:39:11,743 [11   ] ore.Mvc.Internal.ControllerActionInvoker - Route matched with {area = "app", action = "GetPlanAsync", controller = "Plan"}. Executing action TripMaker.Plan.PlanAppService.GetPlanAsync (TripMaker.Application)
+INFO  2019-02-19 20:39:11,747 [11   ] pNetCore.Cors.Infrastructure.CorsService - Policy execution successful.
+INFO  2019-02-19 20:39:11,787 [11   ] ore.Mvc.Internal.ControllerActionInvoker - Executing action method TripMaker.Plan.PlanAppService.GetPlanAsync (TripMaker.Application) with arguments (TripMaker.Plan.GetPlanInput) - Validation state: Valid
+INFO  2019-02-19 20:39:11,793 [11   ] ore.Mvc.Internal.ControllerActionInvoker - Executed action method TripMaker.Plan.PlanAppService.GetPlanAsync (TripMaker.Application), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 3.2277ms.
+INFO  2019-02-19 20:39:11,938 [16   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2019-02-19 20:39:11,941 [16   ] ore.Mvc.Internal.ControllerActionInvoker - Executed action TripMaker.Plan.PlanAppService.GetPlanAsync (TripMaker.Application) in 194.9003ms
+INFO  2019-02-19 20:39:11,948 [16   ] soft.AspNetCore.Hosting.Internal.WebHost - Request finished in 226.9397ms 200 application/json; charset=utf-8

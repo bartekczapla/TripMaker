@@ -28,8 +28,6 @@ namespace TripMaker.Plan
 
             await _planManager.CreateAsync(plan);
 
-            //await _planManager.CreateAsync(plan);
-
             var temp = new PlanListDto() { Title = "test", Date = new DateTime() };
             var list = new List<PlanListDto>();
             list.Add(temp);

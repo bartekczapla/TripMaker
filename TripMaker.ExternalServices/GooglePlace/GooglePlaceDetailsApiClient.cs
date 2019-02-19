@@ -39,5 +39,20 @@ namespace TripMaker.ExternalServices.GooglePlace
             var result = await _httpClient.GetStringAsync(uri);
             return JsonConvert.DeserializeObject<GooglePlaceDetailsRootObject>(result);
         }
+
+        public async Task<GooglePlaceDetailsRootObject> GetAllBasicAsync(string placeId)
+        {
+            var uri = $"json?placeid={placeId}&fields=address_component,adr_address,alt_id,formatted_address,geometry,icon,id,name,permanently_closed,photo,place_id,plus_code,scope,type,url,utc_offset,vicinity&key={GoogleApiKey}";
+            var result = await _httpClient.GetStringAsync(uri);
+            return JsonConvert.DeserializeObject<GooglePlaceDetailsRootObject>(result);
+        }
+
+        public async Task<GooglePlaceDetailsRootObject> GetAllUsefulAsync(string placeId)
+        {
+            var uri = $"json?placeid={placeId}&fields=geometry/location,id,opening_hours,name,place_id,price_level,rating,reviews,scope,types&key={GoogleApiKey}";
+            var result = await _httpClient.GetStringAsync(uri);
+            return JsonConvert.DeserializeObject<GooglePlaceDetailsRootObject>(result);
+        }
+
     }
 }

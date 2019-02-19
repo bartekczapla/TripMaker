@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TripMaker.EntityFrameworkCore;
 
 namespace TripMaker.Migrations
 {
     [DbContext(typeof(TripMakerDbContext))]
-    partial class TripMakerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190219184429_SearchedPlace")]
+    partial class SearchedPlace
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1092,11 +1094,7 @@ namespace TripMaker.Migrations
                     b.Property<DateTime>("CreationTime");
 
                     b.Property<string>("PlaceId")
-                        .IsRequired()
-                        .HasMaxLength(512);
-
-                    b.Property<string>("PlaceName")
-                        .HasMaxLength(512);
+                        .IsRequired();
 
                     b.HasKey("Id");
 
