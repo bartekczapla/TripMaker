@@ -18,7 +18,7 @@ namespace TripMaker.ExternalServices.GooglePlace
         {
             httpClient.BaseAddress = new Uri("https://maps.googleapis.com/maps/api/place/findplacefromtext/");
             _httpClient = httpClient;
-            GoogleApiKey = ConfigUtil.GetAppConfigSetting("GooglePlaceApiKey");
+            GoogleApiKey = Config.GoogleApiKey;
         }
 
 
@@ -36,7 +36,7 @@ namespace TripMaker.ExternalServices.GooglePlace
 
         public async Task<GooglePlaceSearchRootObject> GetAllAsync(string input)
         {
-            ReplaceSpace(ref input);
+            EncodeString(ref input);
             var uri = $"json?input={input}&inputtype=textquery&fields=formatted_address,geometry,icon,id,name,permanently_closed,photos,place_id,plus_code,types,opening_hours,price_level,rating&key={GoogleApiKey}";
             var result = await _httpClient.GetStringAsync(uri);
             return JsonConvert.DeserializeObject<GooglePlaceSearchRootObject>(result);
@@ -44,7 +44,7 @@ namespace TripMaker.ExternalServices.GooglePlace
 
         public async Task<GooglePlaceSearchRootObject> GetAllAsync(string input, Location location)
         {
-            ReplaceSpace(ref input);
+            EncodeString(ref input);
             var uri = $"json?input={input}&inputtype=textquery&fields=formatted_address,geometry,icon,id,name,permanently_closed,photos,place_id,plus_code,types,opening_hours,price_level,rating&locationbias=point:{location.lat},{location.lng}&key={GoogleApiKey}";
             var result = await _httpClient.GetStringAsync(uri);
             return JsonConvert.DeserializeObject<GooglePlaceSearchRootObject>(result);
@@ -52,7 +52,7 @@ namespace TripMaker.ExternalServices.GooglePlace
 
         public async Task<GooglePlaceSearchRootObject> GetAllAsync(string input, Location location, int radius)
         {
-            ReplaceSpace(ref input);
+            EncodeString(ref input);
             var uri = $"json?input={input}&inputtype=textquery&fields=formatted_address,geometry,icon,id,name,permanently_closed,photos,place_id,plus_code,types,opening_hours,price_level,rating&locationbias=circle:{radius}@{location.lat},{location.lng}&key={GoogleApiKey}";
             var result = await _httpClient.GetStringAsync(uri);
             return JsonConvert.DeserializeObject<GooglePlaceSearchRootObject>(result);

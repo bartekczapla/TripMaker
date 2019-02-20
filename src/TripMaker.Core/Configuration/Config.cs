@@ -6,9 +6,9 @@ namespace TripMaker.Configuration
 {
     public static class Config
     {
-        public static string GooglePlaceApiKey
+        public static string GoogleApiKey
         {
-            get { return ConfigUtil.GetAppConfigSetting("GooglePlaceApiKey"); }
+            get { return ConfigUtil.GetAppConfigSetting("GoogleApiKey"); }
         }
     }
 }

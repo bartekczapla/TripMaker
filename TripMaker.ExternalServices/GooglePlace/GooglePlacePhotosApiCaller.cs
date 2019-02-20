@@ -17,7 +17,7 @@ namespace TripMaker.ExternalServices.GooglePlace
         {
             httpClient.BaseAddress = new Uri("https://maps.googleapis.com/maps/api/place/");
             _httpClient = httpClient;
-            GoogleApiKey = ConfigUtil.GetAppConfigSetting("GooglePlaceApiKey");
+            GoogleApiKey = Config.GoogleApiKey;
         }
 
         //Required parameters: 
