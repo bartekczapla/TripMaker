@@ -250,3 +250,9 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+# config
+app.config
+appsettings.json
+web.config
+*.config
