@@ -12,7 +12,9 @@ namespace TripMaker.ExternalServices.Entities
         OVER_QUERY_LIMIT=4,
         REQUEST_DENIED=5,
         INVALID_REQUEST=6,
-        NOT_FOUND=7
+        NOT_FOUND=7,
+        MAX_WAYPOINTS_EXCEEDED=8,
+        MAX_ROUTE_LENGTH_EXCEEDED=9, 
     }
 }
 
@@ -31,3 +33,5 @@ namespace TripMaker.ExternalServices.Entities
 //The key parameter is invalid.
 //INVALID_REQUEST generally indicates that the query (placeid) is missing.
 //NOT_FOUND indicates that the referenced location (placeid) was not found in the Places database.
+//MAX_WAYPOINTS_EXCEEDED indicates that too many waypoints were provided in the request.For applications using the Directions API as a web service, or the directions service in the Maps JavaScript API, the maximum allowed number of waypoints is 23, plus the origin and destination,
+//MAX_ROUTE_LENGTH_EXCEEDED indicates the requested route is too long and cannot be processed.This error occurs when more complex directions are returned.Try reducing the number of waypoints, turns, or instruction

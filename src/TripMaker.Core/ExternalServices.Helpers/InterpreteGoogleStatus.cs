@@ -26,6 +26,10 @@ namespace TripMaker.ExternalServices.Helpers
                     return GoogleResultStatus.INVALID_REQUEST;
                 case "NOT_FOUND":
                     return GoogleResultStatus.NOT_FOUND;
+                case "MAX_WAYPOINTS_EXCEEDED ":
+                    return GoogleResultStatus.MAX_WAYPOINTS_EXCEEDED;
+                case "MAX_ROUTE_LENGTH_EXCEEDED":
+                    return GoogleResultStatus.MAX_ROUTE_LENGTH_EXCEEDED;
                 default:
                     return GoogleResultStatus.NOT_FOUND;
             }

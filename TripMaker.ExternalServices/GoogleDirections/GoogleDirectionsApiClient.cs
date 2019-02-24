@@ -31,7 +31,19 @@ namespace TripMaker.ExternalServices.GoogleDirections
 
         //Optional parameters:
         //- language = {en, pl}
-        //
+        //- mode {driving, walking, bicycling, transit(+departure_time, arrival_tie)}
+        //- waypoints (intermediate locations) =via:lat%2Clng| =via:place_id:{id}|place_id:{id2}
+        //- optimize waypoints( travelling salesperson problem) np &waypoints=optimize:true|Barossa+Valley,SA|Clare,SA
+        // and return "waypoint_order": [ 3, 2, 0, 1 ]
+        // -alternatives {true,false} alternative routes
+        // - avoid {tolls|highways|ferries|indoor}
+        // - unit={metirc}
+        // - arrival_time/departure_time - Specifies the desired time of departure. You can specify the time as an integer in seconds since midnight, January 1, 1970 UTC
+        //mode is driving: You can specify the departure_time to receive a route and trip duration   that take traffic conditions into account. 
+        // -traffic_model {best_guess ,pessimistic ,optimistic )
+        // - transit_mode={bus,subway,train,tram,rail}
+        // -transit_routing_preference {less_walking, fewer_transfers} 
+
 
 
         public async Task<GoogleDirectionsRootObject> GetAllAsync(Location origin, Location destination)

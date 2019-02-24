@@ -1,18 +1,20 @@
-﻿using System;
+﻿using Abp.Application.Services;
+using Abp.Application.Services.Dto;
+using Abp.Domain.Repositories;
+using Abp.Linq.Extensions;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Abp.Application.Services.Dto;
-using TripMaker.Configuration;
-using TripMaker.ExternalServices;
-using TripMaker.ExternalServices.Entities.GooglePlaceNearbySearch;
-using TripMaker.ExternalServices.GooglePlace;
+using TripMaker.Tutorial.Dto;
+using TripMaker.Plan.Models;
+using Abp.AutoMapper;
 
 namespace TripMaker.Plan
 {
-    public class PlanAppService : IPlanAppService
+    public class PlanAppService : TripMakerAppServiceBase, IPlanAppService
     {
         private readonly IPlanManager _planManager;
 
@@ -20,11 +22,11 @@ namespace TripMaker.Plan
         {
             _planManager = planManager;
 
-    }
+        }
 
         public async Task<ListResultDto<PlanListDto>> GetPlanAsync(GetPlanInput input)
         {
-            var plan = new Plan(input.PlaceInfo.Locality, input.PlaceInfo.PlaceId, input.StartDate, input.EndDate);
+            var plan = new Plan(input.PlaceName, input.PlaceId, input.StartDate, input.EndDate);
 
             await _planManager.CreateAsync(plan);
 
@@ -32,9 +34,15 @@ namespace TripMaker.Plan
             var list = new List<PlanListDto>();
             list.Add(temp);
 
-            return new ListResultDto<PlanListDto>(list);
+            return new ListResultDto<PlanListDto>(list);            
+        }
 
-            
+        public async Task<ListResultDto<PlanListDto>> GetTestPlanAsync()
+        {         
+            var input =  PlanCommon.CreateTestInput().MapTo<PlanForm>(); 
+           // await _planManager.CreateAsync(plan);
+
+            return new ListResultDto<PlanListDto>(new List<PlanListDto>());
         }
     }
 }

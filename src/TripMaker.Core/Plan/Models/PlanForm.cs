@@ -1,0 +1,51 @@
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
+using Abp.Timing;
+using TripMaker.Validation;
+
+namespace TripMaker.Plan.Models
+{
+    [Table("PlanForms")]
+    public class PlanForm
+    {
+        [Required]
+        [MaxLength(80)]
+        public virtual string PlaceName { get; protected set; }
+
+        [Required]
+        [MaxLength(80)]
+        public virtual string PlaceId { get; protected set; }
+
+        [GreaterThanCurrentDate]
+        [DateGreaterThan("EndDate")]
+        public virtual DateTime StartDate { get; protected set; }
+
+        public virtual TimeSpan? StartTime { get; protected set; }
+
+        [GreaterThanCurrentDate]
+        public virtual DateTime EndDate { get; protected set; }
+
+        public virtual TimeSpan? EndTime { get; protected set; }
+
+        public virtual bool HasJourneyBooked { get; protected set; }
+
+        public virtual bool HasAccomodationBooked { get; protected set; }
+
+        protected PlanForm() { }
+
+        public PlanForm(string placeName, string placeId, DateTime startDate, TimeSpan? startTime, DateTime endDate, TimeSpan? endTime, bool hasJourneyBooked = false, bool hasAccomodationBooked = false)
+        {
+            PlaceName = placeName;
+            PlaceId = placeId;
+            StartDate = startDate;
+            StartTime = startTime;
+            EndDate = endDate;
+            EndTime = endTime;
+            HasJourneyBooked = hasJourneyBooked;
+            HasAccomodationBooked = hasAccomodationBooked;
+        }
+    }
+}
