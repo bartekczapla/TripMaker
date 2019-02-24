@@ -1062,7 +1062,48 @@ namespace TripMaker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Destination")
+                        .IsRequired()
+                        .HasMaxLength(128);
+
+                    b.Property<int?>("PlanFormId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlanFormId");
+
+                    b.ToTable("Plans");
+                });
+
+            modelBuilder.Entity("TripMaker.Plan.PlanElement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("PlaceName")
+                        .HasMaxLength(128);
+
+                    b.Property<int>("PlanId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlanId");
+
+                    b.ToTable("PlanElements");
+                });
+
+            modelBuilder.Entity("TripMaker.Plan.PlanForm", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreationTime");
+
                     b.Property<DateTime>("EndDate");
+
+                    b.Property<TimeSpan?>("EndTime");
 
                     b.Property<bool>("HasAccomodationBooked");
 
@@ -1070,17 +1111,19 @@ namespace TripMaker.Migrations
 
                     b.Property<string>("PlaceId")
                         .IsRequired()
-                        .HasMaxLength(80);
+                        .HasMaxLength(512);
 
                     b.Property<string>("PlaceName")
                         .IsRequired()
-                        .HasMaxLength(80);
+                        .HasMaxLength(512);
 
                     b.Property<DateTime>("StartDate");
 
+                    b.Property<TimeSpan?>("StartTime");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Plans");
+                    b.ToTable("PlanForms");
                 });
 
             modelBuilder.Entity("TripMaker.Plan.SearchedPlace", b =>
@@ -1372,6 +1415,21 @@ namespace TripMaker.Migrations
                     b.HasOne("TripMaker.Authorization.Users.User", "LastModifierUser")
                         .WithMany()
                         .HasForeignKey("LastModifierUserId");
+                });
+
+            modelBuilder.Entity("TripMaker.Plan.Plan", b =>
+                {
+                    b.HasOne("TripMaker.Plan.PlanForm", "PlanForm")
+                        .WithMany()
+                        .HasForeignKey("PlanFormId");
+                });
+
+            modelBuilder.Entity("TripMaker.Plan.PlanElement", b =>
+                {
+                    b.HasOne("TripMaker.Plan.Plan", "Plan")
+                        .WithMany("Elements")
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TripMaker.Tutorial.EventRegistration", b =>

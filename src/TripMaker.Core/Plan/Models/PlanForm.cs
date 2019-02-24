@@ -6,17 +6,19 @@ using Abp.Domain.Entities.Auditing;
 using Abp.Timing;
 using TripMaker.Validation;
 
-namespace TripMaker.Plan.Models
+namespace TripMaker.Plan
 {
     [Table("PlanForms")]
-    public class PlanForm
+    public class PlanForm : Entity, IHasCreationTime
     {
+        public const int MaxTitleLength = 512;
+
         [Required]
-        [MaxLength(80)]
+        [MaxLength(MaxTitleLength)]
         public virtual string PlaceName { get; protected set; }
 
         [Required]
-        [MaxLength(80)]
+        [MaxLength(MaxTitleLength)]
         public virtual string PlaceId { get; protected set; }
 
         [GreaterThanCurrentDate]
@@ -34,9 +36,15 @@ namespace TripMaker.Plan.Models
 
         public virtual bool HasAccomodationBooked { get; protected set; }
 
-        protected PlanForm() { }
+        public virtual DateTime CreationTime { get; set; }
+
+        protected PlanForm()
+        {
+            CreationTime = Clock.Now;
+        }
 
         public PlanForm(string placeName, string placeId, DateTime startDate, TimeSpan? startTime, DateTime endDate, TimeSpan? endTime, bool hasJourneyBooked = false, bool hasAccomodationBooked = false)
+            :this()
         {
             PlaceName = placeName;
             PlaceId = placeId;

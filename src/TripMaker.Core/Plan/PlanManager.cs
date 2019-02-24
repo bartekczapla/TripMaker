@@ -13,6 +13,9 @@ namespace TripMaker.Plan
     {
 
         private readonly IRepository<Plan> _planRepository;
+        private readonly IRepository<PlanForm> _planFormRepository;
+        private readonly IRepository<PlanElement> _planElementRepository;
+
         private readonly IGooglePlaceDetailsApiClient _googlePlaceDetailsApiClient;
         private readonly IGooglePlaceSearchApiClient _googlePlaceSearchApiClient;
         private readonly IGooglePlaceNearbySearchApiClient _googlePlaceNearbySearchApiClient;
@@ -20,11 +23,19 @@ namespace TripMaker.Plan
         public IEventBus EventBus { get; set; }
 
 
-        public PlanManager(IRepository<Plan> planRepository, IGooglePlaceDetailsApiClient googlePlaceDetailsApiClient,
+        public PlanManager(
+            IRepository<Plan> planRepository,
+            IRepository<PlanForm> planFormRepository,
+            IRepository<PlanElement> planElementRepository,
+            IGooglePlaceDetailsApiClient googlePlaceDetailsApiClient,
             IGooglePlaceSearchApiClient googlePlaceSearchApiClient,
-            IGooglePlaceNearbySearchApiClient googlePlaceNearbySearchApiClient, IGooglePlacePhotosApiCaller googlePlacePhotosApiCaller)
+            IGooglePlaceNearbySearchApiClient googlePlaceNearbySearchApiClient, 
+            IGooglePlacePhotosApiCaller googlePlacePhotosApiCaller
+            )
         {
             _planRepository=planRepository;
+            _planFormRepository = planFormRepository;
+            _planElementRepository = planElementRepository;
             _googlePlaceDetailsApiClient = googlePlaceDetailsApiClient;
             _googlePlaceSearchApiClient = googlePlaceSearchApiClient;
             _googlePlaceNearbySearchApiClient = googlePlaceNearbySearchApiClient;
@@ -33,16 +44,13 @@ namespace TripMaker.Plan
             EventBus = NullEventBus.Instance;
         }
 
-        public async Task CreateAsync(Plan plan)
+        public async Task<Plan> CreateAsync(PlanForm planForm)
         {
-            await EventBus.TriggerAsync(new EventSearchPlace(plan));
+           // await EventBus.TriggerAsync(new EventSearchPlace(plan));
 
-            //var test =await _googlePlaceDetailsApiClient.GetAllAsync(plan.PlaceId);
-           // var test2 = await _googlePlaceNearbySearchApiClient.GetAllAsync(new Location { lat = test.Result.geometry.location.lat,
-                                                                                           // lng = test.Result.geometry.location.lng,}, 10000);
-           // var test3 = await _googlePlaceSearchApiClient.GetAllAsync("Skomielna Biała");
             Console.WriteLine("stop");
-           // await _planRepository.InsertAsync(plan);
+
+            return new Plan(planForm.PlaceName);
         }
     }
 }

@@ -9,7 +9,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TripMaker.Tutorial.Dto;
-using TripMaker.Plan.Models;
 using Abp.AutoMapper;
 
 namespace TripMaker.Plan
@@ -26,9 +25,6 @@ namespace TripMaker.Plan
 
         public async Task<ListResultDto<PlanListDto>> GetPlanAsync(GetPlanInput input)
         {
-            var plan = new Plan(input.PlaceName, input.PlaceId, input.StartDate, input.EndDate);
-
-            await _planManager.CreateAsync(plan);
 
             var temp = new PlanListDto() { Title = "test", Date = new DateTime() };
             var list = new List<PlanListDto>();
@@ -37,10 +33,10 @@ namespace TripMaker.Plan
             return new ListResultDto<PlanListDto>(list);            
         }
 
-        public async Task<ListResultDto<PlanListDto>> GetTestPlanAsync()
+        public async Task<ListResultDto<PlanListDto>> CreatePlanAsync()
         {         
             var input =  PlanCommon.CreateTestInput().MapTo<PlanForm>(); 
-           // await _planManager.CreateAsync(plan);
+            var result = await _planManager.CreateAsync(input);
 
             return new ListResultDto<PlanListDto>(new List<PlanListDto>());
         }
