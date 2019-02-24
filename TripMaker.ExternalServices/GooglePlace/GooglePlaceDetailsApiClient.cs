@@ -54,5 +54,11 @@ namespace TripMaker.ExternalServices.GooglePlace
             return JsonConvert.DeserializeObject<GooglePlaceDetailsRootObject>(result);
         }
 
+        public async Task<GooglePlaceDetailsRootObject> GetMinimumAsync(string placeId)
+        {
+            var uri = $"json?placeid={placeId}&fields=geometry/location&key={GoogleApiKey}";
+            var result = await _httpClient.GetStringAsync(uri);
+            return JsonConvert.DeserializeObject<GooglePlaceDetailsRootObject>(result);
+        }
     }
 }

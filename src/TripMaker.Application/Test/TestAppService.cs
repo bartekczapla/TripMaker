@@ -24,7 +24,7 @@ namespace TripMaker.Test
 
         public async Task GetTestAsync()
         {
-            await _configurationManager.InsertOrUpdateConfigurationAsync(new Configuration.Models.TripMakerConfiguration("Name", "ValueType", "Value"));
+            //await _configurationManager.InsertOrUpdateConfigurationAsync(new Configuration.Models.TripMakerConfiguration("Name", "ValueType", "Value"));
 
             Console.Write("Test");
         }

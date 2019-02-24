@@ -14,5 +14,7 @@ namespace TripMaker.ExternalServices.Interfaces.GooglePlace
         Task<GooglePlaceDetailsRootObject> GetAllBasicAsync(string placeId);
 
         Task<GooglePlaceDetailsRootObject> GetAllUsefulAsync(string placeId);
+
+        Task<GooglePlaceDetailsRootObject> GetMinimumAsync(string placeId);
     }
 }

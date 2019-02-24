@@ -33,7 +33,7 @@ namespace TripMaker.Plan
             return new ListResultDto<PlanListDto>(list);            
         }
 
-        public async Task<ListResultDto<PlanListDto>> CreatePlanAsync()
+        public async Task<ListResultDto<PlanListDto>> CreateTestPlanAsync()
         {         
             var input =  PlanCommon.CreateTestInput().MapTo<PlanForm>(); 
             var result = await _planManager.CreateAsync(input);

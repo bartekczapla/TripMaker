@@ -1029,6 +1029,26 @@ namespace TripMaker.Migrations
                     b.ToTable("TripMakerConfigurations");
                 });
 
+            modelBuilder.Entity("TripMaker.Home.Models.SearchedPlace", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("PlaceId")
+                        .IsRequired()
+                        .HasMaxLength(512);
+
+                    b.Property<string>("PlaceName")
+                        .HasMaxLength(512);
+
+                    b.Property<int>("SearchCount");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SearchedPlaces");
+                });
+
             modelBuilder.Entity("TripMaker.MultiTenancy.Tenant", b =>
                 {
                     b.Property<int>("Id")
@@ -1147,26 +1167,6 @@ namespace TripMaker.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PlanForms");
-                });
-
-            modelBuilder.Entity("TripMaker.Plan.SearchedPlace", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreationTime");
-
-                    b.Property<string>("PlaceId")
-                        .IsRequired()
-                        .HasMaxLength(512);
-
-                    b.Property<string>("PlaceName")
-                        .HasMaxLength(512);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SearchedPlace");
                 });
 
             modelBuilder.Entity("TripMaker.Tutorial.Event", b =>

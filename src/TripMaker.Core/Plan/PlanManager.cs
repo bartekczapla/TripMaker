@@ -6,51 +6,48 @@ using System.Text;
 using System.Threading.Tasks;
 using TripMaker.ExternalServices.Entities.GooglePlaceNearbySearch;
 using TripMaker.ExternalServices.Interfaces.GooglePlace;
+using TripMaker.Plan.Interfaces;
 
 namespace TripMaker.Plan
 {
     public class PlanManager : IPlanManager
     {
-
         private readonly IRepository<Plan> _planRepository;
         private readonly IRepository<PlanForm> _planFormRepository;
         private readonly IRepository<PlanElement> _planElementRepository;
-
-        private readonly IGooglePlaceDetailsApiClient _googlePlaceDetailsApiClient;
-        private readonly IGooglePlaceSearchApiClient _googlePlaceSearchApiClient;
-        private readonly IGooglePlaceNearbySearchApiClient _googlePlaceNearbySearchApiClient;
-        private readonly IGooglePlacePhotosApiCaller _googlePlacePhotosApiCaller;
+        private readonly IPlanFormPolicy _planFormPolicy;
+        private readonly IPlanDataProvider _planDataProvider;
         public IEventBus EventBus { get; set; }
 
 
-        public PlanManager(
+        public PlanManager
+            (
             IRepository<Plan> planRepository,
             IRepository<PlanForm> planFormRepository,
             IRepository<PlanElement> planElementRepository,
-            IGooglePlaceDetailsApiClient googlePlaceDetailsApiClient,
-            IGooglePlaceSearchApiClient googlePlaceSearchApiClient,
-            IGooglePlaceNearbySearchApiClient googlePlaceNearbySearchApiClient, 
-            IGooglePlacePhotosApiCaller googlePlacePhotosApiCaller
+            IPlanDataProvider planDataProvider,
+            IPlanFormPolicy planFormPolicy
             )
         {
             _planRepository=planRepository;
             _planFormRepository = planFormRepository;
             _planElementRepository = planElementRepository;
-            _googlePlaceDetailsApiClient = googlePlaceDetailsApiClient;
-            _googlePlaceSearchApiClient = googlePlaceSearchApiClient;
-            _googlePlaceNearbySearchApiClient = googlePlaceNearbySearchApiClient;
-            _googlePlacePhotosApiCaller = googlePlacePhotosApiCaller;
-
+            _planDataProvider = planDataProvider;
+            _planFormPolicy = planFormPolicy;
             EventBus = NullEventBus.Instance;
         }
 
         public async Task<Plan> CreateAsync(PlanForm planForm)
         {
-           // await EventBus.TriggerAsync(new EventSearchPlace(plan));
+            await _planFormPolicy.CheckFormValidAsync(planForm); //check if planForm object has valid data
 
-            Console.WriteLine("stop");
+            await EventBus.TriggerAsync(new EventSearchPlace(planForm)); //update SearchedPlaces DB
 
-            return new Plan(planForm.PlaceName);
+            var planElements = await _planDataProvider.ProvideDataAsync(planForm);
+
+           // var planId = await _planRepository.InsertAndGetIdAsync(plan);
+
+            return new Plan("sdds");
         }
     }
 }

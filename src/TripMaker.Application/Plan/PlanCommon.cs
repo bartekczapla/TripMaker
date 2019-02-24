@@ -12,9 +12,9 @@ namespace TripMaker.Plan
             {
                 PlaceName= "Madrid",
                 PlaceId= "ChIJgTwKgJcpQg0RaSKMYcHeNsQ",
-                StartDate=new DateTime(2018, 8, 1),
+                StartDate=new DateTime(2019, 8, 1),
                 StartTime=new TimeSpan(8, 0, 0),
-                EndDate=new DateTime(2018, 8, 8),
+                EndDate=new DateTime(2019, 8, 8),
                 EndTime=new TimeSpan(18, 0, 0),
                 HasJourneyBooked=true,
                 HasAccomodationBooked=false

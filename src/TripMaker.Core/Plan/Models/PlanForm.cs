@@ -55,5 +55,10 @@ namespace TripMaker.Plan
             HasJourneyBooked = hasJourneyBooked;
             HasAccomodationBooked = hasAccomodationBooked;
         }
+
+        public bool IsDatesCorrect()
+        {
+            return DateTime.Compare(StartDate, Clock.Now) >= 0 && DateTime.Compare(StartDate, EndDate) <= 0;
+        }
     }
 }

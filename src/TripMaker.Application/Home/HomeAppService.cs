@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TripMaker.Home.Dto;
-using TripMaker.Plan;
+using TripMaker.Home.Models;
 
 namespace TripMaker.Home
 {
@@ -26,13 +26,19 @@ namespace TripMaker.Home
 
         public async Task<ListResultDto<SearchedPlaceDto>> GetMostSearchedPlacesAsync()
         {
-            var places =await _searchedPlaceRepository
+            var places = await _searchedPlaceRepository
                 .GetAll()
-                .GroupBy(x => x.PlaceName)
-                .Select(x => new { PlaceName = x.Key, Count = x.Count() })
-                .OrderByDescending(x => x.Count)
+                .OrderByDescending(x => x.SearchCount)
                 .Take(3)
                 .ToListAsync();
+
+
+                //.GetAll()
+                //.GroupBy(x => x.PlaceName)
+                //.Select(x => new { PlaceName = x.Key, Count = x.Count() })
+                //.OrderByDescending(x => x.Count)
+                //.Take(3)
+                //.ToListAsync();
 
             return new ListResultDto<SearchedPlaceDto>(places.MapTo<List<SearchedPlaceDto>>());
         }

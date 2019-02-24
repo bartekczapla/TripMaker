@@ -11,23 +11,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TripMaker.Authorization.Users;
+using TripMaker.Home;
 
 namespace TripMaker.Plan
 {
     public class EventDatabaseUpdater : IEventHandler<EventSearchPlace>, ITransientDependency
     {
         public ILogger Logger { get; set; }
-        private readonly IRepository<SearchedPlace> _searchPlaceRepository;
+        private readonly ISearchedPlacesManager _searchedPlacesManager;
 
-        public EventDatabaseUpdater(IRepository<SearchedPlace> searchPlaceRepository)
+        public EventDatabaseUpdater(ISearchedPlacesManager searchedPlacesManager)
         {
-            _searchPlaceRepository = searchPlaceRepository;
+            _searchedPlacesManager = searchedPlacesManager;
             Logger = NullLogger.Instance;
         }
 
         public void HandleEvent(EventSearchPlace eventData)
         {
-            AsyncHelper.RunSync(() => _searchPlaceRepository.InsertAsync(new SearchedPlace(eventData.Entity.PlaceId, eventData.Entity.PlaceName)));
+            AsyncHelper.RunSync(() => _searchedPlacesManager.InsertOrUpdateAsync(eventData.Entity.PlaceId, eventData.Entity.PlaceName));
         }
     }
 }
