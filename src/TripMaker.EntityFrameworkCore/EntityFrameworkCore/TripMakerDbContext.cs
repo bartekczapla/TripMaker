@@ -5,6 +5,7 @@ using TripMaker.Authorization.Users;
 using TripMaker.MultiTenancy;
 using TripMaker.Tutorial;
 using TripMaker.Plan;
+using TripMaker.Configuration.Models;
 
 namespace TripMaker.EntityFrameworkCore
 {
@@ -19,6 +20,8 @@ namespace TripMaker.EntityFrameworkCore
         public virtual DbSet<PlanForm> PlanForms { get; set; }
         public virtual DbSet<PlanElement> PlanElements { get; set; }
         public virtual DbSet<SearchedPlace> SearchedPlace { get; set; }
+
+        public virtual DbSet<TripMakerConfiguration> TripMakerConfigurations { get; set; }
 
         public TripMakerDbContext(DbContextOptions<TripMakerDbContext> options)
             : base(options)

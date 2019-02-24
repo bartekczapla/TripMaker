@@ -15,16 +15,16 @@ namespace TripMaker.Test
 {
     public class TestAppService : ITestAppService
     {
-        private readonly IGoogleDirectionsApiClient _googleDirectionsApiClient;
+        private readonly ITripMakerConfigurationManager _configurationManager;
 
-        public TestAppService(IGoogleDirectionsApiClient googleDirectionsApiClient)
+        public TestAppService(ITripMakerConfigurationManager configurationManager)
         {
-            _googleDirectionsApiClient = googleDirectionsApiClient;
+            _configurationManager = configurationManager;
         }
 
         public async Task GetTestAsync()
         {
-            var test=await _googleDirectionsApiClient.GetAllAsync("ChIJFaTSgngUPEcR1hOE8XeFQMY", "ChIJ89z6UDR1FkcRwugSFONLbJc");
+            await _configurationManager.InsertOrUpdateConfigurationAsync(new Configuration.Models.TripMakerConfiguration("Name", "ValueType", "Value"));
 
             Console.Write("Test");
         }
