@@ -10,8 +10,7 @@ namespace TripMaker.ExternalServices.Interfaces.GoogleDistanceMatrix
 {
     public interface IGoogleDistanceMatrixApiClient : IApplicationService
     {
-        Task<GoogleDistanceMatrixRootObject> GetAllAsync(IList<Location> origins, IList<Location> destinations);
+        Task<GoogleDistanceMatrixRootObject> GetAsync(GoogleDistanceMatrixInput input);
 
-        Task<GoogleDistanceMatrixRootObject> GetAllAsync(IList<string> originIds, IList<string> destinationIds);
     }
 }

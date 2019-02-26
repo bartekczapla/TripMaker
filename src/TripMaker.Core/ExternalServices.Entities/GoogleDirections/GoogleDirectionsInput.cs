@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TripMaker.ExternalServices.Entities.GoogleDirections
 {
-    class GoogleDirectionsInput
+    public class GoogleDirectionsInput
     {
     }
 }

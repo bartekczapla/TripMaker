@@ -4,7 +4,11 @@ using System.Text;
 
 namespace TripMaker.ExternalServices.Entities.GoogleDistanceMatrix
 {
-    class GoogleDistanceMatrixInput
+    public class GoogleDistanceMatrixInput
     {
+        public GoogleDistanceMatrixInput()
+        {
+
+        }
     }
 }

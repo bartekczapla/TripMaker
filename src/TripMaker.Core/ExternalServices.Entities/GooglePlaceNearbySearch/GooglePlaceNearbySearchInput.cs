@@ -4,7 +4,11 @@ using System.Text;
 
 namespace TripMaker.ExternalServices.Entities.GooglePlaceNearbySearch
 {
-    class GooglePlaceNearbySearchInput
+    public class GooglePlaceNearbySearchInput
     {
+        public GooglePlaceNearbySearchInput()
+        {
+
+        }
     }
 }

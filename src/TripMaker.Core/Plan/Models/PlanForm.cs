@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using Abp.Timing;
+using TripMaker.Enums;
 using TripMaker.Validation;
 
 namespace TripMaker.Plan
@@ -36,6 +37,8 @@ namespace TripMaker.Plan
 
         public virtual bool HasAccomodationBooked { get; protected set; }
 
+        public virtual LanguageType Language { get; protected set; }
+
         public virtual DateTime CreationTime { get; set; }
 
         protected PlanForm()
@@ -43,7 +46,7 @@ namespace TripMaker.Plan
             CreationTime = Clock.Now;
         }
 
-        public PlanForm(string placeName, string placeId, DateTime startDate, TimeSpan? startTime, DateTime endDate, TimeSpan? endTime, bool hasJourneyBooked = false, bool hasAccomodationBooked = false)
+        public PlanForm(string placeName, string placeId, DateTime startDate, TimeSpan? startTime, DateTime endDate, TimeSpan? endTime, LanguageType language, bool hasJourneyBooked = false, bool hasAccomodationBooked = false)
             :this()
         {
             PlaceName = placeName;
@@ -52,6 +55,7 @@ namespace TripMaker.Plan
             StartTime = startTime;
             EndDate = endDate;
             EndTime = endTime;
+            Language = language;
             HasJourneyBooked = hasJourneyBooked;
             HasAccomodationBooked = hasAccomodationBooked;
         }

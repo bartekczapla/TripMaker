@@ -6,8 +6,6 @@ namespace TripMaker.ExternalServices.Interfaces
 {
     public interface IGoogleDirectionsApiClient : IApplicationService
     {
-        Task<GoogleDirectionsRootObject> GetAllAsync(Location origin, Location destination);
-
-        Task<GoogleDirectionsRootObject> GetAllAsync(string originPlaceId, string destinationPlaceId);
+        Task<GoogleDirectionsRootObject> GetAsync(GoogleDirectionsInput input);
     }
 }

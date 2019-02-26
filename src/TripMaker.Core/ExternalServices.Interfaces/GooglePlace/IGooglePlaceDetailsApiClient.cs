@@ -9,12 +9,6 @@ namespace TripMaker.ExternalServices.Interfaces.GooglePlace
 {
     public interface IGooglePlaceDetailsApiClient : IApplicationService
     {
-        Task<GooglePlaceDetailsRootObject> GetAllAsync(string placeId);
-
-        Task<GooglePlaceDetailsRootObject> GetAllBasicAsync(string placeId);
-
-        Task<GooglePlaceDetailsRootObject> GetAllUsefulAsync(string placeId);
-
-        Task<GooglePlaceDetailsRootObject> GetMinimumAsync(string placeId);
+        Task<GooglePlaceDetailsRootObject> GetAsync(GooglePlaceDetailsInput input);
     }
 }

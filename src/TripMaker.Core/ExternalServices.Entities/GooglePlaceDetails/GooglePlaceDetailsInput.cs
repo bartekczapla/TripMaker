@@ -4,7 +4,11 @@ using System.Text;
 
 namespace TripMaker.ExternalServices.Entities.GooglePlaceDetails
 {
-    class GooglePlaceDetailsInput
+    public class GooglePlaceDetailsInput
     {
+        public GooglePlaceDetailsInput()
+        {
+
+        }
     }
 }
