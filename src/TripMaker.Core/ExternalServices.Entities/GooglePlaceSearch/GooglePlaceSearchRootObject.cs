@@ -8,5 +8,6 @@ namespace TripMaker.ExternalServices.Entities.GooglePlaceSearch
     {
         public List<Candidate> candidates { get; set; }
         public string status { get; set; }
+        public string resultJson { get; set; }
     }
 }

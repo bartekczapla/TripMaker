@@ -49,15 +49,19 @@ namespace TripMaker.ExternalServices.GoogleDirections
         public async Task<GoogleDirectionsRootObject> GetAllAsync(Location origin, Location destination)
         {
             var uri = $"json?&origin={origin.lat},{origin.lng}&destination={destination.lat},{destination.lng}&key={GoogleApiKey}";
-            var result = await _httpClient.GetStringAsync(uri);
-            return JsonConvert.DeserializeObject<GoogleDirectionsRootObject>(result);
+            var resultJson = await _httpClient.GetStringAsync(uri);
+            var result= JsonConvert.DeserializeObject<GoogleDirectionsRootObject>(resultJson);
+            result.resultJson = resultJson;
+            return result;
         }
 
         public async Task<GoogleDirectionsRootObject> GetAllAsync(string originPlaceId, string destinationPlaceId)
         {
             var uri = $"json?&origin=place_id:{originPlaceId}&destination=place_id:{destinationPlaceId}&key={GoogleApiKey}";
-            var result = await _httpClient.GetStringAsync(uri);
-            return JsonConvert.DeserializeObject<GoogleDirectionsRootObject>(result);
+            var resultJson = await _httpClient.GetStringAsync(uri);
+            var result = JsonConvert.DeserializeObject<GoogleDirectionsRootObject>(resultJson);
+            result.resultJson = resultJson;
+            return result;
         }
     }
 }

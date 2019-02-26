@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TripMaker.EntityFrameworkCore;
 
 namespace TripMaker.Migrations
 {
     [DbContext(typeof(TripMakerDbContext))]
-    partial class TripMakerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190226180742_ExternalServicesJSON")]
+    partial class ExternalServicesJSON
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1029,35 +1031,6 @@ namespace TripMaker.Migrations
                     b.ToTable("TripMakerConfigurations");
                 });
 
-            modelBuilder.Entity("TripMaker.ExternalServices.Entities.Common.ExternalServicesJSON", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreationTime");
-
-                    b.Property<string>("InputJSON")
-                        .IsRequired()
-                        .HasMaxLength(8192);
-
-                    b.Property<int?>("PlanFormId");
-
-                    b.Property<string>("ResultJSON")
-                        .IsRequired()
-                        .HasMaxLength(8192);
-
-                    b.Property<string>("ServiceType")
-                        .IsRequired()
-                        .HasMaxLength(80);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlanFormId");
-
-                    b.ToTable("ExternalServicesJSON");
-                });
-
             modelBuilder.Entity("TripMaker.Home.Models.SearchedPlace", b =>
                 {
                     b.Property<int>("Id")
@@ -1448,13 +1421,6 @@ namespace TripMaker.Migrations
                     b.HasOne("TripMaker.Authorization.Users.User", "LastModifierUser")
                         .WithMany()
                         .HasForeignKey("LastModifierUserId");
-                });
-
-            modelBuilder.Entity("TripMaker.ExternalServices.Entities.Common.ExternalServicesJSON", b =>
-                {
-                    b.HasOne("TripMaker.Plan.PlanForm", "PlanForm")
-                        .WithMany()
-                        .HasForeignKey("PlanFormId");
                 });
 
             modelBuilder.Entity("TripMaker.MultiTenancy.Tenant", b =>

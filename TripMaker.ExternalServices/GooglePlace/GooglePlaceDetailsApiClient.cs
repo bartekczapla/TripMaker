@@ -36,29 +36,37 @@ namespace TripMaker.ExternalServices.GooglePlace
         public async Task<GooglePlaceDetailsRootObject> GetAllAsync(string placeId)
         {
             var uri = $"json?placeid={placeId}&key={GoogleApiKey}";
-            var result = await _httpClient.GetStringAsync(uri);
-            return JsonConvert.DeserializeObject<GooglePlaceDetailsRootObject>(result);
+            var resultJson = await _httpClient.GetStringAsync(uri);
+            var result = JsonConvert.DeserializeObject<GooglePlaceDetailsRootObject>(resultJson);
+            result.resultJson = resultJson;
+            return result;
         }
 
         public async Task<GooglePlaceDetailsRootObject> GetAllBasicAsync(string placeId)
         {
             var uri = $"json?placeid={placeId}&fields=address_component,adr_address,alt_id,formatted_address,geometry,icon,id,name,permanently_closed,photo,place_id,plus_code,scope,type,url,utc_offset,vicinity&key={GoogleApiKey}";
-            var result = await _httpClient.GetStringAsync(uri);
-            return JsonConvert.DeserializeObject<GooglePlaceDetailsRootObject>(result);
+            var resultJson = await _httpClient.GetStringAsync(uri);
+            var result = JsonConvert.DeserializeObject<GooglePlaceDetailsRootObject>(resultJson);
+            result.resultJson = resultJson;
+            return result;
         }
 
         public async Task<GooglePlaceDetailsRootObject> GetAllUsefulAsync(string placeId)
         {
             var uri = $"json?placeid={placeId}&fields=geometry/location,id,opening_hours,name,place_id,price_level,rating,reviews,scope,types&key={GoogleApiKey}";
-            var result = await _httpClient.GetStringAsync(uri);
-            return JsonConvert.DeserializeObject<GooglePlaceDetailsRootObject>(result);
+            var resultJson = await _httpClient.GetStringAsync(uri);
+            var result = JsonConvert.DeserializeObject<GooglePlaceDetailsRootObject>(resultJson);
+            result.resultJson = resultJson;
+            return result;
         }
 
         public async Task<GooglePlaceDetailsRootObject> GetMinimumAsync(string placeId)
         {
             var uri = $"json?placeid={placeId}&fields=geometry/location&key={GoogleApiKey}";
-            var result = await _httpClient.GetStringAsync(uri);
-            return JsonConvert.DeserializeObject<GooglePlaceDetailsRootObject>(result);
+            var resultJson = await _httpClient.GetStringAsync(uri);
+            var result = JsonConvert.DeserializeObject<GooglePlaceDetailsRootObject>(resultJson);
+            result.resultJson = resultJson;
+            return result;
         }
     }
 }

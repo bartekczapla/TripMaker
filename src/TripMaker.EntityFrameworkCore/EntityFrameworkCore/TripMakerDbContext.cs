@@ -7,6 +7,7 @@ using TripMaker.Tutorial;
 using TripMaker.Plan;
 using TripMaker.Configuration.Models;
 using TripMaker.Home.Models;
+using TripMaker.ExternalServices.Entities.Common;
 
 namespace TripMaker.EntityFrameworkCore
 {
@@ -21,6 +22,7 @@ namespace TripMaker.EntityFrameworkCore
         public virtual DbSet<PlanForm> PlanForms { get; set; }
         public virtual DbSet<PlanElement> PlanElements { get; set; }
         public virtual DbSet<SearchedPlace> SearchedPlaces { get; set; }
+        public virtual DbSet<ExternalServicesJSON> ExternalServicesJSON { get; set; }
 
         public virtual DbSet<TripMakerConfiguration> TripMakerConfigurations { get; set; }
 

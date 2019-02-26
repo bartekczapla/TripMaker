@@ -9,5 +9,7 @@ namespace TripMaker.ExternalServices.Entities.GooglePlaceNearbySearch
         public List<object> html_attributions { get; set; }
         public List<GooglePlaceNearbySearchResult> results { get; set; }
         public string status { get; set; }
+        public string resultJson { get; set; }
+
     }
 }

@@ -48,15 +48,19 @@ namespace TripMaker.ExternalServices.GoogleDistanceMatrix
         public async Task<GoogleDistanceMatrixRootObject> GetAllAsync(IList<Location> origins, IList<Location> destinations)
         {
             var uri = $"json?&origins={ConvertLocationsToString(origins)}&destinations={ConvertLocationsToString(destinations)}&key={GoogleApiKey}";
-            var result = await _httpClient.GetStringAsync(uri);
-            return JsonConvert.DeserializeObject<GoogleDistanceMatrixRootObject>(result);
+            var resultJson = await _httpClient.GetStringAsync(uri);
+            var result = JsonConvert.DeserializeObject<GoogleDistanceMatrixRootObject>(resultJson);
+            result.resultJson = resultJson;
+            return result;
         }
 
         public async Task<GoogleDistanceMatrixRootObject> GetAllAsync(IList<string> originIds, IList<string> destinationIds)
         {
             var uri = $"json?&origins={ConvertPlaceIdsToString(originIds)}&destinations={ConvertPlaceIdsToString(destinationIds)}&key={GoogleApiKey}";
-            var result = await _httpClient.GetStringAsync(uri);
-            return JsonConvert.DeserializeObject<GoogleDistanceMatrixRootObject>(result);
+            var resultJson = await _httpClient.GetStringAsync(uri);
+            var result = JsonConvert.DeserializeObject<GoogleDistanceMatrixRootObject>(resultJson);
+            result.resultJson = resultJson;
+            return result;
         }
 
     }

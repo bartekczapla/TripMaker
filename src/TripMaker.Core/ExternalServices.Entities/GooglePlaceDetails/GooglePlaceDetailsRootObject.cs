@@ -13,5 +13,7 @@ namespace TripMaker.ExternalServices.Entities.GooglePlaceDetails
         public GooglePlaceDetailsResult Result { get; set; }
 
         public string status { get; set; }
+
+        public string resultJson { get; set; }
     }
 }

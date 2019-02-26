@@ -42,29 +42,37 @@ namespace TripMaker.ExternalServices.GooglePlace
         public async Task<GooglePlaceNearbySearchRootObject> GetAllAsync(Location location, int radius)
         {
             var uri = $"json?location={location.lat},{location.lng}&radius={radius}&key={GoogleApiKey}";
-            var result = await _httpClient.GetStringAsync(uri);
-            return JsonConvert.DeserializeObject<GooglePlaceNearbySearchRootObject>(result);
+            var resultJson = await _httpClient.GetStringAsync(uri);
+            var result = JsonConvert.DeserializeObject<GooglePlaceNearbySearchRootObject>(resultJson);
+            result.resultJson = resultJson;
+            return result;
         }
 
         public async Task<GooglePlaceNearbySearchRootObject> GetAllNearestByKeyWordAsync(Location location, string keyword)
         {
             var uri = $"json?location={location.lat},{location.lng}&rankby=distance&keyword={keyword}&key={GoogleApiKey}";
-            var result = await _httpClient.GetStringAsync(uri);
-            return JsonConvert.DeserializeObject<GooglePlaceNearbySearchRootObject>(result);
+            var resultJson = await _httpClient.GetStringAsync(uri);
+            var result = JsonConvert.DeserializeObject<GooglePlaceNearbySearchRootObject>(resultJson);
+            result.resultJson = resultJson;
+            return result;
         }
 
         public async Task<GooglePlaceNearbySearchRootObject> GetAllNearestByTypeAsync(Location location, string type)
         {
             var uri = $"json?location={location.lat},{location.lng}&rankby=distance&type={type}&key={GoogleApiKey}";
-            var result = await _httpClient.GetStringAsync(uri);
-            return JsonConvert.DeserializeObject<GooglePlaceNearbySearchRootObject>(result);
+            var resultJson = await _httpClient.GetStringAsync(uri);
+            var result = JsonConvert.DeserializeObject<GooglePlaceNearbySearchRootObject>(resultJson);
+            result.resultJson = resultJson;
+            return result;
         }
 
         public async Task<GooglePlaceNearbySearchRootObject> GetNextPageTokenAsync(string token)
         {
             var uri = $"json?pagetoken={token}y&key={GoogleApiKey}";
-            var result = await _httpClient.GetStringAsync(uri);
-            return JsonConvert.DeserializeObject<GooglePlaceNearbySearchRootObject>(result);
+            var resultJson = await _httpClient.GetStringAsync(uri);
+            var result = JsonConvert.DeserializeObject<GooglePlaceNearbySearchRootObject>(resultJson);
+            result.resultJson = resultJson;
+            return result;
         }
     }
 }

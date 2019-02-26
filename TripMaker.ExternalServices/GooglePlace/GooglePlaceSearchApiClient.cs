@@ -39,24 +39,30 @@ namespace TripMaker.ExternalServices.GooglePlace
         {
             EncodeString(ref input);
             var uri = $"json?input={input}&inputtype=textquery&fields={AllFields}&key={GoogleApiKey}";
-            var result = await _httpClient.GetStringAsync(uri);
-            return JsonConvert.DeserializeObject<GooglePlaceSearchRootObject>(result);
+            var resultJson = await _httpClient.GetStringAsync(uri);
+            var result = JsonConvert.DeserializeObject<GooglePlaceSearchRootObject>(resultJson);
+            result.resultJson = resultJson;
+            return result;
         }
 
         public async Task<GooglePlaceSearchRootObject> GetAllAsync(string input, Location location)
         {
             EncodeString(ref input);
             var uri = $"json?input={input}&inputtype=textquery&fields={AllFields}&locationbias=point:{location.lat},{location.lng}&key={GoogleApiKey}";
-            var result = await _httpClient.GetStringAsync(uri);
-            return JsonConvert.DeserializeObject<GooglePlaceSearchRootObject>(result);
+            var resultJson = await _httpClient.GetStringAsync(uri);
+            var result = JsonConvert.DeserializeObject<GooglePlaceSearchRootObject>(resultJson);
+            result.resultJson = resultJson;
+            return result;
         }
 
         public async Task<GooglePlaceSearchRootObject> GetAllAsync(string input, Location location, int radius)
         {
             EncodeString(ref input);
             var uri = $"json?input={input}&inputtype=textquery&fields={AllFields}&locationbias=circle:{radius}@{location.lat},{location.lng}&key={GoogleApiKey}";
-            var result = await _httpClient.GetStringAsync(uri);
-            return JsonConvert.DeserializeObject<GooglePlaceSearchRootObject>(result);
+            var resultJson = await _httpClient.GetStringAsync(uri);
+            var result = JsonConvert.DeserializeObject<GooglePlaceSearchRootObject>(resultJson);
+            result.resultJson = resultJson;
+            return result;
         }
     }
 }

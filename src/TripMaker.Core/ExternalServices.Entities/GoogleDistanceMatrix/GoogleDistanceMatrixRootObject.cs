@@ -10,5 +10,6 @@ namespace TripMaker.ExternalServices.Entities.GoogleDistanceMatrix
         public List<string> origin_addresses { get; set; }
         public List<string> destination_addresses { get; set; }
         public List<GoogleDistanceRow> rows { get; set; }
+        public string resultJson { get; set; }
     }
 }
