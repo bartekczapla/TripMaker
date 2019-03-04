@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TripMaker.ExternalServices.Entities
+namespace TripMaker.Enums
 {
     public enum GoogleResultStatus
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TripMaker.Enums;
 using TripMaker.ExternalServices.Entities;
 
 namespace TripMaker.ExternalServices.Helpers

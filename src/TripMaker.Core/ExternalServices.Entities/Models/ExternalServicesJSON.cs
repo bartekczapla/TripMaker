@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using TripMaker.Plan;
 
-namespace TripMaker.ExternalServices.Entities.Common
+namespace TripMaker.ExternalServices.Entities.Models
 {
     [Table("ExternalServicesJSON")]
     public class ExternalServicesJSON : Entity, IHasCreationTime

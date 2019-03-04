@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using TripMaker.Enums;
 
@@ -18,7 +19,8 @@ namespace TripMaker.ExternalServices.Entities
 
     public static class GooglePlaceTypes
     {
-        public static GooglePlaceType[] Table =
+
+        public static ICollection<GooglePlaceType> Table =new Collection<GooglePlaceType>
         {
               new GooglePlaceType("accounting", GooglePlaceTypeCategory.None),
               new GooglePlaceType("airport", GooglePlaceTypeCategory.None),

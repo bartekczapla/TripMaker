@@ -7,7 +7,7 @@ using TripMaker.Tutorial;
 using TripMaker.Plan;
 using TripMaker.Configuration.Models;
 using TripMaker.Home.Models;
-using TripMaker.ExternalServices.Entities.Common;
+using TripMaker.ExternalServices.Entities.Models;
 
 namespace TripMaker.EntityFrameworkCore
 {

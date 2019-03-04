@@ -22,7 +22,7 @@ namespace TripMaker.ExternalServices.Entities
 
     public static class GoogleFields
     {
-        public static GoogleField[] Table =
+        public static ICollection<GoogleField> Table =new Collection<GoogleField>
         {
             new GoogleField("formatted_address", GoogleFieldType.Address, new ExternalServicesType[] {ExternalServicesType.GooglePlaceSearch, ExternalServicesType.GooglePlaceDetails }),
             new GoogleField("geometry", GoogleFieldType.Address, new ExternalServicesType[] { ExternalServicesType.GooglePlaceSearch, ExternalServicesType.GooglePlaceDetails }),
