@@ -37,17 +37,16 @@ namespace TripMaker.Plan
             EventBus = NullEventBus.Instance;
         }
 
-        public async Task<Plan> CreateAsync(PlanForm planForm)
+        public async Task CreateAsync(PlanForm planForm)
         {
             await _planFormPolicy.CheckFormValidAsync(planForm); //check if planForm object has valid data
 
             await EventBus.TriggerAsync(new EventSearchPlace(planForm)); //update SearchedPlaces DB
 
-            var planElements = await _planDataProvider.ProvideDataAsync(planForm);
+             await _planDataProvider.ProvideDataAsync(planForm);
 
            // var planId = await _planRepository.InsertAndGetIdAsync(plan);
 
-            return new Plan("sdds");
         }
     }
 }

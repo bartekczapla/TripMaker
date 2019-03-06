@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using TripMaker.Configuration;
 using Newtonsoft.Json;
-using static TripMaker.ExternalServices.Helpers.GooglePlaceCommon;
 using TripMaker.ExternalServices.Entities.GoogleDistanceMatrix;
 using TripMaker.ExternalServices.Interfaces.GoogleDistanceMatrix;
 using TripMaker.ExternalServices.Entities.Common;

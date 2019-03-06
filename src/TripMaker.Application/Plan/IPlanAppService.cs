@@ -12,7 +12,7 @@ namespace TripMaker.Plan
     {
         Task<ListResultDto<PlanListDto>> GetPlanAsync(GetPlanInput input);
 
-        Task<ListResultDto<PlanListDto>> CreateTestPlanAsync();
+        Task<ListResultDto<PlanListDto>> GetTestPlanAsync();
 
     }
 }

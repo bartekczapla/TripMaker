@@ -7,8 +7,8 @@ namespace TripMaker.Plan.Interfaces
 {
     public interface IPlanDataProvider : IDomainService
     {
-        Task<IEnumerable<PlanElement>> ProvideDataAsync(PlanForm planForm);
+        Task ProvideDataAsync(PlanForm planForm);
 
-        Task<bool> IsPlaceIdValid(string placeId);
+       // Task<bool> IsPlaceIdValid(string placeId);
     }
 }

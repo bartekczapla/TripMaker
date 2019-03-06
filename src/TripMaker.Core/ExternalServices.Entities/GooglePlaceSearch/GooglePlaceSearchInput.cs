@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using TripMaker.Enums;
+using TripMaker.ExternalServices.Entities.Common;
 
 namespace TripMaker.ExternalServices.Entities.GooglePlaceSearch
 {

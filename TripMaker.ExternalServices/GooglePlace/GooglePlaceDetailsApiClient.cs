@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using TripMaker.ExternalServices.Entities.GooglePlaceDetails;
 using TripMaker.ExternalServices.Interfaces.GooglePlace;
 using TripMaker.ExternalServices.Interfaces;
+using TripMaker.ExternalServices;
 
 namespace TripMaker.ExternalServices.GooglePlace
 {
@@ -16,7 +17,10 @@ namespace TripMaker.ExternalServices.GooglePlace
         public HttpClient _httpClient;
         private readonly IGoogleUriProvider _googleUriProvider;
 
-        public GooglePlaceDetailsApiClient(HttpClient httpClient, IGoogleUriProvider googleUriProvider)
+        public GooglePlaceDetailsApiClient(
+            HttpClient httpClient
+            , IGoogleUriProvider googleUriProvider
+            )
         {
             httpClient.BaseAddress = new Uri("https://maps.googleapis.com/maps/api/place/details/");
             _httpClient = httpClient;

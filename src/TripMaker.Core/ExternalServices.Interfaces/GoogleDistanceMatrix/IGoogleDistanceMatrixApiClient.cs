@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services;
+using Abp.Domain.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +9,7 @@ using TripMaker.ExternalServices.Entities.GoogleDistanceMatrix;
 
 namespace TripMaker.ExternalServices.Interfaces.GoogleDistanceMatrix
 {
-    public interface IGoogleDistanceMatrixApiClient : IApplicationService
+    public interface IGoogleDistanceMatrixApiClient : IDomainService
     {
         Task<GoogleDistanceMatrixRootObject> GetAsync(GoogleDistanceMatrixInput input);
 

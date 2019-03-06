@@ -15,6 +15,7 @@ namespace TripMaker.Plan
                 StartDate=new DateTime(2019, 8, 1),
                 StartTime=new TimeSpan(8, 0, 0),
                 EndDate=new DateTime(2019, 8, 8),
+                Language= Enums.LanguageType.Pl,
                 EndTime=new TimeSpan(18, 0, 0),
                 HasJourneyBooked=true,
                 HasAccomodationBooked=false

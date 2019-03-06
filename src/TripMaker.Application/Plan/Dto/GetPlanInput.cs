@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using TripMaker.Enums;
 
 namespace TripMaker.Plan
 {
@@ -30,6 +31,8 @@ namespace TripMaker.Plan
         public virtual bool HasJourneyBooked { get; set; }
 
         public virtual bool HasAccomodationBooked { get; set; }
+
+        public virtual LanguageType Language { get;  set; }
 
         public override string ToString()
         {

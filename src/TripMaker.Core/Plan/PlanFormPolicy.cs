@@ -9,11 +9,11 @@ namespace TripMaker.Plan
 {
     public class PlanFormPolicy : IPlanFormPolicy
     {
-        private readonly IPlanDataProvider _planDataProvider;
+       // private readonly IPlanDataProvider _planDataProvider;
 
-        public PlanFormPolicy(IPlanDataProvider planDataProvider)
+        public PlanFormPolicy()
         {
-            _planDataProvider = planDataProvider;
+         //   _planDataProvider = planDataProvider;
         }
 
         public async Task CheckFormValidAsync(PlanForm planForm)
@@ -22,10 +22,10 @@ namespace TripMaker.Plan
             {
                 throw new UserFriendlyException("Trip start or end data are incorrect!");
             }
-            if (!(await _planDataProvider.IsPlaceIdValid(planForm.PlaceId)))
-            {
-                throw new UserFriendlyException("PlaceId is incorrect!");
-            }
+            //if (!(await _planDataProvider.IsPlaceIdValid(planForm.PlaceId)))
+            //{
+            //    throw new UserFriendlyException("PlaceId is incorrect!");
+            //}
         }
     }
 }

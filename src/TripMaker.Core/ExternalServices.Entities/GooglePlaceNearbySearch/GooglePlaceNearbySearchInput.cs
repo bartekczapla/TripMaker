@@ -1,5 +1,6 @@
 ﻿
 using TripMaker.Enums;
+using TripMaker.ExternalServices.Entities.Common;
 
 namespace TripMaker.ExternalServices.Entities.GooglePlaceNearbySearch
 {
@@ -18,7 +19,7 @@ namespace TripMaker.ExternalServices.Entities.GooglePlaceNearbySearch
             Rankby = GoogleRankby.Prominence;
         }
 
-        public GooglePlaceNearbySearchInput(Location location, LanguageType language, string keyword, GooglePlaceTypeCategory type= GooglePlaceTypeCategory.None, int? minprice=null, int? maxprice = null)
+        public GooglePlaceNearbySearchInput(Location location, LanguageType language, string keyword, GooglePlaceType type, int? minprice=null, int? maxprice = null)
         {
             Location = location;
             Language = language;
@@ -36,6 +37,6 @@ namespace TripMaker.ExternalServices.Entities.GooglePlaceNearbySearch
         public GoogleRankby Rankby { get; set; }
         public int? Minprice { get; set; } //0-4
         public int? Maxprice { get; set; } //0-4
-        public GooglePlaceTypeCategory Type { get; set; }
+        public GooglePlaceType Type { get; set; }
     }
 }

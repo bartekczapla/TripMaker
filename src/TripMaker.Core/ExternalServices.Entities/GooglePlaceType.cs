@@ -8,6 +8,12 @@ namespace TripMaker.ExternalServices.Entities
 {
     public class GooglePlaceType
     {
+        public GooglePlaceType()
+        {
+            Name = String.Empty;
+            Type = GooglePlaceTypeCategory.None;
+        }
+
         public GooglePlaceType(string name, GooglePlaceTypeCategory type)
         {
             Name = name;

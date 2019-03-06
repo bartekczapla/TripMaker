@@ -22,7 +22,7 @@ namespace TripMaker.ExternalServices.GooglePlace
             _googleUriProvider = googleUriProvider;
         }
 
-        public async Task<GooglePlaceNearbySearchRootObject> GetAsync(GooglePlaceDetailsInput input)
+        public async Task<GooglePlaceNearbySearchRootObject> GetAsync(GooglePlaceNearbySearchInput input)
         {
             var uri = _googleUriProvider.Create(input);
             var resultJson = await _httpClient.GetStringAsync(uri);

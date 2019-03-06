@@ -1,5 +1,6 @@
 ﻿
 using Abp.Application.Services;
+using Abp.Domain.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,9 +11,9 @@ using TripMaker.ExternalServices.Entities.GooglePlaceNearbySearch;
 
 namespace TripMaker.ExternalServices.Interfaces.GooglePlace
 {
-    public interface IGooglePlaceNearbySearchApiClient : IApplicationService
+    public interface IGooglePlaceNearbySearchApiClient : IDomainService
     {
-        Task<GooglePlaceNearbySearchRootObject> GetAsync(GooglePlaceDetailsInput input);
+        Task<GooglePlaceNearbySearchRootObject> GetAsync(GooglePlaceNearbySearchInput input);
 
         Task<GooglePlaceNearbySearchRootObject> GetNextPageTokenAsync(string token);
     }

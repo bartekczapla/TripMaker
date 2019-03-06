@@ -13,7 +13,7 @@ using Abp.AutoMapper;
 
 namespace TripMaker.Plan
 {
-    public class PlanAppService : TripMakerAppServiceBase, IPlanAppService
+    public class PlanAppService : IPlanAppService
     {
         private readonly IPlanManager _planManager;
 
@@ -33,10 +33,10 @@ namespace TripMaker.Plan
             return new ListResultDto<PlanListDto>(list);            
         }
 
-        public async Task<ListResultDto<PlanListDto>> CreateTestPlanAsync()
+        public async Task<ListResultDto<PlanListDto>> GetTestPlanAsync()
         {         
             var input =  PlanCommon.CreateTestInput().MapTo<PlanForm>(); 
-            var result = await _planManager.CreateAsync(input);
+             await _planManager.CreateAsync(input);
 
             return new ListResultDto<PlanListDto>(new List<PlanListDto>());
         }

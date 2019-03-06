@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace TripMaker.Enums
 {
     public enum GoogleTravelMode
     {
+        [Description("driving")]
         Driving=0,
-        Walking=1,
-        Bicycling=2,
-        Transit=3
+        [Description("walking")]
+        Walking =1,
+        [Description("bicycling")]
+        Bicycling =2,
+        [Description("transit")]
+        Transit =3
     }
 }
