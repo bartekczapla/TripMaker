@@ -22,13 +22,10 @@ namespace TripMaker.Plan
         [MaxLength(MaxTitleLength)]
         public virtual string PlaceId { get; protected set; }
 
-        [GreaterThanCurrentDate]
-        [DateGreaterThan("EndDate")]
         public virtual DateTime StartDate { get; protected set; }
 
         public virtual TimeSpan? StartTime { get; protected set; }
 
-        [GreaterThanCurrentDate]
         public virtual DateTime EndDate { get; protected set; }
 
         public virtual TimeSpan? EndTime { get; protected set; }

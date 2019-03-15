@@ -5,6 +5,6 @@ namespace TripMaker.Plan
 {
     public interface IPlanManager : IDomainService
     {
-        Task CreateAsync(PlanForm planForm);
+        Task<Plan> CreateAsync(PlanForm planForm);
     }
 }

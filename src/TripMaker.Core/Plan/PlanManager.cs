@@ -16,7 +16,7 @@ namespace TripMaker.Plan
         private readonly IRepository<PlanForm> _planFormRepository;
         private readonly IRepository<PlanElement> _planElementRepository;
         private readonly IPlanFormPolicy _planFormPolicy;
-        private readonly IPlanDataProvider _planDataProvider;
+        private readonly IPlanElementsProvider _planElementsProvider;
         public IEventBus EventBus { get; set; }
 
 
@@ -25,28 +25,39 @@ namespace TripMaker.Plan
             IRepository<Plan> planRepository,
             IRepository<PlanForm> planFormRepository,
             IRepository<PlanElement> planElementRepository,
-            IPlanDataProvider planDataProvider,
+            IPlanElementsProvider planElementsProvider,
             IPlanFormPolicy planFormPolicy
             )
         {
             _planRepository=planRepository;
             _planFormRepository = planFormRepository;
             _planElementRepository = planElementRepository;
-            _planDataProvider = planDataProvider;
+            _planElementsProvider = planElementsProvider;
             _planFormPolicy = planFormPolicy;
             EventBus = NullEventBus.Instance;
         }
 
-        public async Task CreateAsync(PlanForm planForm)
+        public async Task<Plan> CreateAsync(PlanForm planForm)
         {
             await _planFormPolicy.CheckFormValidAsync(planForm); //check if planForm object has valid data
 
             await EventBus.TriggerAsync(new EventSearchPlace(planForm)); //update SearchedPlaces DB
 
-             await _planDataProvider.ProvideDataAsync(planForm);
+            await _planFormRepository.InsertAsync(planForm);
+   
 
-           // var planId = await _planRepository.InsertAndGetIdAsync(plan);
+            var plan = await _planElementsProvider.GenerateAsync(planForm);
 
+
+            //insert plan to DB
+            await _planRepository.InsertAsync(plan);
+
+            foreach(var element in plan.Elements)
+            {
+                await _planElementRepository.InsertAsync(element);
+            }
+
+            return plan;
         }
     }
 }

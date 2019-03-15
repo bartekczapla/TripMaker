@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using TripMaker.Enums;
 using TripMaker.Plan;
 
 namespace TripMaker.ExternalServices.Entities.Models
@@ -13,16 +14,15 @@ namespace TripMaker.ExternalServices.Entities.Models
     [Table("ExternalServicesJSON")]
     public class ExternalServicesJSON : Entity, IHasCreationTime
     {
-        public const int MaxTypeLength = 80;
-        public const int MaxJsonLength = 64*128;
+        public const int MaxUriLength = 64*4;
+        public const int MaxJsonLength = 128*128;
 
         [Required]
-        [MaxLength(MaxTypeLength)]
-        public virtual string ServiceType { get; protected set; }
+        public virtual ExternalServicesType ServiceType { get; protected set; }
 
         [Required]
-        [MaxLength(MaxJsonLength)]
-        public virtual string InputJSON { get; protected set; }
+        [MaxLength(MaxUriLength)]
+        public virtual string InputUri { get; protected set; }
 
         [Required]
         [MaxLength(MaxJsonLength)]
@@ -40,11 +40,11 @@ namespace TripMaker.ExternalServices.Entities.Models
             CreationTime = Clock.Now;
         }
 
-        public ExternalServicesJSON(string type, string inputJson, string resultJson,int? planFormId=null)
+        public ExternalServicesJSON(ExternalServicesType type, string inputUri, string resultJson,int? planFormId=null)
             :this()
         {
             ServiceType = type;
-            InputJSON = inputJson;
+            InputUri = inputUri;
             ResultJSON = resultJson;
             PlanFormId = planFormId;
         }

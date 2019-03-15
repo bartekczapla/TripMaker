@@ -31,6 +31,8 @@ namespace TripMaker.ExternalServices.GoogleDistanceMatrix
             var resultJson = await _httpClient.GetStringAsync(uri);
             var result = JsonConvert.DeserializeObject<GoogleDistanceMatrixRootObject>(resultJson);
             result.resultJson = resultJson;
+            result.inputUri = uri;
+
             return result;
         }
 

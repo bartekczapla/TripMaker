@@ -34,6 +34,8 @@ namespace TripMaker.ExternalServices.GooglePlace
             var resultJson = await _httpClient.GetStringAsync(uri);
             var result = JsonConvert.DeserializeObject<GooglePlaceDetailsRootObject>(resultJson);
             result.resultJson = resultJson;
+            result.inputUri = uri;
+
             return result;
         }
     }

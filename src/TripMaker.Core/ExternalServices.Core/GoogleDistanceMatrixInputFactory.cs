@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using TripMaker.ExternalServices.Entities.GoogleDistanceMatrix;
+using TripMaker.ExternalServices.Interfaces;
 using TripMaker.ExternalServices.Interfaces.GoogleDistanceMatrix;
 using TripMaker.Plan;
 

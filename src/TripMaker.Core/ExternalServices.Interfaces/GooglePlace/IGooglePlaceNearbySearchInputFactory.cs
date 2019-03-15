@@ -2,13 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TripMaker.Enums;
+using TripMaker.ExternalServices.Entities;
+using TripMaker.ExternalServices.Entities.Common;
 using TripMaker.ExternalServices.Entities.GooglePlaceNearbySearch;
 using TripMaker.Plan;
 
-namespace TripMaker.ExternalServices.Interfaces.GooglePlace
+namespace TripMaker.ExternalServices.Interfaces
 {
     public interface IGooglePlaceNearbySearchInputFactory : IDomainService
     {
-        GooglePlaceNearbySearchInput Create(PlanForm planForm);
+        GooglePlaceNearbySearchInput Create(Location location, LanguageType language, GooglePlaceType type);
     }
 }

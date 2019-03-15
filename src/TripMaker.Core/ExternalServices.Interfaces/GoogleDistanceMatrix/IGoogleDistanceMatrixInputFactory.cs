@@ -5,7 +5,7 @@ using System.Text;
 using TripMaker.ExternalServices.Entities.GoogleDistanceMatrix;
 using TripMaker.Plan;
 
-namespace TripMaker.ExternalServices.Interfaces.GoogleDistanceMatrix
+namespace TripMaker.ExternalServices.Interfaces
 {
     public interface IGoogleDistanceMatrixInputFactory : IDomainService
     {

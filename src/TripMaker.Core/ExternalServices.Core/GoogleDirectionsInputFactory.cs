@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using TripMaker.ExternalServices.Entities.GoogleDirections;
-using TripMaker.ExternalServices.Interfaces.GoogleDirections;
+using TripMaker.ExternalServices.Interfaces;
 using TripMaker.Plan;
 
 namespace TripMaker.ExternalServices.Core
@@ -30,8 +30,6 @@ namespace TripMaker.ExternalServices.Core
         // -traffic_model {best_guess ,pessimistic ,optimistic )
         // - transit_mode={bus,subway,train,tram,rail}
         // -transit_routing_preference {less_walking, fewer_transfers} 
-
-
 
 
         public GoogleDirectionsInput Create(PlanForm planForm)

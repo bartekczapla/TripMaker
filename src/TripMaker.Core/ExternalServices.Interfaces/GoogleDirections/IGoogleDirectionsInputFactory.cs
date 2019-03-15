@@ -2,7 +2,7 @@
 using TripMaker.ExternalServices.Entities.GoogleDirections;
 using TripMaker.Plan;
 
-namespace TripMaker.ExternalServices.Interfaces.GoogleDirections
+namespace TripMaker.ExternalServices.Interfaces
 {
     public interface IGoogleDirectionsInputFactory : IDomainService
     {

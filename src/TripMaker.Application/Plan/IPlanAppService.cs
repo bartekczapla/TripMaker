@@ -10,9 +10,9 @@ namespace TripMaker.Plan
 {
     public interface IPlanAppService : IApplicationService
     {
-        Task<ListResultDto<PlanListDto>> GetPlanAsync(GetPlanInput input);
+        Task<ListResultDto<PlanDto>> GetPlanAsync(GetPlanInput input);
 
-        Task<ListResultDto<PlanListDto>> GetTestPlanAsync();
+        Task<PlanDto> GetTestPlanAsync();
 
     }
 }

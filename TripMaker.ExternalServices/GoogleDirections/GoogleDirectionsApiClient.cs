@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using TripMaker.Configuration;
 using Newtonsoft.Json;
 using TripMaker.ExternalServices.Interfaces;
 using TripMaker.ExternalServices.Entities.GoogleDirections;
@@ -20,7 +17,6 @@ namespace TripMaker.ExternalServices.GoogleDirections
             httpClient.BaseAddress = new Uri("https://maps.googleapis.com/maps/api/directions/");
             _httpClient = httpClient;
             _googleUriProvider = googleUriProvider;
-
         }
 
         public async Task<GoogleDirectionsRootObject> GetAsync(GoogleDirectionsInput input)
@@ -29,6 +25,7 @@ namespace TripMaker.ExternalServices.GoogleDirections
             var resultJson = await _httpClient.GetStringAsync(uri);
             var result= JsonConvert.DeserializeObject<GoogleDirectionsRootObject>(resultJson);
             result.resultJson = resultJson;
+            result.inputUri = uri;
             return result;
         }
 

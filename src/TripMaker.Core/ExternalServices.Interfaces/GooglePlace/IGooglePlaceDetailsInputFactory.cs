@@ -2,13 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TripMaker.Enums;
 using TripMaker.ExternalServices.Entities.GooglePlaceDetails;
 using TripMaker.Plan;
 
-namespace TripMaker.ExternalServices.Interfaces.GooglePlace
+namespace TripMaker.ExternalServices.Interfaces
 {
     public interface IGooglePlaceDetailsInputFactory : IDomainService
     {
-        GooglePlaceDetailsInput Create(PlanForm planForm);
+        GooglePlaceDetailsInput CreateAll(string placeId, LanguageType language);
     }
 }

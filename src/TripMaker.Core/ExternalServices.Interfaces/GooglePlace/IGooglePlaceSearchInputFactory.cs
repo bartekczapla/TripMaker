@@ -5,7 +5,7 @@ using System.Text;
 using TripMaker.ExternalServices.Entities.GooglePlaceSearch;
 using TripMaker.Plan;
 
-namespace TripMaker.ExternalServices.Interfaces.GooglePlace
+namespace TripMaker.ExternalServices.Interfaces
 {
     public interface IGooglePlaceSearchInputFactory : IDomainService
     {

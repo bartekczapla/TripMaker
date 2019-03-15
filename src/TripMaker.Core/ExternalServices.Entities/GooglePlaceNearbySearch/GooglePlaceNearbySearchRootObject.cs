@@ -10,6 +10,7 @@ namespace TripMaker.ExternalServices.Entities.GooglePlaceNearbySearch
         public List<GooglePlaceNearbySearchResult> results { get; set; }
         public string status { get; set; }
         public string resultJson { get; set; }
+        public string inputUri { get; set; }
 
     }
 }

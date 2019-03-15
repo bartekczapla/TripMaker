@@ -23,22 +23,18 @@ namespace TripMaker.Plan
 
         }
 
-        public async Task<ListResultDto<PlanListDto>> GetPlanAsync(GetPlanInput input)
+        public async Task<ListResultDto<PlanDto>> GetPlanAsync(GetPlanInput input)
         {
 
-            var temp = new PlanListDto() { Title = "test", Date = new DateTime() };
-            var list = new List<PlanListDto>();
-            list.Add(temp);
-
-            return new ListResultDto<PlanListDto>(list);            
+            return new ListResultDto<PlanDto>();            
         }
 
-        public async Task<ListResultDto<PlanListDto>> GetTestPlanAsync()
+        public async Task<PlanDto> GetTestPlanAsync()
         {         
             var input =  PlanCommon.CreateTestInput().MapTo<PlanForm>(); 
-             await _planManager.CreateAsync(input);
+            var result= await _planManager.CreateAsync(input);
 
-            return new ListResultDto<PlanListDto>(new List<PlanListDto>());
+            return result.MapTo<PlanDto>();
         }
     }
 }
