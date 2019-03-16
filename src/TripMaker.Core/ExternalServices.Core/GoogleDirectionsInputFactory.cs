@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TripMaker.Enums;
+using TripMaker.ExternalServices.Entities.Common;
 using TripMaker.ExternalServices.Entities.GoogleDirections;
 using TripMaker.ExternalServices.Interfaces;
 using TripMaker.Plan;
@@ -32,9 +34,15 @@ namespace TripMaker.ExternalServices.Core
         // -transit_routing_preference {less_walking, fewer_transfers} 
 
 
-        public GoogleDirectionsInput Create(PlanForm planForm)
+        public GoogleDirectionsInput Create(string originId, string destinationId, LanguageType language, GoogleTravelMode mode)
         {
-            throw new NotImplementedException();
+            return new GoogleDirectionsInput(originId, destinationId, mode, language);
+        }
+
+
+        public GoogleDirectionsInput Create(Location origin, Location destination, LanguageType language, GoogleTravelMode mode)
+        {
+            return new GoogleDirectionsInput(origin, destination, mode, language);
         }
     }
 }

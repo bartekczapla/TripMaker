@@ -23,6 +23,14 @@ namespace TripMaker.ExternalServices.Entities.GooglePlaceSearch
             Fields = new Collection<GoogleField>();
         }
 
+        public GooglePlaceSearchInput(string input, Location location, LanguageType language, IList<GoogleField> fields)
+        {
+            Input = input;
+            Location = location;
+            Language = language;
+            Fields = new Collection<GoogleField>(fields);
+        }
+
         public string Input { get; set; }
         public Location Location { get; set; }
         public int? Radius { get; set; }

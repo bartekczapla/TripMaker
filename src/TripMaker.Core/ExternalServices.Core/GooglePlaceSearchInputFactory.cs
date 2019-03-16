@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using TripMaker.Enums;
+using TripMaker.ExternalServices.Entities;
+using TripMaker.ExternalServices.Entities.Common;
 using TripMaker.ExternalServices.Entities.GooglePlaceSearch;
 using TripMaker.ExternalServices.Interfaces;
 using TripMaker.ExternalServices.Interfaces.GooglePlace;
@@ -24,10 +28,16 @@ namespace TripMaker.ExternalServices.Core
         //- locationbias = {ipbiad | point:lat,lng | circle:radius@lat,lng |rectangle:south,west|north,east}
 
 
-        public GooglePlaceSearchInput Create(PlanForm planForm)
+        public GooglePlaceSearchInput CreateUseful(Location location, GooglePlaceTypeCategory typeCategory, LanguageType language)
         {
+            var allUsefulFields = GoogleFields.Table
+                            .Where(x => x.AllowedServices.Contains(ExternalServicesType.GooglePlaceSearch) &&
+                            (x.Type == GoogleFieldType.Details || x.Type == GoogleFieldType.PlaceInfo || x.Type == GoogleFieldType.Reviews))
+                            .ToList();
 
-            throw new NotImplementedException();
+            var input = GooglePlaceTypes.Table.First(x => x.Type == typeCategory).Name;
+
+            return new GooglePlaceSearchInput(input, location, language, allUsefulFields);
         }
     }
 }

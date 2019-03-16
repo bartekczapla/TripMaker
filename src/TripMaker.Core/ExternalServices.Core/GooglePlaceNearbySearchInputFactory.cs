@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TripMaker.Enums;
 using TripMaker.ExternalServices.Entities;
@@ -30,9 +31,13 @@ namespace TripMaker.ExternalServices.Core
         //- pagetoken -Returns the next 20 results from a previously run search. Setting a pagetoken parameter will execute a search with the same parameters used previously
 
 
-        public GooglePlaceNearbySearchInput Create(Location location, LanguageType language, GooglePlaceType type)
+        public GooglePlaceNearbySearchInput Create(Location location, LanguageType language, GooglePlaceTypeCategory typeCategory)
         {
-            return new GooglePlaceNearbySearchInput(location, language, String.Empty, type);
+            var types = GooglePlaceTypes.Table.Where(x => x.Type == typeCategory).ToList();
+            Random rnd = new Random();
+            var index=rnd.Next(types.Count);
+
+            return new GooglePlaceNearbySearchInput(location, language, String.Empty, types[index]);
         }
     }
 }

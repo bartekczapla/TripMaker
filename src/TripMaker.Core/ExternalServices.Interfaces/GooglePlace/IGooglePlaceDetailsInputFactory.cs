@@ -10,6 +10,6 @@ namespace TripMaker.ExternalServices.Interfaces
 {
     public interface IGooglePlaceDetailsInputFactory : IDomainService
     {
-        GooglePlaceDetailsInput CreateAll(string placeId, LanguageType language);
+        GooglePlaceDetailsInput CreateAllUseful(string placeId, LanguageType language);
     }
 }

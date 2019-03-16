@@ -60,9 +60,9 @@ namespace TripMaker.Plan
         {
             var plan = new Plan(planForm.PlaceName, planForm.Id);
 
-            var destinationInfo = await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateAll(planForm.PlaceId, planForm.Language));
+            var destinationInfo = await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateAllUseful(planForm.PlaceId, planForm.Language));
 
-            var googleNearbyRestaurantInput = _googlePlaceNearbySearchInputFactory.Create(destinationInfo.Result.geometry.location, planForm.Language, new GooglePlaceType("bar", GooglePlaceTypeCategory.None));
+            var googleNearbyRestaurantInput = _googlePlaceNearbySearchInputFactory.Create(destinationInfo.Result.geometry.location, planForm.Language, GooglePlaceTypeCategory.Partying);
             var nearbyRestaurant = await _googlePlaceNearbySearchApiClient.GetAsync(googleNearbyRestaurantInput);
 
             var firstMatch = nearbyRestaurant.results.First();
@@ -77,17 +77,3 @@ namespace TripMaker.Plan
         }
     }
 }
-
-            //var googleDetailsInput = new GooglePlaceDetailsInput(planForm.PlaceId, planForm.Language);
-            // googleDetailsInput.Fields.Add(new GoogleField("geometry", GoogleFieldType.Address, new ExternalServicesType[] { ExternalServicesType.GooglePlaceSearch, ExternalServicesType.GooglePlaceDetails }));
-
-            //var googleDetails = await _googlePlaceDetailsApiClient.GetAsync(googleDetailsInput);
-
-            //var googlePlaceSearch = new GooglePlaceSearchInput("restauracja", googleDetails.Result.geometry.location, planForm.Language, 3000);
-            //var googleSearch = await _googlePlaceSearchApiClient.GetAsync(googlePlaceSearch);
-
-            //var googleNearbyInput = new GooglePlaceNearbySearchInput(googleDetails.Result.geometry.location, planForm.Language, "restaurant", new GooglePlaceType(), 0, 2);
-            //var googleNearby = await _googlePlaceNearbySearchApiClient.GetAsync(googleNearbyInput);
-
-            //var googleDirectionsInput = new GoogleDirectionsInput(googleNearby.results[0].geometry.location, googleNearby.results[2].geometry.location, GoogleTravelMode.Walking, planForm.Language);
-            //var googleDirections = await _googleDirectionsApiClient.GetAsync(googleDirectionsInput);
