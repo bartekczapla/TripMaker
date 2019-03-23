@@ -5,6 +5,7 @@ using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using Abp.Timing;
 using TripMaker.Enums;
+using TripMaker.Plan.Models;
 using TripMaker.Validation;
 
 namespace TripMaker.Plan
@@ -44,7 +45,14 @@ namespace TripMaker.Plan
         public virtual Plan Plan { get; protected set; }
         public virtual int? PlanId { get; protected set; }
 
-        public PlanElement(string placeName, string placeId,  double lat, double lng, int orderNo, DateTime start, DateTime end, PlanElementType elementType, double? rating)
+        //[ForeignKey("StartPlanElementId")]
+        //public virtual PlanRoute StartRoute{ get; protected set; }
+
+        //[ForeignKey("EndPlanElementId")]
+        //public virtual PlanRoute EndRoute { get; protected set; }
+
+
+        public PlanElement(string placeName, string placeId,  double lat, double lng, int orderNo, DateTime start, DateTime end, PlanElementType elementType, double? rating=null)
         {
             PlaceName = placeName;
             PlaceId = placeId;

@@ -8,6 +8,8 @@ using TripMaker.Plan;
 using TripMaker.Configuration.Models;
 using TripMaker.Home.Models;
 using TripMaker.ExternalServices.Entities.Models;
+using TripMaker.Plan.Models;
+using System.Linq;
 
 namespace TripMaker.EntityFrameworkCore
 {
@@ -21,6 +23,8 @@ namespace TripMaker.EntityFrameworkCore
         public virtual DbSet<Plan.Plan> Plans { get; set; }
         public virtual DbSet<PlanForm> PlanForms { get; set; }
         public virtual DbSet<PlanElement> PlanElements { get; set; }
+        public virtual DbSet<PlanRoute> PlanRoutes { get; set; }
+        public virtual DbSet<PlanRouteStep> PlanRouteSteps { get; set; }
         public virtual DbSet<SearchedPlace> SearchedPlaces { get; set; }
         public virtual DbSet<ExternalServicesJSON> ExternalServicesJSON { get; set; }
 
@@ -29,6 +33,14 @@ namespace TripMaker.EntityFrameworkCore
         public TripMakerDbContext(DbContextOptions<TripMakerDbContext> options)
             : base(options)
         {
+          
         }
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder) 
+        //{
+
+        //    base.OnModelCreating(modelBuilder);
+
+        //}
     }
 }

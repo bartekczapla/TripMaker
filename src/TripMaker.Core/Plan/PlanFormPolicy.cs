@@ -16,6 +16,11 @@ namespace TripMaker.Plan
          //   _planDataProvider = planDataProvider;
         }
 
+        // Co sprawdzić
+        // -> różnica dat -> 2 tygodnie?
+        // -> Timespan must be?
+
+
         public async Task CheckFormValidAsync(PlanForm planForm)
         {
             if (!planForm.IsDatesCorrect())
