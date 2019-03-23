@@ -14,22 +14,20 @@ namespace TripMaker.Plan.Models
 
         public virtual int Duration { get; protected set; }
 
-        [ForeignKey("StartPlanElementId")]
-        public virtual PlanElement StartPlanElement { get; protected set; }
-        public virtual int? StartPlanElementId { get; protected set; }
+        //[ForeignKey("StartPlanElementId")]
+        //public virtual PlanElement StartPlanElement { get; protected set; }
+        //public virtual int? StartPlanElementId { get; protected set; }
 
-        [ForeignKey("EndPlanElementId")]
-        public virtual PlanElement EndPlanElement { get; protected set; }
-        public virtual int? EndPlanElementId { get; protected set; }
+        //[ForeignKey("EndPlanElementId")]
+        //public virtual PlanElement EndPlanElement { get; protected set; }
+        //public virtual int? EndPlanElementId { get; protected set; }
 
 
         [ForeignKey("PlanRouteId")]
         public virtual ICollection<PlanRouteStep> Steps { get; protected set; }
 
-        public PlanRoute( int distance, int duration,int? startPlanElementId=null,int? endPlanElementId=null )
+        public PlanRoute( int distance, int duration)
         {
-            StartPlanElementId = startPlanElementId;
-            EndPlanElementId = endPlanElementId;
             Distance = distance;
             Duration = duration;
             Steps = new Collection<PlanRouteStep>();

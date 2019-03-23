@@ -45,12 +45,13 @@ namespace TripMaker.Plan
         public virtual Plan Plan { get; protected set; }
         public virtual int? PlanId { get; protected set; }
 
-        //[ForeignKey("StartPlanElementId")]
-        //public virtual PlanRoute StartRoute{ get; protected set; }
+        [ForeignKey("StartingRouteId")]
+        public virtual PlanRoute StartingRoute { get; set; }
+        public virtual int? StartingRouteId { get; set; }
 
-        //[ForeignKey("EndPlanElementId")]
-        //public virtual PlanRoute EndRoute { get; protected set; }
-
+        [ForeignKey("EndingRouteId")]
+        public virtual PlanRoute EndingRoute { get; set; }
+        public virtual int? EndingRouteId { get; set; }
 
         public PlanElement(string placeName, string placeId,  double lat, double lng, int orderNo, DateTime start, DateTime end, PlanElementType elementType, double? rating=null)
         {
