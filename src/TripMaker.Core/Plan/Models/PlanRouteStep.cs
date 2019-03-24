@@ -15,9 +15,9 @@ namespace TripMaker.Plan.Models
         public const int MaxManeuverLength = 64;
         public const int MaxHtmlLength = 64 * 1024; //64KB
 
-        public virtual int Distance { get; protected set; }
+        public virtual int Distance { get; protected set; } //meters
 
-        public virtual int Duration { get; protected set; }
+        public virtual int Duration { get; protected set; } //seconds
 
         public virtual double StartStepLat { get; protected set; }
 
@@ -39,9 +39,8 @@ namespace TripMaker.Plan.Models
         public virtual PlanRoute PlanRoute { get; protected set; }
         public virtual int PlanRouteId { get; protected set; }
 
-        public PlanRouteStep(int planRouteId, int distance, int duration, double startStepLat, double startStepLng, double endStepLat, double endStepLng,   GoogleTravelMode travelMode, string htmlInstruction, string maneuver)
+        public PlanRouteStep(int distance, int duration, double startStepLat, double startStepLng, double endStepLat, double endStepLng,   GoogleTravelMode travelMode, string htmlInstruction, string maneuver)
         {
-            PlanRouteId = planRouteId;
             Distance = distance;
             Duration = duration;
             StartStepLat = startStepLat;

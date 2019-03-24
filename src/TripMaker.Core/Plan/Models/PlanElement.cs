@@ -16,34 +16,34 @@ namespace TripMaker.Plan
         public const int MaxTitleLength = 128;
 
         [MaxLength(MaxTitleLength)]
-        public virtual string PlaceName { get; protected set; }
+        public virtual string PlaceName { get;  set; }
 
         [MaxLength(MaxTitleLength)]
-        public virtual string PlaceId { get; protected set; }
+        public virtual string PlaceId { get;  set; }
 
     
-        public virtual double Lat { get; protected set; }
+        public virtual double Lat { get;  set; }
 
 
-        public virtual double Lng { get; protected set; }
-
-        [Required]
-        public virtual int OrderNo { get; protected set; }
+        public virtual double Lng { get;  set; }
 
         [Required]
-        public virtual DateTime Start { get; protected set; }
+        public virtual int OrderNo { get;  set; }
 
         [Required]
-        public virtual DateTime End { get; protected set; }
+        public virtual DateTime Start { get; set; }
 
         [Required]
-        public virtual PlanElementType ElementType { get; protected set; }
+        public virtual DateTime End { get;  set; }
 
-        public virtual double? Rating { get; protected set; }
+        [Required]
+        public virtual PlanElementType ElementType { get;  set; }
+
+        public virtual double? Rating { get;  set; }
 
         [ForeignKey("PlanId")]
-        public virtual Plan Plan { get; protected set; }
-        public virtual int? PlanId { get; protected set; }
+        public virtual Plan Plan { get;  set; }
+        public virtual int? PlanId { get;  set; }
 
         [ForeignKey("StartingRouteId")]
         public virtual PlanRoute StartingRoute { get; set; }
@@ -65,6 +65,27 @@ namespace TripMaker.Plan
             ElementType = elementType;
             Rating = rating;
         }
+
+        public PlanElement(string placeName, string placeId, double lat, double lng, int orderNo, PlanElementType elementType, double? rating = null)
+        {
+            PlaceName = placeName;
+            PlaceId = placeId;
+            Lat = lat;
+            Lng = lng;
+            OrderNo = orderNo;
+            ElementType = elementType;
+            Rating = rating;
+            Start = new DateTime();
+            End = new DateTime();
+        }
+
+        public void SetDate(DateTime start, DateTime end)
+        {
+            Start = start;
+            End = end;
+        }
+
+
 
     }
 }

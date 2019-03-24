@@ -22,6 +22,7 @@ namespace TripMaker.Plan.Models
         //public virtual PlanElement EndPlanElement { get; protected set; }
         //public virtual int? EndPlanElementId { get; protected set; }
 
+        //string copywright?
 
         [ForeignKey("PlanRouteId")]
         public virtual ICollection<PlanRouteStep> Steps { get; protected set; }

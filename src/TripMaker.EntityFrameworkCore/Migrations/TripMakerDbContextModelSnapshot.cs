@@ -1126,6 +1126,30 @@ namespace TripMaker.Migrations
                     b.ToTable("AbpTenants");
                 });
 
+            modelBuilder.Entity("TripMaker.Plan.Models.PlanAccomodation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FormattedAddress")
+                        .HasMaxLength(128);
+
+                    b.Property<double>("Lat");
+
+                    b.Property<double>("Lng");
+
+                    b.Property<string>("PlaceId")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("PlaceName")
+                        .HasMaxLength(128);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PlanAccomodations");
+                });
+
             modelBuilder.Entity("TripMaker.Plan.Models.PlanRoute", b =>
                 {
                     b.Property<int>("Id")
@@ -1271,11 +1295,15 @@ namespace TripMaker.Migrations
                         .IsRequired()
                         .HasMaxLength(512);
 
+                    b.Property<int?>("PlanAccomodationId");
+
                     b.Property<DateTime>("StartDate");
 
                     b.Property<TimeSpan?>("StartTime");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PlanAccomodationId");
 
                     b.ToTable("PlanForms");
                 });
@@ -1590,6 +1618,13 @@ namespace TripMaker.Migrations
                     b.HasOne("TripMaker.Plan.Models.PlanRoute", "StartingRoute")
                         .WithMany()
                         .HasForeignKey("StartingRouteId");
+                });
+
+            modelBuilder.Entity("TripMaker.Plan.PlanForm", b =>
+                {
+                    b.HasOne("TripMaker.Plan.Models.PlanAccomodation", "PlanAccomodation")
+                        .WithMany()
+                        .HasForeignKey("PlanAccomodationId");
                 });
 
             modelBuilder.Entity("TripMaker.Tutorial.EventRegistration", b =>

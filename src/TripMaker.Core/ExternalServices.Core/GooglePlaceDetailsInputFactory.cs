@@ -26,11 +26,20 @@ namespace TripMaker.ExternalServices.Core
         {
             var allUsefulFields = GoogleFields.Table
                                         .Where(x => x.AllowedServices.Contains(ExternalServicesType.GooglePlaceDetails) &&
-                                        (x.Type == GoogleFieldType.Details || x.Type == GoogleFieldType.PlaceInfo || x.Type == GoogleFieldType.Reviews))
+                                        (x.Type == GoogleFieldType.Address || x.Type == GoogleFieldType.Details || x.Type == GoogleFieldType.PlaceInfo || x.Type == GoogleFieldType.Reviews))
                                         .ToList();
 
             return new GooglePlaceDetailsInput(placeId, language, allUsefulFields);
         }
 
+        public GooglePlaceDetailsInput CreateBasic(string placeId, LanguageType language)
+        {
+            var basicFields = GoogleFields.Table
+                                        .Where(x => x.AllowedServices.Contains(ExternalServicesType.GooglePlaceDetails) &&
+                                        (x.Type == GoogleFieldType.Address || x.Type == GoogleFieldType.Details ))
+                                        .ToList();
+
+            return new GooglePlaceDetailsInput(placeId, language, basicFields);
+        }
     }
 }

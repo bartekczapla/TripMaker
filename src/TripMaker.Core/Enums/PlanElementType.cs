@@ -6,12 +6,17 @@ namespace TripMaker.Enums
 {
     public enum PlanElementType
     {
-        Nothing=0,
-        Eating=1,
-        Sleeping=2,
-        Relaxing=3,
-        Sightseeing=4,
-        Partying=5,
-        Moving=6
+        Nothing,
+        Eating,
+        Sleeping,
+        Entertainment,
+        Relax,
+        Activity,
+        Culture,
+        Sightseeing,
+        Partying,
+        Shopping,
+        Moving
     }
 }
+

@@ -22,6 +22,7 @@ namespace TripMaker.EntityFrameworkCore
         public virtual DbSet<EventRegistration> EventRegistrations { get; set; }
         public virtual DbSet<Plan.Plan> Plans { get; set; }
         public virtual DbSet<PlanForm> PlanForms { get; set; }
+        public virtual DbSet<PlanAccomodation> PlanAccomodations { get; set; }
         public virtual DbSet<PlanElement> PlanElements { get; set; }
         public virtual DbSet<PlanRoute> PlanRoutes { get; set; }
         public virtual DbSet<PlanRouteStep> PlanRouteSteps { get; set; }

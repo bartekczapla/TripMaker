@@ -5,6 +5,7 @@ using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using Abp.Timing;
 using TripMaker.Enums;
+using TripMaker.Plan.Models;
 using TripMaker.Validation;
 
 namespace TripMaker.Plan
@@ -38,6 +39,10 @@ namespace TripMaker.Plan
 
         public virtual DateTime CreationTime { get; set; }
 
+        [ForeignKey("PlanAccomodationId")]
+        public virtual PlanAccomodation PlanAccomodation { get; set; }
+        public virtual int? PlanAccomodationId { get; set; }
+
         protected PlanForm()
         {
             CreationTime = Clock.Now;
@@ -55,6 +60,7 @@ namespace TripMaker.Plan
             Language = language;
             HasJourneyBooked = hasJourneyBooked;
             HasAccomodationBooked = hasAccomodationBooked;
+           
         }
 
         public bool IsDatesCorrect()
