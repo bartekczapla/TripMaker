@@ -27,16 +27,12 @@ namespace TripMaker.Plan
 
         public virtual double Lng { get;  set; }
 
-        [Required]
         public virtual int OrderNo { get;  set; }
 
-        [Required]
         public virtual DateTime Start { get; set; }
 
-        [Required]
         public virtual DateTime End { get;  set; }
 
-        [Required]
         public virtual PlanElementType ElementType { get;  set; }
 
         public virtual double? Rating { get;  set; }
@@ -52,6 +48,13 @@ namespace TripMaker.Plan
         [ForeignKey("EndingRouteId")]
         public virtual PlanRoute EndingRoute { get; set; }
         public virtual int? EndingRouteId { get; set; }
+
+        public PlanElement(int orderNo, DateTime start, DateTime end)
+        {
+            OrderNo = orderNo;
+            Start = start;
+            End = end;
+        }
 
         public PlanElement(string placeName, string placeId,  double lat, double lng, int orderNo, DateTime start, DateTime end, PlanElementType elementType, double? rating=null)
         {
@@ -85,7 +88,22 @@ namespace TripMaker.Plan
             End = end;
         }
 
+        public void UpdateDateTimeWithRouteDuration(TimeSpan routeDuration)
+        {
+            Start=Start.Add(routeDuration);
+            End=End.Add(routeDuration);
+        }
 
+        public void UpdateInformation(string placeName, string placeId, double lat, double lng, TimeSpan duration, PlanElementType elementType, double? rating = null)
+        {
+            PlaceName = placeName;
+            PlaceId = placeId;
+            Lat = lat;
+            Lng = lng;
+            End=End.Add(duration);
+            ElementType = elementType;
+            Rating = rating;
+        }
 
     }
 }

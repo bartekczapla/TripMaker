@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using TripMaker.Enums;
+using TripMaker.Plan.Dto;
 
 namespace TripMaker.Plan
 {
@@ -31,6 +32,8 @@ namespace TripMaker.Plan
         public virtual bool HasJourneyBooked { get; set; }
 
         public virtual bool HasAccomodationBooked { get; set; }
+
+        public virtual PlanAccomodationDto PlanAccomodation { get; set; }
 
         public virtual LanguageType Language { get;  set; }
 

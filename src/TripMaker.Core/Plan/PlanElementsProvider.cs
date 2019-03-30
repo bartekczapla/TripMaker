@@ -34,6 +34,10 @@ namespace TripMaker.Plan
         private readonly IGooglePlaceNearbySearchInputFactory _googlePlaceNearbySearchInputFactory;
         private readonly IGooglePlaceSearchInputFactory _googlePlaceSearchInputFactory;
 
+        private readonly IPlanElementDecisionMaker _planElementDecisionMaker;
+        private readonly IPlanElementCandidateFactory _planElementCandidateFactory;
+        private readonly IPlanElementByUserPreferencesPicker _planElementByUserPreferencesPicker;
+
         public IEventBus EventBus { get; set; }
 
         public PlanElementsProvider( IGooglePlaceDetailsApiClient googlePlaceDetailsApiClient, IGooglePlaceSearchApiClient googlePlaceSearchApiClient,
@@ -41,7 +45,8 @@ namespace TripMaker.Plan
             IGoogleDirectionsApiClient googleDirectionsApiClient,
             IGoogleDirectionsInputFactory googleDirectionsInputFactory, IGoogleDistanceMatrixInputFactory googleDistanceMatrixInputFactory,
             IGooglePlaceDetailsInputFactory googlePlaceDetailsInputFactory, IGooglePlaceNearbySearchInputFactory googlePlaceNearbySearchInputFactory,
-            IGooglePlaceSearchInputFactory googlePlaceSearchInputFactory)
+            IGooglePlaceSearchInputFactory googlePlaceSearchInputFactory, IPlanElementCandidateFactory planElementCandidateFactory,
+            IPlanElementDecisionMaker planElementDecisionMaker, IPlanElementByUserPreferencesPicker planElementByUserPreferencesPicker)
         {
             _googlePlaceDetailsApiClient = googlePlaceDetailsApiClient;
             _googlePlaceSearchApiClient = googlePlaceSearchApiClient;
@@ -55,6 +60,10 @@ namespace TripMaker.Plan
             _googlePlaceNearbySearchInputFactory = googlePlaceNearbySearchInputFactory;
             _googlePlaceSearchInputFactory = googlePlaceSearchInputFactory;
 
+            _planElementDecisionMaker = planElementDecisionMaker;
+            _planElementCandidateFactory = planElementCandidateFactory;
+            _planElementByUserPreferencesPicker = planElementByUserPreferencesPicker;
+
             EventBus = NullEventBus.Instance;
         }
 
@@ -65,9 +74,23 @@ namespace TripMaker.Plan
             //Destination Info
             var destinationInfo = await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateBasic(planForm.PlaceId, planForm.Language));
 
-            //Accomodation
-            var accomodation = new Accomodation(destinationInfo.Result.geometry.location , destinationInfo.Result.place_id, destinationInfo.Result.name, destinationInfo.Result.formatted_address);
-
+            //Accomodation 
+            Accomodation accomodation;
+            if(planForm.HasAccomodationBooked && planForm.PlanAccomodation != null)
+            {
+                var accomodationInfo = await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateBasic(planForm.PlanAccomodation.PlaceId, planForm.Language));
+                accomodation = new Accomodation(accomodationInfo.Result.geometry.location, accomodationInfo.Result.place_id, accomodationInfo.Result.name, accomodationInfo.Result.formatted_address);
+                //update planForm.PlanAccomodation
+                planForm.PlanAccomodation.Lat = accomodation.Location.lat;
+                planForm.PlanAccomodation.Lng = accomodation.Location.lng;
+                planForm.PlanAccomodation.FormattedAddress = accomodation.FormattedAddress;
+                planForm.PlanAccomodation.PlaceName = accomodation.PlaceName;
+            }
+            else
+            {
+                //if no accomodation, everyday starting point is taken from destination address
+                accomodation = new Accomodation(destinationInfo.Result.geometry.location , destinationInfo.Result.place_id, destinationInfo.Result.name, destinationInfo.Result.formatted_address);
+            }
 
 
             //Time iterator
@@ -76,7 +99,18 @@ namespace TripMaker.Plan
             var endDateTime = planForm.EndTime.HasValue ? planForm.EndDate.Add(planForm.EndTime.Value) : planForm.StartDate.Add(EndTimeAssumption);
 
             //List to hold PlanElements from current day
-            IList<PlanElement> CurrentDayElements = new List<PlanElement>();
+            List<PlanElement> CurrentDayElements = new List<PlanElement>();
+
+            //List to hold Plan Element Candidates from api services
+            List<PlanElementCandidate> PlanElementCandidate = new List<PlanElementCandidate>();
+            List<PlanElementCandidate> UsedPlanElementCandidate = new List<PlanElementCandidate>();
+
+            //Add Sleeping to candidates list
+            PlanElementCandidate.Add(new PlanElementCandidate(accomodation.PlaceName, accomodation.PlaceId, accomodation.Location, PlanElementType.Sleeping, SleepingDuration));
+
+            //starting point from hotel when some error
+            PlanElementCandidate.Add(new PlanElementCandidate(accomodation.PlaceName, accomodation.PlaceId, accomodation.Location, PlanElementType.Nothing, DoingNothingTime));
+
 
             //PlanElements iter
             int iter = 1;
@@ -88,22 +122,117 @@ namespace TripMaker.Plan
             //previous PlanElemnt which hold previous Location for DirectionApi
             Location previousPlanElementLocation = Location.Create(startElement.Lat, startElement.Lng);
 
-            while (DateTime.Compare(currentDateTime, endDateTime) >= 0)
+            while (DateTime.Compare(currentDateTime, endDateTime) <= 0)
             {
                 iter += 1;
 
+                //declare local variables 
+                var planElement = new PlanElement(iter, currentDateTime, currentDateTime); 
+
                 //decide what to do
-                var googleNearbyRestaurantInput = _googlePlaceNearbySearchInputFactory.Create(previousPlanElementLocation, planForm.Language, GooglePlaceTypeCategory.Culture);
-                var nearbyResult = await _googlePlaceNearbySearchApiClient.GetAsync(googleNearbyRestaurantInput);
-                var firstMatch = nearbyResult.results.First();
+                var decision = _planElementDecisionMaker.Decide(currentDateTime, CurrentDayElements);
 
+                //get candidates
+                if(!PlanElementCandidate.Any(x=>x.ElementType == decision.ElementType))
+                {
+                    var anyChange= await _planElementCandidateFactory.UpdateListAsync(PlanElementCandidate, UsedPlanElementCandidate, decision, planForm, previousPlanElementLocation);
 
+                    //change decision if no change of list
+                    if (!anyChange)
+                    {
+                        decision.ElementType = PlanElementType.Nothing;
+                    }
+                }
 
-                //create planElement
-                var planElement = new PlanElement(firstMatch.name, firstMatch.place_id, 
-                                                firstMatch.geometry.location.lat,  firstMatch.geometry.location.lng, 
-                                                iter, planForm.StartDate.Add(planForm.StartTime.Value), planForm.StartDate.Add(planForm.StartTime.Value.Add(new TimeSpan(1,0,0))), 
-                                                PlanElementType.Partying, null);
+                //Get Plan Element
+                if (decision.ElementType == PlanElementType.Sleeping)
+                {
+                    var candidate = PlanElementCandidate.First(x => x.ElementType == decision.ElementType);
+                    planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
+                }
+                else if(decision.ElementType == PlanElementType.Eating)
+                {
+                    var candidate=_planElementByUserPreferencesPicker.Pick(PlanElementCandidate, decision.ElementType);
+                    planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
+
+                    //update both lists
+                    UsedPlanElementCandidate.Add(candidate);
+                    PlanElementCandidate.RemoveAll(x => x.PlaceId == candidate.PlaceId && x.PlaceName == candidate.PlaceName);
+                   
+
+                }
+                else if (decision.ElementType == PlanElementType.Entertainment)
+                {
+                    var candidate = _planElementByUserPreferencesPicker.Pick(PlanElementCandidate, decision.ElementType);
+                    planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
+
+                    //update both lists
+                    UsedPlanElementCandidate.Add(candidate);
+                    PlanElementCandidate.RemoveAll(x => x.PlaceId == candidate.PlaceId && x.PlaceName == candidate.PlaceName);
+                }
+                else if (decision.ElementType == PlanElementType.Relax)
+                {
+                    var candidate = _planElementByUserPreferencesPicker.Pick(PlanElementCandidate, decision.ElementType);
+                    planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
+
+                    //update both lists
+                    UsedPlanElementCandidate.Add(candidate);
+                    PlanElementCandidate.RemoveAll(x => x.PlaceId == candidate.PlaceId && x.PlaceName == candidate.PlaceName);
+                }
+                else if (decision.ElementType == PlanElementType.Activity)
+                {
+                    var candidate = _planElementByUserPreferencesPicker.Pick(PlanElementCandidate, decision.ElementType);
+                    planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
+
+                    //update both lists
+                    UsedPlanElementCandidate.Add(candidate);
+                    PlanElementCandidate.RemoveAll(x => x.PlaceId == candidate.PlaceId && x.PlaceName == candidate.PlaceName);
+                }
+                else if (decision.ElementType == PlanElementType.Culture)
+                {
+                    var candidate = _planElementByUserPreferencesPicker.Pick(PlanElementCandidate, decision.ElementType);
+                    planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
+
+                    //update both lists
+                    UsedPlanElementCandidate.Add(candidate);
+                    PlanElementCandidate.RemoveAll(x => x.PlaceId == candidate.PlaceId && x.PlaceName == candidate.PlaceName);
+                }
+                else if (decision.ElementType == PlanElementType.Sightseeing)
+                {
+                    var candidate = _planElementByUserPreferencesPicker.Pick(PlanElementCandidate, decision.ElementType);
+                    planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
+
+                    //update both lists
+                    UsedPlanElementCandidate.Add(candidate);
+                    PlanElementCandidate.RemoveAll(x => x.PlaceId == candidate.PlaceId && x.PlaceName == candidate.PlaceName);
+                }
+                else if (decision.ElementType == PlanElementType.Partying)
+                {
+                    var candidate = _planElementByUserPreferencesPicker.Pick(PlanElementCandidate, decision.ElementType);
+                    planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
+
+                    //update both lists
+                    UsedPlanElementCandidate.Add(candidate);
+                    PlanElementCandidate.RemoveAll(x => x.PlaceId == candidate.PlaceId && x.PlaceName == candidate.PlaceName);
+                }
+                else if (decision.ElementType == PlanElementType.Shopping)
+                {
+                    var candidate = _planElementByUserPreferencesPicker.Pick(PlanElementCandidate, decision.ElementType);
+                    planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
+
+                    //update both lists
+                    UsedPlanElementCandidate.Add(candidate);
+                    PlanElementCandidate.RemoveAll(x => x.PlaceId == candidate.PlaceId && x.PlaceName == candidate.PlaceName);
+                }
+                else //nothing
+                {
+                    var candidate = _planElementByUserPreferencesPicker.Pick(PlanElementCandidate, PlanElementType.Nothing);
+                    planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
+
+                }
+
+                //-----------------------------//
+                //---- DIRECTIONS ------------//
 
                 //travelMode
                 var travelMode = GoogleTravelMode.Walking;
@@ -117,7 +246,9 @@ namespace TripMaker.Plan
                     var route = directionsApiResult.routes.First().legs.First(); //only 1 leg if no waypoints
                     var planRoute = new PlanRoute(route.distance.value, route.duration.value);
 
-                    //update planElement time
+                    //update planElement time with time take by route
+                    var routeDuration = TimeSpan.FromSeconds(route.duration.value);
+                    planElement.UpdateDateTimeWithRouteDuration(routeDuration);
 
                     //steps of route
                     foreach(var step in route.steps)
@@ -131,15 +262,25 @@ namespace TripMaker.Plan
 
                     planElement.EndingRoute = planRoute;
                 }
+                else
+                {
+                    var planRoute = new PlanRoute(0, 0);
+                    planElement.EndingRoute = planRoute;
+                }
 
                 //add to Plan and CurrentDayElements lists
                 plan.Elements.Add(planElement);
                 CurrentDayElements.Add(planElement);
 
+                //update CurrentDateTime
+                currentDateTime = planElement.End;
+
                 //change previous Location
                 previousPlanElementLocation.lat = planElement.Lat;
                 previousPlanElementLocation.lng = planElement.Lng;
 
+
+                //PlanElement with sleeping indicate end of day
                 if (planElement.ElementType == PlanElementType.Sleeping)
                 {
                     CurrentDayElements.Clear();
@@ -149,13 +290,5 @@ namespace TripMaker.Plan
             return plan;
         }
 
-        static PlanElementType ProvideElementType(DateTime currentDateTime, IList<PlanElement> currentDayElements)
-        {
-            if (!currentDayElements.Any(x => x.ElementType == PlanElementType.Eating))
-                return PlanElementType.Eating; //first thing- breakfast
-            else
-                return PlanElementType.Nothing;
-
-        }
     }
 }
