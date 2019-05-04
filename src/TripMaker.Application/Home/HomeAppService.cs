@@ -17,11 +17,24 @@ namespace TripMaker.Home
     public class HomeAppService : TripMakerAppServiceBase, IHomeAppService
     {
         private readonly IRepository<SearchedPlace> _searchedPlaceRepository;
+        private readonly IRepository<ContactUs> _contactUsRepository;
 
-        public HomeAppService(IRepository<SearchedPlace> searchedPlaceRepository)
+        public HomeAppService(IRepository<SearchedPlace> searchedPlaceRepository, IRepository<ContactUs> contactUsRepository)
         {
             _searchedPlaceRepository = searchedPlaceRepository;
+            _contactUsRepository = contactUsRepository;
 
+        }
+
+        public async Task<bool> CreateContactUsAsync(ContactUsDto input)
+        {
+            var contact = new ContactUs(input.Name, input.Email, input.Message);
+
+            var id= await _contactUsRepository.InsertAndGetIdAsync(contact);
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+
+            return id > 0;
         }
 
         public async Task<ListResultDto<SearchedPlaceDto>> GetMostSearchedPlacesAsync()
