@@ -28,7 +28,7 @@ namespace TripMaker.EntityFrameworkCore
         public virtual DbSet<PlanRouteStep> PlanRouteSteps { get; set; }
         public virtual DbSet<SearchedPlace> SearchedPlaces { get; set; }
         public virtual DbSet<ExternalServicesJSON> ExternalServicesJSON { get; set; }
-
+        public virtual DbSet<ContactUs> ContactUs { get; set; }
         public virtual DbSet<TripMakerConfiguration> TripMakerConfigurations { get; set; }
 
         public TripMakerDbContext(DbContextOptions<TripMakerDbContext> options)

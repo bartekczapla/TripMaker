@@ -18,22 +18,22 @@ namespace TripMaker.Plan
 
         [Required]
         [StringLength(MaxTitleLength)]
-        public virtual string Destination { get; protected set; }
+        public virtual string Destination { get;  set; }
 
         [ForeignKey("PlanFormId")]
-        public virtual PlanForm PlanForm { get; protected set; }
-        public virtual int? PlanFormId { get; protected set; }
+        public virtual PlanForm PlanForm { get;  set; }
+        public virtual int? PlanFormId { get;  set; }
 
         [ForeignKey("UserId")]
-        public virtual User User { get; protected set; }
-        public virtual long? UserId { get; protected set; }
+        public virtual User User { get;  set; }
+        public virtual long? UserId { get;  set; }
 
         [StringLength(MaxTitleLength)]
-        public virtual string Comment { get; protected set; }
+        public virtual string Comment { get;  set; }
 
 
         [ForeignKey("PlanId")]
-        public virtual ICollection<PlanElement> Elements { get; protected set; }
+        public virtual ICollection<PlanElement> Elements { get;  set; }
 
         public Plan(string destination,int? planFormId=null, long? userId=null)
         {

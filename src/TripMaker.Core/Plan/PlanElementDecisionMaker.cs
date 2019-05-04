@@ -14,6 +14,11 @@ namespace TripMaker.Plan
         {
             var currentTime = currentDateTime.TimeOfDay;
 
+            if(TimeSpan.Compare(currentTime, SleepingTime) >= 0 || TimeSpan.Compare(currentTime, SleepingTime2) < 0)
+            {
+                return new PlanElementDecision(PlanElementType.Sleeping);
+            }
+
             if (!currentDayElements.Any(x => x.ElementType == PlanElementType.Eating))
                 return new PlanElementDecision(PlanElementType.Eating); //first thing- breakfast
 
@@ -23,8 +28,6 @@ namespace TripMaker.Plan
             if (TimeSpan.Compare(currentTime, DinnerTime) >= 0 && currentDayElements.Where(x => x.ElementType == PlanElementType.Eating).Count() == 2)
                 return new PlanElementDecision(PlanElementType.Eating); //dinner
 
-            if(TimeSpan.Compare(currentTime, SleepingTime) >= 0)
-                return new PlanElementDecision(PlanElementType.Sleeping);
 
             //var group = currentDayElements.GroupBy(x => x.ElementType);
             if(!currentDayElements.Any(x=>x.ElementType==PlanElementType.Activity))

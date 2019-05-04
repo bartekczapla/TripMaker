@@ -1,7 +1,10 @@
 ﻿using Abp.Domain.Repositories;
 using Abp.Events.Bus;
+using Abp.UI;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TripMaker.ExternalServices.Entities.GooglePlaceNearbySearch;
@@ -73,6 +76,23 @@ namespace TripMaker.Plan
                         await _planRouteStepRepository.InsertAsync(step);
                     }
                 }
+            }
+
+            return plan;
+        }
+
+        public async Task<Plan> GetAsync(int planId)
+        {
+            var plan = await _planRepository
+                .GetAll()
+                .Include(e => e.Elements)
+                .ThenInclude(r=>r.EndingRoute)
+                .Where(e => e.Id == planId)
+                .FirstOrDefaultAsync();
+
+            if (plan == null)
+            {
+                throw new UserFriendlyException($"Could not found the plan with id: {planId}");
             }
 
             return plan;

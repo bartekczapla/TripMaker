@@ -16,7 +16,7 @@ namespace TripMaker.Plan
         public readonly TimeSpan DinnerTime = new TimeSpan(18, 0, 0);
         public readonly TimeSpan PartyTime = new TimeSpan(19, 0, 0);
         public readonly TimeSpan SleepingTime = new TimeSpan(23, 0, 0);
-
+        public readonly TimeSpan SleepingTime2 = new TimeSpan(5, 0, 0);
 
         //PlanElement Duration
         public readonly TimeSpan EatingDuration = new TimeSpan(1, 0, 0);

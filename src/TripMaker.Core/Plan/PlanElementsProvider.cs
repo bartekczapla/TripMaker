@@ -150,7 +150,9 @@ namespace TripMaker.Plan
                     var candidate = PlanElementCandidate.First(x => x.ElementType == decision.ElementType);
                     planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
                 }
-                else if(decision.ElementType == PlanElementType.Eating)
+                else if(decision.ElementType == PlanElementType.Eating || decision.ElementType == PlanElementType.Entertainment || decision.ElementType == PlanElementType.Relax || 
+                decision.ElementType == PlanElementType.Activity || decision.ElementType == PlanElementType.Culture || decision.ElementType == PlanElementType.Sightseeing || 
+                decision.ElementType == PlanElementType.Partying || decision.ElementType == PlanElementType.Shopping)
                 {
                     var candidate=_planElementByUserPreferencesPicker.Pick(PlanElementCandidate, decision.ElementType);
                     planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
@@ -159,70 +161,6 @@ namespace TripMaker.Plan
                     UsedPlanElementCandidate.Add(candidate);
                     PlanElementCandidate.RemoveAll(x => x.PlaceId == candidate.PlaceId && x.PlaceName == candidate.PlaceName);
                    
-
-                }
-                else if (decision.ElementType == PlanElementType.Entertainment)
-                {
-                    var candidate = _planElementByUserPreferencesPicker.Pick(PlanElementCandidate, decision.ElementType);
-                    planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
-
-                    //update both lists
-                    UsedPlanElementCandidate.Add(candidate);
-                    PlanElementCandidate.RemoveAll(x => x.PlaceId == candidate.PlaceId && x.PlaceName == candidate.PlaceName);
-                }
-                else if (decision.ElementType == PlanElementType.Relax)
-                {
-                    var candidate = _planElementByUserPreferencesPicker.Pick(PlanElementCandidate, decision.ElementType);
-                    planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
-
-                    //update both lists
-                    UsedPlanElementCandidate.Add(candidate);
-                    PlanElementCandidate.RemoveAll(x => x.PlaceId == candidate.PlaceId && x.PlaceName == candidate.PlaceName);
-                }
-                else if (decision.ElementType == PlanElementType.Activity)
-                {
-                    var candidate = _planElementByUserPreferencesPicker.Pick(PlanElementCandidate, decision.ElementType);
-                    planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
-
-                    //update both lists
-                    UsedPlanElementCandidate.Add(candidate);
-                    PlanElementCandidate.RemoveAll(x => x.PlaceId == candidate.PlaceId && x.PlaceName == candidate.PlaceName);
-                }
-                else if (decision.ElementType == PlanElementType.Culture)
-                {
-                    var candidate = _planElementByUserPreferencesPicker.Pick(PlanElementCandidate, decision.ElementType);
-                    planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
-
-                    //update both lists
-                    UsedPlanElementCandidate.Add(candidate);
-                    PlanElementCandidate.RemoveAll(x => x.PlaceId == candidate.PlaceId && x.PlaceName == candidate.PlaceName);
-                }
-                else if (decision.ElementType == PlanElementType.Sightseeing)
-                {
-                    var candidate = _planElementByUserPreferencesPicker.Pick(PlanElementCandidate, decision.ElementType);
-                    planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
-
-                    //update both lists
-                    UsedPlanElementCandidate.Add(candidate);
-                    PlanElementCandidate.RemoveAll(x => x.PlaceId == candidate.PlaceId && x.PlaceName == candidate.PlaceName);
-                }
-                else if (decision.ElementType == PlanElementType.Partying)
-                {
-                    var candidate = _planElementByUserPreferencesPicker.Pick(PlanElementCandidate, decision.ElementType);
-                    planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
-
-                    //update both lists
-                    UsedPlanElementCandidate.Add(candidate);
-                    PlanElementCandidate.RemoveAll(x => x.PlaceId == candidate.PlaceId && x.PlaceName == candidate.PlaceName);
-                }
-                else if (decision.ElementType == PlanElementType.Shopping)
-                {
-                    var candidate = _planElementByUserPreferencesPicker.Pick(PlanElementCandidate, decision.ElementType);
-                    planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
-
-                    //update both lists
-                    UsedPlanElementCandidate.Add(candidate);
-                    PlanElementCandidate.RemoveAll(x => x.PlaceId == candidate.PlaceId && x.PlaceName == candidate.PlaceName);
                 }
                 else //nothing
                 {

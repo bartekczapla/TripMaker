@@ -36,5 +36,15 @@ namespace TripMaker.Plan
 
             return result.MapTo<PlanDto>();
         }
+
+        public async Task<PlanDto> GetTestPlanByIdAsync(int planId)
+        {
+            planId = 5;
+            var result = await _planManager.GetAsync(planId);
+
+            var dto= result.MapTo<PlanDto>();
+
+            return dto;
+        }
     }
 }

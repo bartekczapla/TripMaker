@@ -28,7 +28,8 @@ namespace TripMaker.Plan.Dto
 
         public  double? Rating { get;  set; }
 
-
         public  int? PlanId { get;  set; }
+
+
     }
 }

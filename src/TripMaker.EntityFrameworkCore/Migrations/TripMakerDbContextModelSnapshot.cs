@@ -1056,6 +1056,31 @@ namespace TripMaker.Migrations
                     b.ToTable("ExternalServicesJSON");
                 });
 
+            modelBuilder.Entity("TripMaker.Home.Models.ContactUs", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(500);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ContactUs");
+                });
+
             modelBuilder.Entity("TripMaker.Home.Models.SearchedPlace", b =>
                 {
                     b.Property<int>("Id")
