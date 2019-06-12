@@ -30,11 +30,17 @@ namespace TripMaker.Plan
         }
 
         public async Task<PlanDto> GetTestPlanAsync()
-        {         
-            var input =  PlanCommon.CreateTestInput().MapTo<PlanForm>(); 
-            var result= await _planManager.CreateAsync(input);
+        {
+            //var input =  PlanCommon.CreateTestInput().MapTo<PlanForm>(); 
+            //var result= await _planManager.CreateAsync(input);
 
-            return result.MapTo<PlanDto>();
+            //return result.MapTo<PlanDto>();
+            int planId = 5;
+            var result = await _planManager.GetAsync(planId);
+
+            var dto = result.MapTo<PlanDto>();
+
+            return dto;
         }
 
         public async Task<PlanDto> GetTestPlanByIdAsync(int planId)

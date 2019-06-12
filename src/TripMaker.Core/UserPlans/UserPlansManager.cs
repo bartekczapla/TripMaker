@@ -1,4 +1,5 @@
 ﻿using Abp.Domain.Repositories;
+using Abp.UI;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,19 @@ namespace TripMaker.UserPlans
             _planRepository = planRepository;
         }
 
+        public async Task<bool> DeleteAsync(int planId)
+        {
+            var plan = await _planRepository
+                .GetAll()
+                .Where(e => e.Id == planId)
+                .FirstOrDefaultAsync();
+
+            plan.User = null;
+            plan.UserId = null;
+
+            return true;
+        }
+
         public async Task<List<Plan.Plan>> GetAllUserPlansAsync(User user)
         {
             var plans = await _planRepository
@@ -30,6 +44,27 @@ namespace TripMaker.UserPlans
                         .ToListAsync();
 
             return plans;
+        }
+
+        public async Task<Plan.Plan> GetDetailsAsync(int planId)
+        {
+            var plan = await _planRepository
+                .GetAll()
+                .Include(e => e.PlanForm)
+                .Include(e => e.Elements)
+                .ThenInclude(r => r.EndingRoute)
+                .ThenInclude(r => r.Steps)
+                .Where(e => e.Id == planId)
+                .FirstOrDefaultAsync();
+
+            plan.Elements.OrderBy(e => e.OrderNo);
+
+            if (plan == null)
+            {
+                throw new UserFriendlyException($"Could not found the plan with id: {planId}");
+            }
+
+            return plan;
         }
     }
 }

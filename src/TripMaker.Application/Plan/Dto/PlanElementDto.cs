@@ -30,6 +30,8 @@ namespace TripMaker.Plan.Dto
 
         public  int? PlanId { get;  set; }
 
+        public PlanRouteDto EndingRoute { get; set; }
+
 
     }
 }

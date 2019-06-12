@@ -10,5 +10,9 @@ namespace TripMaker.UserPlans.Interfaces
     public interface IUserPlansManager : IDomainService
     {
         Task<List<Plan.Plan>> GetAllUserPlansAsync(User user);
+
+        Task<Plan.Plan> GetDetailsAsync(int planId);
+
+        Task<bool> DeleteAsync(int planId);
     }
 }

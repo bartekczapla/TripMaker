@@ -85,10 +85,14 @@ namespace TripMaker.Plan
         {
             var plan = await _planRepository
                 .GetAll()
+                .Include(e=>e.PlanForm)
                 .Include(e => e.Elements)
                 .ThenInclude(r=>r.EndingRoute)
+                .ThenInclude(r => r.Steps)
                 .Where(e => e.Id == planId)
                 .FirstOrDefaultAsync();
+
+            plan.Elements.OrderBy(e => e.OrderNo);
 
             if (plan == null)
             {

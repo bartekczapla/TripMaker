@@ -14,6 +14,8 @@ namespace TripMaker.Plan
 
         public int? PlanFormId { get;  set; }
 
+        public PlanFormDto PlanForm { get; set; }
+
         public  ICollection<PlanElementDto> Elements { get;  set; }
 
     }

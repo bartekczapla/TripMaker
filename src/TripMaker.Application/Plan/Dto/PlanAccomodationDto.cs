@@ -7,6 +7,7 @@ using TripMaker.Plan.Models;
 namespace TripMaker.Plan.Dto
 {
     [AutoMapTo(typeof(PlanAccomodation))]
+    [AutoMapFrom(typeof(PlanAccomodation))]
     public class PlanAccomodationDto
     {
         public double Lat { get; set; }
