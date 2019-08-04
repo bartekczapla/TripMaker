@@ -35,7 +35,7 @@ namespace TripMaker.ExternalServices.Entities
             new GoogleField("plus_code", GoogleFieldType.Others, new ExternalServicesType[] {ExternalServicesType.GooglePlaceSearch, ExternalServicesType.GooglePlaceDetails  }),
             new GoogleField("scope", GoogleFieldType.Others, new ExternalServicesType[] {ExternalServicesType.GooglePlaceSearch, ExternalServicesType.GooglePlaceDetails  }),
             new GoogleField("types", GoogleFieldType.PlaceInfo, new ExternalServicesType[] {ExternalServicesType.GooglePlaceSearch  }),
-            new GoogleField("opening_hours", GoogleFieldType.Others, new ExternalServicesType[] {ExternalServicesType.GooglePlaceSearch , ExternalServicesType.GooglePlaceDetails  }),
+            new GoogleField("opening_hours", GoogleFieldType.Details, new ExternalServicesType[] {ExternalServicesType.GooglePlaceSearch , ExternalServicesType.GooglePlaceDetails  }),
             new GoogleField("price_level", GoogleFieldType.Reviews, new ExternalServicesType[] {ExternalServicesType.GooglePlaceSearch, ExternalServicesType.GooglePlaceDetails   }),
             new GoogleField("user_ratings_total", GoogleFieldType.Reviews, new ExternalServicesType[] {ExternalServicesType.GooglePlaceSearch, ExternalServicesType.GooglePlaceDetails  }),
             new GoogleField("rating", GoogleFieldType.Reviews, new ExternalServicesType[] {ExternalServicesType.GooglePlaceSearch, ExternalServicesType.GooglePlaceDetails   }),

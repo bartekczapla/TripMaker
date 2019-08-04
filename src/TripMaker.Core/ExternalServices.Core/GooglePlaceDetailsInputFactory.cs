@@ -41,5 +41,15 @@ namespace TripMaker.ExternalServices.Core
 
             return new GooglePlaceDetailsInput(placeId, language, basicFields);
         }
+
+        public GooglePlaceDetailsInput CreatePhotoReference(string placeId)
+        {
+            var basicFields = GoogleFields.Table
+                                        .Where(x => x.AllowedServices.Contains(ExternalServicesType.GooglePlaceDetails) &&
+                                        (x.Type == GoogleFieldType.Photos ))
+                                        .ToList();
+
+            return new GooglePlaceDetailsInput(placeId, LanguageType.Pl, basicFields);
+        }
     }
 }

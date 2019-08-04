@@ -16,13 +16,13 @@ namespace TripMaker.Home
 {
     public class HomeAppService : TripMakerAppServiceBase, IHomeAppService
     {
-        private readonly IRepository<SearchedPlace> _searchedPlaceRepository;
         private readonly IRepository<ContactUs> _contactUsRepository;
+        private readonly ISearchedPlacesManager _searchedPlacesManager;
 
-        public HomeAppService(IRepository<SearchedPlace> searchedPlaceRepository, IRepository<ContactUs> contactUsRepository)
+        public HomeAppService(IRepository<ContactUs> contactUsRepository, ISearchedPlacesManager searchedPlacesManager)
         {
-            _searchedPlaceRepository = searchedPlaceRepository;
             _contactUsRepository = contactUsRepository;
+            _searchedPlacesManager = searchedPlacesManager;
 
         }
 
@@ -37,23 +37,12 @@ namespace TripMaker.Home
             return id > 0;
         }
 
-        public async Task<ListResultDto<SearchedPlaceDto>> GetMostSearchedPlacesAsync()
+        public async Task<ListResultDto<SearchedPlaceAndPhoto>> GetMostSearchedPlacesAsync()
         {
-            var places = await _searchedPlaceRepository
-                .GetAll()
-                .OrderByDescending(x => x.SearchCount)
-                .Take(3)
-                .ToListAsync();
 
-
-                //.GetAll()
-                //.GroupBy(x => x.PlaceName)
-                //.Select(x => new { PlaceName = x.Key, Count = x.Count() })
-                //.OrderByDescending(x => x.Count)
-                //.Take(3)
-                //.ToListAsync();
-
-            return new ListResultDto<SearchedPlaceDto>(places.MapTo<List<SearchedPlaceDto>>());
+            var places = await _searchedPlacesManager.GetMostSearchedPlaces();
+            
+            return new ListResultDto<SearchedPlaceAndPhoto>(places.MapTo<List<SearchedPlaceAndPhoto>>());
         }
     }
 }

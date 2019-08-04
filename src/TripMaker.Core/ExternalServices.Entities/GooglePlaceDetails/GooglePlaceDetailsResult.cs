@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TripMaker.ExternalServices.Entities.GooglePlaceSearch;
 
 namespace TripMaker.ExternalServices.Entities.GooglePlaceDetails
 {
@@ -15,6 +16,7 @@ namespace TripMaker.ExternalServices.Entities.GooglePlaceDetails
         public string id { get; set; }
         public string international_phone_number { get; set; }
         public string name { get; set; }
+        public List<Photo> photos { get; set; }
         public string place_id { get; set; }
         public double rating { get; set; }
         public string reference { get; set; }

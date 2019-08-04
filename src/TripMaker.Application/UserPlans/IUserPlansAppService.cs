@@ -11,7 +11,7 @@ namespace TripMaker.UserPlans
 {
     public interface IUserPlansAppService : IApplicationService
     {
-        Task<ListResultDto<UserPlansListDto>> GetAllUserPlansAsync(GetAllUserPlansInput input);
+        Task<ListResultDto<UserPlansListDto>> GetAllUserPlansAsync();
 
         Task<PlanDto> GetDetailAsync(EntityDto<int> input);
 

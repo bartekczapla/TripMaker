@@ -48,9 +48,9 @@ namespace TripMaker.ExternalServices.Entities
               new GooglePlaceType("car_rental", GooglePlaceTypeCategory.Car_rental),
               new GooglePlaceType("car_repair", GooglePlaceTypeCategory.None),
               new GooglePlaceType("car_wash", GooglePlaceTypeCategory.None),
-              new GooglePlaceType("casino", GooglePlaceTypeCategory.Entertainment),
+              new GooglePlaceType("casino", GooglePlaceTypeCategory.Partying),
               new GooglePlaceType("cemetery", GooglePlaceTypeCategory.None),
-              new GooglePlaceType("church", GooglePlaceTypeCategory.Culture),
+              new GooglePlaceType("church", GooglePlaceTypeCategory.Sightseeing),
               new GooglePlaceType("city_hall", GooglePlaceTypeCategory.Sightseeing),
               new GooglePlaceType("clothing_store", GooglePlaceTypeCategory.Shopping),
               new GooglePlaceType("convenience_store", GooglePlaceTypeCategory.Food),
@@ -69,8 +69,8 @@ namespace TripMaker.ExternalServices.Entities
               new GooglePlaceType("gym", GooglePlaceTypeCategory.Activity),
               new GooglePlaceType("hair_care", GooglePlaceTypeCategory.None),
               new GooglePlaceType("hardware_store", GooglePlaceTypeCategory.None),
-              new GooglePlaceType("hindu_temple", GooglePlaceTypeCategory.Culture),
-              new GooglePlaceType("home_goods_store", GooglePlaceTypeCategory.None),
+              new GooglePlaceType("hindu_temple", GooglePlaceTypeCategory.Sightseeing),
+              new GooglePlaceType("home_goods_store", GooglePlaceTypeCategory.Shopping),
               new GooglePlaceType("hospital", GooglePlaceTypeCategory.None),
               new GooglePlaceType("insurance_agency", GooglePlaceTypeCategory.None),
               new GooglePlaceType("jewelry_store", GooglePlaceTypeCategory.None),
@@ -106,12 +106,12 @@ namespace TripMaker.ExternalServices.Entities
               new GooglePlaceType("shoe_store", GooglePlaceTypeCategory.Shopping),
               new GooglePlaceType("shopping_mall", GooglePlaceTypeCategory.Shopping),
               new GooglePlaceType("spa", GooglePlaceTypeCategory.Relax),
-              new GooglePlaceType("stadium", GooglePlaceTypeCategory.None),
+              new GooglePlaceType("stadium", GooglePlaceTypeCategory.Sightseeing),
               new GooglePlaceType("storage", GooglePlaceTypeCategory.None),
               new GooglePlaceType("store", GooglePlaceTypeCategory.None),
               new GooglePlaceType("subway_station", GooglePlaceTypeCategory.City_communication),
               new GooglePlaceType("supermarket", GooglePlaceTypeCategory.Food),
-              new GooglePlaceType("synagogue", GooglePlaceTypeCategory.Culture),
+              new GooglePlaceType("synagogue", GooglePlaceTypeCategory.Sightseeing),
               new GooglePlaceType("taxi_stand", GooglePlaceTypeCategory.None),
               new GooglePlaceType("train_station", GooglePlaceTypeCategory.City_communication),
               new GooglePlaceType("transit_station", GooglePlaceTypeCategory.City_communication),
@@ -121,7 +121,7 @@ namespace TripMaker.ExternalServices.Entities
               //additional
               new GooglePlaceType("food", GooglePlaceTypeCategory.Food),
               new GooglePlaceType("natural_feature", GooglePlaceTypeCategory.Sightseeing),
-              new GooglePlaceType("point_of_interest", GooglePlaceTypeCategory.Entertainment)
+              new GooglePlaceType("point_of_interest", GooglePlaceTypeCategory.Sightseeing)
         };
     }
 }

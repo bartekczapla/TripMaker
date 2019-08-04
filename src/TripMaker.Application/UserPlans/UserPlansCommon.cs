@@ -19,6 +19,7 @@ namespace TripMaker.UserPlans
             {
                 var planDto = new UserPlansListDto
                 {
+                    Id = plan.Id,
                     PlaceName = plan.PlanForm.PlaceName,
                     PlaceId = plan.PlanForm.PlaceId,
                     Destination = plan.Destination,

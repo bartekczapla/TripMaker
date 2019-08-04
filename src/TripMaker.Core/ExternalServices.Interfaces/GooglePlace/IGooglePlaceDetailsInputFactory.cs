@@ -15,5 +15,7 @@ namespace TripMaker.ExternalServices.Interfaces
         GooglePlaceDetailsInput CreateAll(string placeId, LanguageType language);
 
         GooglePlaceDetailsInput CreateBasic(string placeId, LanguageType language);
+
+        GooglePlaceDetailsInput CreatePhotoReference(string placeId);
     }
 }

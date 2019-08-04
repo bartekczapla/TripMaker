@@ -1081,6 +1081,31 @@ namespace TripMaker.Migrations
                     b.ToTable("ContactUs");
                 });
 
+            modelBuilder.Entity("TripMaker.Home.Models.PlacePhoto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("MaxHeight");
+
+                    b.Property<int?>("MaxWidth");
+
+                    b.Property<string>("Photo")
+                        .HasMaxLength(65536);
+
+                    b.Property<string>("PhotoReference")
+                        .HasMaxLength(512);
+
+                    b.Property<string>("PlaceId")
+                        .IsRequired()
+                        .HasMaxLength(512);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PlacePhotos");
+                });
+
             modelBuilder.Entity("TripMaker.Home.Models.SearchedPlace", b =>
                 {
                     b.Property<int>("Id")
