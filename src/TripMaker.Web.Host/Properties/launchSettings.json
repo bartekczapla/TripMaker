@@ -17,7 +17,6 @@
     },
     "TripMaker.Web.Host": {
       "commandName": "Project",
-      "launchBrowser": true,
       "launchUrl": "http://localhost:21021",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

@@ -29,8 +29,11 @@ namespace TripMaker.ExternalServices.GooglePlace
         public async Task<string> GetPhotoAsync(string photoreference, int? maxheight, int? maxwidth)
         {
             var uri = _googleUriProvider.Create(photoreference, maxheight, maxwidth);
-            var result = await _httpClient.GetStringAsync(uri);
-            return "photo";
+            var content = await _httpClient.GetByteArrayAsync(uri);
+            if (content != null)
+                return Convert.ToBase64String(content);
+            else
+                return String.Empty;
         }
     }
 }

@@ -30,6 +30,7 @@ namespace TripMaker.EntityFrameworkCore
         public virtual DbSet<ExternalServicesJSON> ExternalServicesJSON { get; set; }
         public virtual DbSet<ContactUs> ContactUs { get; set; }
         public virtual DbSet<TripMakerConfiguration> TripMakerConfigurations { get; set; }
+        public virtual DbSet<PlacePhoto> PlacePhotos { get; set; }
 
         public TripMakerDbContext(DbContextOptions<TripMakerDbContext> options)
             : base(options)

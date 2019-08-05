@@ -34,12 +34,12 @@ namespace TripMaker.UserPlans
             return true;
         }
 
-        public async Task<List<Plan.Plan>> GetAllUserPlansAsync(User user)
+        public async Task<List<Plan.Plan>> GetAllUserPlansAsync(long userId)
         {
             var plans = await _planRepository
                         .GetAll()
                         .Include(e => e.PlanForm)
-                        .Where(e => e.UserId == user.Id)
+                        .Where(e => e.UserId == userId)
                         .OrderByDescending(e => e.PlanForm.CreationTime)
                         .ToListAsync();
 

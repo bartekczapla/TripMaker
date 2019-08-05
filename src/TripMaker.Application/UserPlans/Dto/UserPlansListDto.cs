@@ -8,9 +8,9 @@ using TripMaker.Plan;
 
 namespace TripMaker.UserPlans.Dto
 {
-    [AutoMapFrom(typeof(TripMaker.Plan.Plan))]
     public class UserPlansListDto : EntityDto
     {
+
         public string PlaceName { get; set; }
 
         public string PlaceId { get; set; }

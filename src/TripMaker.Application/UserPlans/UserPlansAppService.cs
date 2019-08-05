@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
+using Abp.Authorization;
 using Abp.AutoMapper;
 using Abp.UI;
 using TripMaker.Plan;
@@ -11,6 +12,7 @@ using TripMaker.UserPlans.Interfaces;
 
 namespace TripMaker.UserPlans
 {
+    [AbpAuthorize]
     public class UserPlansAppService : TripMakerAppServiceBase, IUserPlansAppService
     {
         private readonly IUserPlansManager _userPlansManager;
@@ -25,7 +27,7 @@ namespace TripMaker.UserPlans
             return await _userPlansManager.DeleteAsync(input.Id);
         }
 
-        public async Task<ListResultDto<UserPlansListDto>> GetAllUserPlansAsync(GetAllUserPlansInput input)
+        public async Task<ListResultDto<UserPlansListDto>> GetAllUserPlansAsync()
         {
             var user = await GetCurrentUserAsync();
             if (user == null)
@@ -33,8 +35,7 @@ namespace TripMaker.UserPlans
                 throw new UserFriendlyException("Could not found logged user.");
             }
 
-            user.Id = 3;
-            var plans = await _userPlansManager.GetAllUserPlansAsync(user);
+            var plans = await _userPlansManager.GetAllUserPlansAsync(user.Id);
 
             return new ListResultDto<UserPlansListDto>(UserPlansCommon.MapResult(plans));
         }
