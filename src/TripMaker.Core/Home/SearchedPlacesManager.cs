@@ -45,17 +45,22 @@ namespace TripMaker.Home
             foreach(var place in places)
             {
                 var hasPhoto = false;
-                if (await _placePhotoRepository.CountAsync(x => x.PlaceId == place.PlaceId) == 0)
+                var photoCounter = await _placePhotoRepository.CountAsync(x => x.PlaceId == place.PlaceId);
+                if (photoCounter == 0)
                 {
                     hasPhoto = await UpdatePlacePhotos(place.PlaceId);
                 }
                 else
                     hasPhoto = true;
 
+                Random r = new Random();
+                int skipPhotos = r.Next(photoCounter);
+
                 var photo = (await _placePhotoRepository
                                 .GetAll()
                                 .Where(x => x.PlaceId == place.PlaceId)
                                 .OrderByDescending(x => !String.IsNullOrWhiteSpace(x.Photo))
+                                .Skip(skipPhotos)
                                 .FirstOrDefaultAsync());
 
                 result.Add(new SearchedPlaceAndPhoto(place.PlaceId, place.PlaceName, place.SearchCount, photo != null ? photo.Photo : String.Empty ));

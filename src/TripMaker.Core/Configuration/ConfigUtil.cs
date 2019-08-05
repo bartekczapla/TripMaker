@@ -14,8 +14,9 @@ namespace TripMaker.Configuration
         /// <returns>empty string if key is null</returns>
         public static string GetAppConfigSetting(string configKey)
         {
-            var test = ConfigurationManager.AppSettings;
-            return ConfigurationManager.AppSettings[configKey] ?? string.Empty;
+            var a = ConfigurationManager.GetSection("appSettings");
+            var result = ConfigurationManager.AppSettings[configKey];
+            return result ?? string.Empty;
         }
 
     }
