@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TripMaker.Authorization.Users;
+using TripMaker.PlacePhotos;
 using TripMaker.Plan;
 using TripMaker.UserPlans.Interfaces;
 
@@ -15,10 +16,12 @@ namespace TripMaker.UserPlans
     public class UserPlansManager : IUserPlansManager
     {
         private readonly IRepository<Plan.Plan> _planRepository;
+        private readonly IPlacePhotoManager _placePhotoManager;
 
-        public UserPlansManager(IRepository<Plan.Plan> planRepository)
+        public UserPlansManager(IRepository<Plan.Plan> planRepository, IPlacePhotoManager placePhotoManager)
         {
             _planRepository = planRepository;
+            _placePhotoManager = placePhotoManager;
         }
 
         public async Task<bool> DeleteAsync(int planId)
@@ -42,6 +45,12 @@ namespace TripMaker.UserPlans
                         .Where(e => e.UserId == userId)
                         .OrderByDescending(e => e.PlanForm.CreationTime)
                         .ToListAsync();
+            //photos
+            foreach(var plan in plans)
+            {
+                var planForm = plan.PlanForm;
+                plan.Photo = await _placePhotoManager.GetPhotos(planForm?.PlaceId);
+            }
 
             return plans;
         }

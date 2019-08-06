@@ -10,6 +10,7 @@ using TripMaker.ExternalServices.Interfaces;
 using TripMaker.ExternalServices.Interfaces.GooglePlace;
 using TripMaker.Home.Models;
 using Abp.Domain.Repositories;
+using TripMaker.PlacePhotos;
 
 namespace TripMaker.Home
 {
@@ -17,19 +18,14 @@ namespace TripMaker.Home
     {
         private readonly IRepository<SearchedPlace> _searchPlaceRepository;
         private readonly IRepository<PlacePhoto> _placePhotoRepository;
-        private readonly IGooglePlaceDetailsInputFactory _googlePlaceDetailsInputFactory;
-        private readonly IGooglePlacePhotosApiCaller _googlePlacePhotosApiCaller;
-        private readonly IGooglePlaceDetailsApiClient _googlePlaceDetailsApiClient; 
 
-        public SearchedPlacesManager(IRepository<SearchedPlace> searchPlaceRepository, IRepository<PlacePhoto> placePhotoRepository,
-            IGooglePlacePhotosApiCaller googlePlacePhotosApiCaller, IGooglePlaceDetailsApiClient googlePlaceDetailsApiClient,
-            IGooglePlaceDetailsInputFactory googlePlaceDetailsInputFactory)
+        private readonly IPlacePhotoManager _placePhotoManager;
+
+        public SearchedPlacesManager(IRepository<SearchedPlace> searchPlaceRepository, IRepository<PlacePhoto> placePhotoRepository, IPlacePhotoManager placePhotoManager)
         {
             _searchPlaceRepository = searchPlaceRepository;
             _placePhotoRepository = placePhotoRepository;
-            _googlePlacePhotosApiCaller = googlePlacePhotosApiCaller;
-            _googlePlaceDetailsApiClient = googlePlaceDetailsApiClient;
-            _googlePlaceDetailsInputFactory = googlePlaceDetailsInputFactory;
+            _placePhotoManager = placePhotoManager;
         }
 
         public async Task<ICollection<SearchedPlaceAndPhoto>> GetMostSearchedPlaces(int number = 3)
@@ -45,25 +41,34 @@ namespace TripMaker.Home
             foreach(var place in places)
             {
                 var hasPhoto = false;
+                var photo = String.Empty;
+
                 var photoCounter = await _placePhotoRepository.CountAsync(x => x.PlaceId == place.PlaceId);
                 if (photoCounter == 0)
                 {
-                    hasPhoto = await UpdatePlacePhotos(place.PlaceId);
+                    photo = await _placePhotoManager.UpdatePhotos(place.PlaceId);
                 }
                 else
                     hasPhoto = true;
 
-                Random r = new Random();
-                int skipPhotos = r.Next(photoCounter);
+                if(hasPhoto)
+                {
+                    Random r = new Random();
+                    int skipPhotos = r.Next(photoCounter);
 
-                var photo = (await _placePhotoRepository
-                                .GetAll()
-                                .Where(x => x.PlaceId == place.PlaceId)
-                                .OrderByDescending(x => !String.IsNullOrWhiteSpace(x.Photo))
-                                .Skip(skipPhotos)
-                                .FirstOrDefaultAsync());
+                    var placePhoto = (await _placePhotoRepository
+                                    .GetAll()
+                                    .Where(x => x.PlaceId == place.PlaceId)
+                                    .OrderByDescending(x => !String.IsNullOrWhiteSpace(x.Photo))
+                                    .Skip(skipPhotos)
+                                    .FirstOrDefaultAsync());
 
-                result.Add(new SearchedPlaceAndPhoto(place.PlaceId, place.PlaceName, place.SearchCount, photo != null ? photo.Photo : String.Empty ));
+                    photo = placePhoto != null ? placePhoto.Photo : String.Empty; 
+                }
+
+
+
+                result.Add(new SearchedPlaceAndPhoto(place.PlaceId, place.PlaceName, place.SearchCount, photo));
             }
 
             return result;
@@ -87,35 +92,9 @@ namespace TripMaker.Home
 
             if(await _placePhotoRepository.CountAsync(x=>x.PlaceId == placeId) == 0)
             {
-                await UpdatePlacePhotos(placeId);
+                await _placePhotoManager.UpdatePhotos(placeId);
             }
         }
 
-        private async Task<bool> UpdatePlacePhotos(string placeId)
-        {
-                var details =await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreatePhotoReference(placeId));
-                if (InterpreteGoogleStatus.IsStatusOk(details.status))
-                {
-                    var maxPhotoNum = 1;
-                    foreach (var item in details.Result.photos)
-                    {
-
-                        var photo = await _googlePlacePhotosApiCaller.GetPhotoAsync(item.photo_reference,800,null);
-                        if(!String.IsNullOrWhiteSpace(photo))
-                        {
-                            await _placePhotoRepository.InsertAsync(new PlacePhoto(placeId, item.photo_reference, photo));
-                        }
-                        maxPhotoNum += 1;
-                        if (maxPhotoNum == 5) break;
-                    }
-
-                    return maxPhotoNum > 1;
-
-                } else
-                {
-                    return false;
-                } 
-                
-        }
     }
 }

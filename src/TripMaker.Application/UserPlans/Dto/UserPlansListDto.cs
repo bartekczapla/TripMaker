@@ -17,6 +17,8 @@ namespace TripMaker.UserPlans.Dto
 
         public string Destination { get; set; }
 
+        public string Photo { get; set; }
+
         public int? PlanFormId { get; set; }
 
         public DateTime StartDate { get;  set; }

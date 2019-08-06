@@ -31,6 +31,9 @@ namespace TripMaker.Plan
         [StringLength(MaxTitleLength)]
         public virtual string Comment { get;  set; }
 
+        [NotMapped]
+        public string Photo { get; set; }
+
 
         [ForeignKey("PlanId")]
         public virtual ICollection<PlanElement> Elements { get;  set; }
@@ -42,9 +45,6 @@ namespace TripMaker.Plan
             Comment = "test";
             UserId = userId;
             Elements = new Collection<PlanElement>();
-
- 
-
         }
 
     }

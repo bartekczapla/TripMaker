@@ -8,7 +8,7 @@ namespace TripMaker.UserPlans
 {
     public static class UserPlansCommon
     {
-        public static List<UserPlansListDto> MapResult(List<Plan.Plan> plans)
+        public static List<UserPlansListDto> MapResult(IList<Plan.Plan> plans)
         {
             if(plans == null)
                 throw new UserFriendlyException($"Could not create {typeof(List<UserPlansListDto>)} from empty {typeof(List<Plan.Plan>)}.");
@@ -23,6 +23,7 @@ namespace TripMaker.UserPlans
                     PlaceName = plan.PlanForm.PlaceName,
                     PlaceId = plan.PlanForm.PlaceId,
                     Destination = plan.Destination,
+                    Photo = plan.Photo,
                     PlanFormId = plan.PlanFormId,
                     StartDate = plan.PlanForm.StartDate,
                     StartTime = plan.PlanForm.StartTime,
