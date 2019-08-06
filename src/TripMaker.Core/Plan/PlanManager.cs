@@ -11,6 +11,8 @@ using TripMaker.ExternalServices.Entities.GooglePlaceNearbySearch;
 using TripMaker.ExternalServices.Interfaces.GooglePlace;
 using TripMaker.Plan.Interfaces;
 using TripMaker.Plan.Models;
+using Abp.Domain.Entities;
+using Abp.Domain.Repositories;
 
 namespace TripMaker.Plan
 {
@@ -23,6 +25,7 @@ namespace TripMaker.Plan
         private readonly IRepository<PlanRouteStep> _planRouteStepRepository;
         private readonly IPlanFormPolicy _planFormPolicy;
         private readonly IPlanElementsProvider _planElementsProvider;
+        private readonly IPlanProvider _planProvider;
         public IEventBus EventBus { get; set; }
 
 
@@ -35,7 +38,8 @@ namespace TripMaker.Plan
             IRepository<PlanRouteStep> planRouteStepRepository,
 
             IPlanElementsProvider planElementsProvider,
-            IPlanFormPolicy planFormPolicy
+            IPlanFormPolicy planFormPolicy,
+            IPlanProvider planProvider
             )
         {
             _planRepository=planRepository;
@@ -46,6 +50,7 @@ namespace TripMaker.Plan
             _planRouteStepRepository = planRouteStepRepository;
             _planFormPolicy = planFormPolicy;
             EventBus = NullEventBus.Instance;
+            _planProvider = planProvider;
         }
 
         public async Task<Plan> CreateAsync(PlanForm planForm)
@@ -55,9 +60,9 @@ namespace TripMaker.Plan
             await EventBus.TriggerAsync(new EventSearchPlace(planForm)); //update SearchedPlaces DB
 
             await _planFormRepository.InsertAsync(planForm);
-   
 
-            var plan = await _planElementsProvider.GenerateAsync(planForm);
+
+            var plan =await _planProvider.GenerateAsync(planForm); //await _planElementsProvider.GenerateAsync(planForm);
 
 
             //insert plan to DB
@@ -77,6 +82,8 @@ namespace TripMaker.Plan
                     }
                 }
             }
+
+
 
             return plan;
         }

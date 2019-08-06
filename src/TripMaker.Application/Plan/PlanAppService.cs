@@ -1,19 +1,26 @@
-﻿using Abp.Application.Services;
-using Abp.Application.Services.Dto;
-using Abp.Domain.Repositories;
-using Abp.Linq.Extensions;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using TripMaker.Tutorial.Dto;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Abp.Application.Services;
+using Abp.Application.Services.Dto;
+using Abp.Authorization;
+using Abp.Domain.Entities;
+using Abp.Domain.Repositories;
+using Abp.IdentityFramework;
+using Abp.Localization;
+using Abp.Runtime.Session;
+using TripMaker.Authorization;
+using TripMaker.Authorization.Roles;
+using TripMaker.Authorization.Users;
+using TripMaker.Roles.Dto;
+using TripMaker.Users.Dto;
 using Abp.AutoMapper;
 
 namespace TripMaker.Plan
 {
-    public class PlanAppService : IPlanAppService
+    public class PlanAppService : TripMakerAppServiceBase, IPlanAppService
     {
         private readonly IPlanManager _planManager;
 
@@ -33,6 +40,9 @@ namespace TripMaker.Plan
         {
             var input =  PlanCommon.CreateTestInput().MapTo<PlanForm>(); 
             var result= await _planManager.CreateAsync(input);
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+
             var dto = result.MapTo<PlanDto>();
 
             return dto;
