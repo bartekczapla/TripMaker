@@ -11,6 +11,7 @@ namespace TripMaker.Plan
     {
         public WeightVector Generate(PlanForm planForm)
         {
+            decimal TotalWeightSum = 1.0m;
             var weightVector = new WeightVector();
 
             return weightVector;

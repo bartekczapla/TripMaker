@@ -7,32 +7,39 @@ namespace TripMaker.Plan.Models
 {
     public class DecisionRow
     {
-        private double[] Values;
+        private int NumberOfColumns => Enum.GetNames(typeof(WeightVectorLabel)).Length;
+        public PlanElementCandidate Candidate { get; set; }
+
+        public decimal[] DecisionValues;
+   
+        public int InitialPosition { get; set; }
+        public int ScorePosition { get; set; }
+        public decimal NormalizedScore { get; set; } //znormalizowana ocena pakietów negocjacyjnych
 
         public DecisionRow()
         {
-            Values = new double[10];
+            DecisionValues = new decimal[NumberOfColumns];
         }
 
-        public void SetValue(WeightVectorLabel label, double value)
+        public void SetValue(WeightVectorLabel label, decimal value)
         {
-            Values[(int)label] = ValidateValue(label, value);
+            DecisionValues[(int)label] = ValidateValue(label, value);
         }
 
-        private double ValidateValue(WeightVectorLabel label, double value)
+        private decimal ValidateValue(WeightVectorLabel label, decimal value)
         {
             switch (label)
             {
                 case WeightVectorLabel.Price:
                     return GetInRange(0, 4, value);
                 case WeightVectorLabel.Rating:
-                    return GetInRange(1.0d, 5.0d, value);
+                    return GetInRange(1.0m, 5.0m, value);
                 default:
                     return GetInRange(null, null, value);
             }
         }
 
-        private double GetInRange(double? from, double? to, double value)
+        private decimal GetInRange(decimal? from, decimal? to, decimal value)
         {
             if (from.HasValue && value < from)
                 return from.Value;
@@ -41,5 +48,6 @@ namespace TripMaker.Plan.Models
             else
                 return value;
         }
+
     }
 }

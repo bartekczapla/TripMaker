@@ -65,25 +65,23 @@ namespace TripMaker.Plan
             var plan =await _planProvider.GenerateAsync(planForm); //await _planElementsProvider.GenerateAsync(planForm);
 
 
-            //insert plan to DB
-            await _planRepository.InsertAsync(plan);
+            ////insert plan to DB
+            //await _planRepository.InsertAsync(plan);
 
-            foreach(var element in plan.Elements)
-            {
-                await _planElementRepository.InsertAsync(element);
+            //foreach(var element in plan.Elements)
+            //{
+            //    await _planElementRepository.InsertAsync(element);
 
-                if(element.EndingRoute != null)
-                {
-                    await _planRouteRepository.InsertAsync(element.EndingRoute);
+            //    if(element.EndingRoute != null)
+            //    {
+            //        await _planRouteRepository.InsertAsync(element.EndingRoute);
 
-                    foreach(var step in element.EndingRoute.Steps)
-                    {
-                        await _planRouteStepRepository.InsertAsync(step);
-                    }
-                }
-            }
-
-
+            //        foreach(var step in element.EndingRoute.Steps)
+            //        {
+            //            await _planRouteStepRepository.InsertAsync(step);
+            //        }
+            //    }
+            //}
 
             return plan;
         }
