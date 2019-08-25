@@ -53,7 +53,8 @@ namespace TripMaker.Plan
         {
             var candidates = new List<PlanElementCandidate>();
 
-
+            var googleNearbyRestaurantInput = _googlePlaceNearbySearchInputFactory.Create(previousLocation, planForm.Language, GooglePlaceTypeCategory.Restaurant);
+            var nearbyResult = await _googlePlaceNearbySearchApiClient.GetAsync(googleNearbyRestaurantInput);
 
 
 

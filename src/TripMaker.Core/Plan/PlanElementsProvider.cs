@@ -69,6 +69,7 @@ namespace TripMaker.Plan
 
         public async Task<IList<PlanElement>> GenerateAsync(DecisionArray decisionArray, Plan plan)
         {
+            var assumptions = new PlanAssumptions(plan.PlanForm);
             var elements = new List<PlanElement>();
 
 
