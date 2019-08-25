@@ -14,7 +14,7 @@ using static TripMaker.Plan.PlanHelpers;
 
 namespace TripMaker.Plan
 {
-    public class PlanProvider : PlanAssumptions, IPlanProvider
+    public class PlanProvider : PlanConsts, IPlanProvider
     {
         private readonly IWeightVectorProvider _weightVectorProvider;
         private readonly IPlanElementCandidateFactory _planElementCandidateFactory;

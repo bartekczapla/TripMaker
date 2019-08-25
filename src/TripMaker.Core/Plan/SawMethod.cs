@@ -8,7 +8,7 @@ using TripMaker.Plan.Models;
 
 namespace TripMaker.Plan
 {
-    public class SawMethod : PlanAssumptions, ISawMethod
+    public class SawMethod : PlanConsts, ISawMethod
     {
 
         public decimal CalculateNormalizedScore(SawNormalizationMethod method, WeightVector weightVector, decimal[] rowValues, decimal[] minVector, decimal[] maxVector)

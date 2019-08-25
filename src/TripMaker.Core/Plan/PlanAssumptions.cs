@@ -1,98 +1,85 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using TripMaker.Enums;
-using TripMaker.Plan.Models;
 
 namespace TripMaker.Plan
 {
-    public abstract class PlanAssumptions
+    public class PlanAssumptions
     {
-        public int NumberOfColumns => Enum.GetNames(typeof(WeightVectorLabel)).Length;
-
-        //0. Price //1. Rating //2. Distance //3. Popularity //4.Entertainment //5. Relax //6. Activity //7. Culture //8. Sightseeing //9. Partying //10. Shopping
-        public readonly Criteria[] DecisionCriterias = new Criteria[]
-        {
-            new Criteria{Position=(int)WeightVectorLabel.Price,
-                         Label =WeightVectorLabel.Price.ToString(),
-                         AspirationLevel =0.0m,
-                         ReserveLevel =4.0m },
-
-            new Criteria{Position=(int)WeightVectorLabel.Rating,
-                        Label =WeightVectorLabel.Rating.ToString(),
-                        AspirationLevel =5.0m,
-                        ReserveLevel =1.0m},
-
-            new Criteria{Position=(int)WeightVectorLabel.Distance,
-                        Label =WeightVectorLabel.Distance.ToString(),
-                        AspirationLevel =0.0m,
-                        ReserveLevel =200.0m},
-
-            new Criteria{Position=(int)WeightVectorLabel.Popularity,
-                        Label =WeightVectorLabel.Popularity.ToString(),
-                        AspirationLevel =20000.0m,
-                        ReserveLevel =0.0m},
-
-            new Criteria{Position=(int)WeightVectorLabel.Entertainment,
-                        Label =WeightVectorLabel.Entertainment.ToString(),
-                        AspirationLevel =1.0m,
-                        ReserveLevel =0.0m},
-
-            new Criteria{Position=(int)WeightVectorLabel.Relax,
-                        Label =WeightVectorLabel.Relax.ToString(),
-                        AspirationLevel =1.0m,
-                        ReserveLevel =0.0m},
-
-            new Criteria{Position=(int)WeightVectorLabel.Activity,
-                        Label =WeightVectorLabel.Activity.ToString(),
-                        AspirationLevel =1.0m,
-                        ReserveLevel =0.0m},
-
-            new Criteria{Position=(int)WeightVectorLabel.Culture,
-                        Label =WeightVectorLabel.Culture.ToString(),
-                        AspirationLevel =1.0m,
-                        ReserveLevel =0.0m},
-
-            new Criteria{Position=(int)WeightVectorLabel.Sightseeing,
-                        Label =WeightVectorLabel.Sightseeing.ToString(),
-                        AspirationLevel =1.0m,
-                        ReserveLevel =0.0m},
-
-            new Criteria{Position=(int)WeightVectorLabel.Partying,
-                        Label =WeightVectorLabel.Partying.ToString(),
-                        AspirationLevel =1.0m,
-                        ReserveLevel =0.0m},
-
-            new Criteria{Position=(int)WeightVectorLabel.Shopping,
-                        Label =WeightVectorLabel.Shopping.ToString(),
-                        AspirationLevel =1.0m,
-                        ReserveLevel =0.0m},
-        };
-
-        public static readonly TimeSpan StartTimeAssumption = new TimeSpan(8, 0, 0);
-        public static readonly TimeSpan EndTimeAssumption = new TimeSpan(20, 0, 0);
-        public static readonly TimeSpan OneHour = new TimeSpan(1, 0, 0);
-        public static readonly TimeSpan SleepingDuration = new TimeSpan(8, 0, 0);
-
-        public static readonly double MaximumDistanceToAccomodation = 15000;
-
-        //Eating
-        public static readonly TimeSpan LunchTime = new TimeSpan(14, 0, 0);
-        public static readonly TimeSpan DinnerTime = new TimeSpan(18, 0, 0);
-        public static readonly TimeSpan PartyTime = new TimeSpan(19, 0, 0);
-        public static readonly TimeSpan SleepingTime = new TimeSpan(23, 0, 0);
-        public static readonly TimeSpan SleepingTime2 = new TimeSpan(5, 0, 0);
+        public TimeSpan LunchTime { get; protected set; }
+        public TimeSpan DinnerTime { get; protected set; }
+        public TimeSpan SleepDuration { get; protected set; }
+        public TimeSpan SleepingTime { get; protected set; }
 
         //PlanElement Duration
-        public static readonly TimeSpan EatingDuration = new TimeSpan(1, 0, 0);
-        public static readonly TimeSpan EntertainmentDuration = new TimeSpan(3, 0, 0);
-        public static readonly TimeSpan RelaxDuration = new TimeSpan(3, 0, 0);
-        public static readonly TimeSpan ActivityDuration = new TimeSpan(2, 0, 0);
-        public static readonly TimeSpan CultureDuration = new TimeSpan(3, 0, 0);
-        public static readonly TimeSpan SightseeingDuration = new TimeSpan(3, 0, 0);
-        public static readonly TimeSpan PartyingDuration = new TimeSpan(3, 0, 0);
-        public static readonly TimeSpan ShoppingDuration = new TimeSpan(2, 0, 0);
+        public TimeSpan EatingDuration { get; protected set; }
+        public TimeSpan EntertainmentDuration { get; protected set; }
+        public TimeSpan RelaxDuration { get; protected set; }
+        public TimeSpan ActivityDuration { get; protected set; }
+        public TimeSpan CultureDuration { get; protected set; }
+        public TimeSpan SightseeingDuration { get; protected set; }
+        public TimeSpan PartyingDuration { get; protected set; }
+        public TimeSpan ShoppingDuration { get; protected set; }
 
-        public static readonly TimeSpan DoingNothingTime = new TimeSpan(0, 10, 0);
+        public PlanAssumptions(PlanForm planForm)
+        {
+            SleepDuration = new TimeSpan(planForm.AverageSleep, 0, 0);
+            var numberOfPartyActivity = planForm.PreferedPlanElements.Count(x => x == Enums.PlanElementType.Partying) + (planForm.SortedPlanElements.IndexOf(Enums.PlanElementType.Partying) < 3 ? 1 : 0);
+            switch(numberOfPartyActivity)
+            {
+                case 1:
+                    SleepingTime = new TimeSpan(24, 0, 0);
+                    break;
+                case 2:
+                    SleepingTime = new TimeSpan(1, 0, 0);
+                    break;
+                case 3:
+                    SleepingTime = new TimeSpan(2, 0, 0);
+                    break;
+                default:
+                    SleepingTime = new TimeSpan(23, 0, 0);
+                    break;
+            }
+
+            LunchTime = SleepingTime.Add(SleepDuration).Add(new TimeSpan((int)((24 - planForm.AverageSleep) / 2), 0, 0));
+            DinnerTime = new TimeSpan(19, 0, 0);
+
+            if(planForm.AtractionDurationPreference == Enums.PlanFormEnums.AtractionDurationPreference.Fast)
+            {
+                EatingDuration = new TimeSpan(1, 0, 0);
+                EntertainmentDuration = new TimeSpan(1, 30, 0);
+                RelaxDuration = new TimeSpan(1, 30, 0);
+                ActivityDuration = new TimeSpan(1, 30, 0);
+                CultureDuration = new TimeSpan(1, 30, 0);
+                SightseeingDuration = new TimeSpan(1, 30, 0);
+                PartyingDuration = new TimeSpan(1, 30, 0);
+                ShoppingDuration = new TimeSpan(1, 30, 0);
+            } else if (planForm.AtractionDurationPreference == Enums.PlanFormEnums.AtractionDurationPreference.Medium)
+            {
+                EatingDuration = new TimeSpan(1, 30, 0);
+                EntertainmentDuration = new TimeSpan(2, 30, 0);
+                RelaxDuration = new TimeSpan(2, 30, 0);
+                ActivityDuration = new TimeSpan(2, 30, 0);
+                CultureDuration = new TimeSpan(2, 30, 0);
+                SightseeingDuration = new TimeSpan(2, 30, 0);
+                PartyingDuration = new TimeSpan(2, 30, 0);
+                ShoppingDuration = new TimeSpan(2, 30, 0);
+            }
+            else if (planForm.AtractionDurationPreference == Enums.PlanFormEnums.AtractionDurationPreference.Slow)
+            {
+                EatingDuration = new TimeSpan(2, 0, 0);
+                EntertainmentDuration = new TimeSpan(3, 30, 0);
+                RelaxDuration = new TimeSpan(3, 30, 0);
+                ActivityDuration = new TimeSpan(3, 30, 0);
+                CultureDuration = new TimeSpan(3, 30, 0);
+                SightseeingDuration = new TimeSpan(3, 30, 0);
+                PartyingDuration = new TimeSpan(3, 30, 0);
+                ShoppingDuration = new TimeSpan(3, 30, 0);
+            }
+
+
+
+        }
     }
 }
