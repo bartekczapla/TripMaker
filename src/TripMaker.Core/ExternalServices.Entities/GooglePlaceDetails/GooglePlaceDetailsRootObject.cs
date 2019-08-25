@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TripMaker.ExternalServices.Helpers;
 
 namespace TripMaker.ExternalServices.Entities.GooglePlaceDetails
 {
@@ -17,5 +18,13 @@ namespace TripMaker.ExternalServices.Entities.GooglePlaceDetails
         public string inputUri { get; set; }
 
         public string resultJson { get; set; }
+
+        public bool IsOk
+        {
+            get
+            {
+                return InterpreteGoogleStatus.Interprete(status) == Enums.GoogleResultStatus.OK;
+            }
+        }
     }
 }

@@ -74,6 +74,8 @@ namespace TripMaker.Plan
         public static readonly TimeSpan OneHour = new TimeSpan(1, 0, 0);
         public static readonly TimeSpan SleepingDuration = new TimeSpan(8, 0, 0);
 
+        public static readonly double MaximumDistanceToAccomodation = 15000;
+
         //Eating
         public static readonly TimeSpan LunchTime = new TimeSpan(14, 0, 0);
         public static readonly TimeSpan DinnerTime = new TimeSpan(18, 0, 0);

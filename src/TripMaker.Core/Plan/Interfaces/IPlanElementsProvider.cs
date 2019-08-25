@@ -8,6 +8,6 @@ namespace TripMaker.Plan.Interfaces
     public interface IPlanElementsProvider : IDomainService
     {
         // Task<Plan> GenerateAsync(PlanForm planForm);
-        Task<Plan> GenerateAsync(DecisionArray decisionArray, PlanForm planForm);
+        Task<IList<PlanElement>> GenerateAsync(DecisionArray decisionArray, Plan plan);
     }
 }

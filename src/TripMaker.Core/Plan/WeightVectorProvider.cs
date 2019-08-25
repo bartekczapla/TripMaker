@@ -24,3 +24,30 @@ namespace TripMaker.Plan
         }
     }
 }
+//// 1) Miejsce i czas
+//public virtual string PlaceName { get; set; }
+//public virtual string PlaceId { get; set; }
+//public virtual DateTime StartDate { get; set; }
+//public virtual TimeSpan StartTime { get; set; }
+//public virtual DateTime EndDate { get; set; }
+//public virtual TimeSpan EndTime { get; set; }
+//public virtual bool HasAccomodationBooked { get; set; }
+//public virtual string AccomodationId { get; set; }
+//public virtual LanguageType Language { get; set; }
+
+//// 2) Przemieszczanie się
+//public IList<GoogleTravelMode> PreferedTravelModes { get; set; }
+//public virtual string PreferedTravelModesString { get; set; }
+//public virtual int MaxWalkingKmsPerDay { get; set; }
+//public virtual DistanceTypePreference DistanceTypePreference { get; set; }
+
+//// 3) Główne preferencje
+//public virtual PricePreference PricePreference { get; set; }
+//public virtual FoodPreference FoodPreference { get; set; }
+//public virtual int AverageSleep { get; set; }
+//public virtual AtractionPopularityPreference AtractionPopularityPreference { get; set; }
+//public virtual AtractionDurationPreference AtractionDurationPreference { get; set; }
+
+//// 4) Cele podróży
+//public IList<PlanElementType> SortedPlanElements { get; set; }
+//public IList<PlanElementType> PreferedPlanElements { get; set; }

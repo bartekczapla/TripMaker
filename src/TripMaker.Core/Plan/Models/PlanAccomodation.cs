@@ -12,26 +12,29 @@ namespace TripMaker.Plan.Models
     {
         public const int MaxNameLength = 128;
 
-
         public virtual double Lat { get; set; }
 
         public virtual double Lng { get; set; }
 
         [MaxLength(MaxNameLength)]
-        public string PlaceId { get; set; }
+        public virtual string PlaceId { get; set; }
 
         [MaxLength(MaxNameLength)]
-        public string PlaceName { get; set; }
+        public virtual string PlaceName { get; set; }
 
         [MaxLength(MaxNameLength)]
-        public string FormattedAddress { get; set; }
+        public virtual string FormattedAddress { get; set; }
+
+
+        public virtual decimal? Rating { get; set; }
+        public virtual decimal? TotalUserReviews { get; set; }
 
         //[ForeignKey("PlanFormId")]
         //public virtual PlanForm PlanForm { get; set; }
         //public virtual int PlanFormId { get; set; }
 
 
-        public PlanAccomodation(double lat, double lng, string placeId, string placeName, string formattedAddress)
+        public PlanAccomodation(double lat, double lng, string placeId, string placeName, string formattedAddress, decimal? rating = null, decimal? totalUserReviews = null)
         {
 
             Lat = lat;
@@ -39,7 +42,9 @@ namespace TripMaker.Plan.Models
             PlaceId = placeId;
             PlaceName = placeName;
             FormattedAddress = formattedAddress;
-            
+            Rating = rating;
+            TotalUserReviews = totalUserReviews;
+
         }
     }
 }

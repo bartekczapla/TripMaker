@@ -18,11 +18,12 @@ namespace TripMaker.ExternalServices.Entities.GooglePlaceDetails
         public string name { get; set; }
         public List<Photo> photos { get; set; }
         public string place_id { get; set; }
-        public double rating { get; set; }
+        public double? rating { get; set; }
         public string reference { get; set; }
         public List<Review> reviews { get; set; }
         public string scope { get; set; }
         public List<string> types { get; set; }
+        public double? user_ratings_total { get; set; }
         public string url { get; set; }
         public int utc_offset { get; set; }
         public string vicinity { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TripMaker.ExternalServices.Helpers;
 
 namespace TripMaker.ExternalServices.Entities.GoogleDistanceMatrix
 {
@@ -12,5 +13,12 @@ namespace TripMaker.ExternalServices.Entities.GoogleDistanceMatrix
         public List<GoogleDistanceRow> rows { get; set; }
         public string inputUri { get; set; }
         public string resultJson { get; set; }
+        public bool IsOk
+        {
+            get
+            {
+                return InterpreteGoogleStatus.Interprete(status) == Enums.GoogleResultStatus.OK;
+            }
+        }
     }
 }

@@ -1195,6 +1195,10 @@ namespace TripMaker.Migrations
                     b.Property<string>("PlaceName")
                         .HasMaxLength(128);
 
+                    b.Property<decimal?>("Rating");
+
+                    b.Property<decimal?>("TotalUserReviews");
+
                     b.HasKey("Id");
 
                     b.ToTable("PlanAccomodations");
@@ -1289,10 +1293,16 @@ namespace TripMaker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Address");
+
                     b.Property<string>("Comment")
                         .HasMaxLength(128);
 
-                    b.Property<string>("Destination")
+                    b.Property<decimal?>("Lat");
+
+                    b.Property<decimal?>("Lng");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128);
 
@@ -1301,6 +1311,10 @@ namespace TripMaker.Migrations
                     b.Property<int?>("PlanFormId");
 
                     b.Property<int?>("PlanFormWeightVectorId");
+
+                    b.Property<decimal?>("Rating");
+
+                    b.Property<decimal?>("TotalUserReviews");
 
                     b.Property<long?>("UserId");
 

@@ -22,7 +22,7 @@ namespace TripMaker.UserPlans
                     Id = plan.Id,
                     PlaceName = plan.PlanForm.PlaceName,
                     PlaceId = plan.PlanForm.PlaceId,
-                    Destination = plan.Destination,
+                    Destination = plan.Name,
                     Photo = plan.Photo,
                     PlanFormId = plan.PlanFormId,
                     StartDate = plan.PlanForm.StartDate,

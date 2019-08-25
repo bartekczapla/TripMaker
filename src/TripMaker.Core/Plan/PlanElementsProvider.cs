@@ -67,13 +67,12 @@ namespace TripMaker.Plan
             EventBus = NullEventBus.Instance;
         }
 
-        public async Task<Plan> GenerateAsync(DecisionArray decisionArray, PlanForm planForm)
+        public async Task<IList<PlanElement>> GenerateAsync(DecisionArray decisionArray, Plan plan)
         {
-            var plan = new Plan(planForm.PlaceName);
-            plan.PlanForm = planForm;
-            plan.PlanFormWeightVector = PlanFormWeightVector.Create(decisionArray.WeightVector);
+            var elements = new List<PlanElement>();
 
-            return plan;
+
+            return elements;
         }
 
 
