@@ -29,6 +29,11 @@ namespace TripMaker.Plan.Models
                 return 0.0m;
         }
 
+        public decimal GetLabelValue(WeightVectorLabel label)
+        {
+            return Values[(int)label];
+        }
+
         private decimal GetInRange(decimal value)
         {
             if (value < 0.00m)

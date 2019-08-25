@@ -14,36 +14,31 @@ namespace TripMaker.Plan
     {
         private readonly IWeightVectorProvider _weightVectorProvider;
         private readonly IPlanElementCandidateFactory _planElementCandidateFactory;
-        private readonly ISawNormalization _sawNormalization;
+        private readonly ISawMethod _sawMethod;
+        private readonly IDecisionRowFactory _decisionRowFactory;
+        private readonly IPlanElementsProvider _planElementsProvider;
 
 
-
-        public PlanProvider(IWeightVectorProvider weightVectorProvider, IPlanElementCandidateFactory planElementCandidateFactory, ISawNormalization sawNormalization)
+        public PlanProvider(IWeightVectorProvider weightVectorProvider, IPlanElementCandidateFactory planElementCandidateFactory,
+            IDecisionRowFactory decisionRowFactory, ISawMethod sawMethod, IPlanElementsProvider planElementsProvider)
         {
             _weightVectorProvider = weightVectorProvider;
             _planElementCandidateFactory = planElementCandidateFactory;
-            _sawNormalization = sawNormalization;
+            _decisionRowFactory = decisionRowFactory;
+            _sawMethod = sawMethod;
+            _planElementsProvider = planElementsProvider;
         }
 
         public async Task<Plan> GenerateAsync(PlanForm planForm)
         {
-            // 1. Generate weight vector based on user preferences
-            var weightVector = _weightVectorProvider.Generate(planForm);
-            weightVector.Values[0] = 0.3m;
-            weightVector.Values[1] = 0.2m;
-            weightVector.Values[2] = 0.1m;
-            weightVector.Values[3] = 0.1m;
-            weightVector.Values[4] = 0.1m;
-            weightVector.Values[5] = 0.1m;
-            weightVector.Values[6] = 0.1m;
-
-            // 2. Get candidates to be plan element
-            var candidates = await _planElementCandidateFactory.GetCandidates(planForm, weightVector);
-
-            // 3. Create decision array with list of candidates
+            // 1. Create decision array
             var DecisionArray = new DecisionArray();
-            DecisionArray.WeightVector = weightVector;
 
+            // 2. Generate weight vector based on user preferences
+            DecisionArray.WeightVector = _weightVectorProvider.Generate(planForm);
+
+            // 3. Get plan candidates 
+            var candidates = await _planElementCandidateFactory.GetCandidates(planForm, DecisionArray.WeightVector);
 
             //TEST
             var test = new DecisionRow { InitialPosition = 1 };
@@ -74,19 +69,23 @@ namespace TripMaker.Plan
 
             DecisionArray.DecisionRows.Add(test3);
 
-            //foreach (var candidate in candidates)
-            //{
+            //4. Create decision row with values based on candidates
+            int init = 1;
+            foreach (var candidate in candidates)
+            {
+                DecisionArray.DecisionRows.Add(_decisionRowFactory.Create(candidate, init));
+                ++init;
+            }
 
-            //}
-
-            // 4. Normalizacja (3 typy) i 5. funkcja celu
+            // 4. SCORE FUNCTION -> SAW Normalization (3 types - chosen first) and then calculate Score
             var minVector = DecisionArray.GetMinVector();
             var maxVector = DecisionArray.GetMaxVector();
             foreach(var decisionRow in DecisionArray.DecisionRows)
             {
-                decisionRow.NormalizedScore = _sawNormalization.Normalize(SawNormalizationMethod.LinearFirstType, DecisionArray.WeightVector, decisionRow.DecisionValues, minVector, maxVector);
+                decisionRow.NormalizedScore = _sawMethod.CalculateNormalizedScore(SawNormalizationMethod.LinearFirstType, DecisionArray.WeightVector, decisionRow.DecisionValues, minVector, maxVector);
             }
-            // 6. Klasyfikacja wg oceny punktowej
+
+            // 5. Clasification
             DecisionArray.DecisionRows = DecisionArray.DecisionRows.OrderByDescending(x => x.NormalizedScore).ToList();
             int newPos = 1;
             foreach(var row in DecisionArray.DecisionRows)
@@ -94,9 +93,11 @@ namespace TripMaker.Plan
                 row.ScorePosition = newPos;
                 ++newPos;
             }
-            // 7. Optymalizacja trasy
 
-            return new Plan("test");
+            // 7. Create Plan based on decision array and optimize it
+            var plan = await _planElementsProvider.GenerateAsync(DecisionArray, planForm);
+
+            return plan;
         }
     }
 }

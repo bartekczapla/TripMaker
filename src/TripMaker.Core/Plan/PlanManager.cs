@@ -55,18 +55,16 @@ namespace TripMaker.Plan
 
         public async Task<Plan> CreateAsync(PlanForm planForm)
         {
-            await _planFormPolicy.CheckFormValidAsync(planForm); //check if planForm object has valid data
+            //await _planFormPolicy.CheckFormValidAsync(planForm); //check if planForm object has valid data
 
             await EventBus.TriggerAsync(new EventSearchPlace(planForm)); //update SearchedPlaces DB
 
             await _planFormRepository.InsertAsync(planForm);
 
-
             var plan =await _planProvider.GenerateAsync(planForm); //await _planElementsProvider.GenerateAsync(planForm);
 
-
             ////insert plan to DB
-            //await _planRepository.InsertAsync(plan);
+            await _planRepository.InsertAsync(plan);
 
             //foreach(var element in plan.Elements)
             //{
@@ -83,7 +81,7 @@ namespace TripMaker.Plan
             //    }
             //}
 
-            return plan;
+            return new Plan("test");
         }
 
         public async Task<Plan> GetAsync(int planId)

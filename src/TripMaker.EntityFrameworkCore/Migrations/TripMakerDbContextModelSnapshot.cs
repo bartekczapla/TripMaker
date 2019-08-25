@@ -1200,6 +1200,39 @@ namespace TripMaker.Migrations
                     b.ToTable("PlanAccomodations");
                 });
 
+            modelBuilder.Entity("TripMaker.Plan.Models.PlanFormWeightVector", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Activity");
+
+                    b.Property<decimal>("Culture");
+
+                    b.Property<decimal>("Distance");
+
+                    b.Property<decimal>("Entertainment");
+
+                    b.Property<decimal>("Partying");
+
+                    b.Property<decimal>("Popularity");
+
+                    b.Property<decimal>("Price");
+
+                    b.Property<decimal>("Rating");
+
+                    b.Property<decimal>("Relax");
+
+                    b.Property<decimal>("Shopping");
+
+                    b.Property<decimal>("Sightseeing");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PlanFormWeightVectors");
+                });
+
             modelBuilder.Entity("TripMaker.Plan.Models.PlanRoute", b =>
                 {
                     b.Property<int>("Id")
@@ -1263,13 +1296,21 @@ namespace TripMaker.Migrations
                         .IsRequired()
                         .HasMaxLength(128);
 
+                    b.Property<int?>("PlanAccomodationId");
+
                     b.Property<int?>("PlanFormId");
+
+                    b.Property<int?>("PlanFormWeightVectorId");
 
                     b.Property<long?>("UserId");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PlanAccomodationId");
+
                     b.HasIndex("PlanFormId");
+
+                    b.HasIndex("PlanFormWeightVectorId");
 
                     b.HasIndex("UserId");
 
@@ -1325,17 +1366,30 @@ namespace TripMaker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AccomodationId")
+                        .HasMaxLength(80);
+
+                    b.Property<int>("AtractionDurationPreference");
+
+                    b.Property<int>("AtractionPopularityPreference");
+
+                    b.Property<int>("AverageSleep");
+
                     b.Property<DateTime>("CreationTime");
+
+                    b.Property<int>("DistanceTypePreference");
 
                     b.Property<DateTime>("EndDate");
 
-                    b.Property<TimeSpan?>("EndTime");
+                    b.Property<TimeSpan>("EndTime");
+
+                    b.Property<int>("FoodPreference");
 
                     b.Property<bool>("HasAccomodationBooked");
 
-                    b.Property<bool>("HasJourneyBooked");
-
                     b.Property<int>("Language");
+
+                    b.Property<int>("MaxWalkingKmsPerDay");
 
                     b.Property<string>("PlaceId")
                         .IsRequired()
@@ -1345,15 +1399,25 @@ namespace TripMaker.Migrations
                         .IsRequired()
                         .HasMaxLength(512);
 
-                    b.Property<int?>("PlanAccomodationId");
+                    b.Property<string>("PreferedPlanElementsString")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("PreferedTravelModesString")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<int>("PricePreference");
+
+                    b.Property<string>("SortedPlanElementsString")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("StartDate");
 
-                    b.Property<TimeSpan?>("StartTime");
+                    b.Property<TimeSpan>("StartTime");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PlanAccomodationId");
 
                     b.ToTable("PlanForms");
                 });
@@ -1646,9 +1710,17 @@ namespace TripMaker.Migrations
 
             modelBuilder.Entity("TripMaker.Plan.Plan", b =>
                 {
+                    b.HasOne("TripMaker.Plan.Models.PlanAccomodation", "PlanAccomodation")
+                        .WithMany()
+                        .HasForeignKey("PlanAccomodationId");
+
                     b.HasOne("TripMaker.Plan.PlanForm", "PlanForm")
                         .WithMany()
                         .HasForeignKey("PlanFormId");
+
+                    b.HasOne("TripMaker.Plan.Models.PlanFormWeightVector", "PlanFormWeightVector")
+                        .WithMany()
+                        .HasForeignKey("PlanFormWeightVectorId");
 
                     b.HasOne("TripMaker.Authorization.Users.User", "User")
                         .WithMany()
@@ -1668,13 +1740,6 @@ namespace TripMaker.Migrations
                     b.HasOne("TripMaker.Plan.Models.PlanRoute", "StartingRoute")
                         .WithMany()
                         .HasForeignKey("StartingRouteId");
-                });
-
-            modelBuilder.Entity("TripMaker.Plan.PlanForm", b =>
-                {
-                    b.HasOne("TripMaker.Plan.Models.PlanAccomodation", "PlanAccomodation")
-                        .WithMany()
-                        .HasForeignKey("PlanAccomodationId");
                 });
 
             modelBuilder.Entity("TripMaker.Tutorial.EventRegistration", b =>

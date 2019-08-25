@@ -34,6 +34,13 @@ namespace TripMaker.Plan
         [NotMapped]
         public string Photo { get; set; }
 
+        [ForeignKey("PlanAccomodationId")]
+        public virtual PlanAccomodation PlanAccomodation { get; set; }
+        public virtual int? PlanAccomodationId { get; set; }
+
+        [ForeignKey("PlanFormWeightVectorId")]
+        public virtual PlanFormWeightVector PlanFormWeightVector { get; set; }
+        public virtual int? PlanFormWeightVectorId { get; set; }
 
         [ForeignKey("PlanId")]
         public virtual ICollection<PlanElement> Elements { get;  set; }

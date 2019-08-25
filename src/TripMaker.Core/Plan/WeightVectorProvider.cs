@@ -13,7 +13,13 @@ namespace TripMaker.Plan
         {
             decimal TotalWeightSum = 1.0m;
             var weightVector = new WeightVector();
-
+            weightVector.Values[0] = 0.3m;
+            weightVector.Values[1] = 0.2m;
+            weightVector.Values[2] = 0.1m;
+            weightVector.Values[3] = 0.1m;
+            weightVector.Values[4] = 0.1m;
+            weightVector.Values[5] = 0.1m;
+            weightVector.Values[6] = 0.1m;
             return weightVector;
         }
     }
