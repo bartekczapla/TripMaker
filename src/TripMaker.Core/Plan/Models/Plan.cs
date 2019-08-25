@@ -20,8 +20,8 @@ namespace TripMaker.Plan
         [StringLength(MaxTitleLength)]
         public virtual string Name { get;  set; }
 
-        public virtual decimal? Lat { get; set; }
-        public virtual decimal? Lng { get; set; }
+        public virtual double Lat { get; set; }
+        public virtual double Lng { get; set; }
         public virtual string Address { get; set; }
         public virtual decimal? Rating { get; set; }
         public virtual decimal? TotalUserReviews { get; set; }
@@ -51,7 +51,7 @@ namespace TripMaker.Plan
         [ForeignKey("PlanId")]
         public virtual ICollection<PlanElement> Elements { get;  set; }
 
-        public Plan(string name, decimal? lat=null, decimal? lng = null, decimal? rating = null, decimal? totalUserReviews = null, string address="")
+        public Plan(string name, double lat, double lng , decimal? rating = null, decimal? totalUserReviews = null, string address="")
         {
             Name = name;
             Lat = lat;

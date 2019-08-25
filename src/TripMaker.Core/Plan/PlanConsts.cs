@@ -26,7 +26,7 @@ namespace TripMaker.Plan
             new Criteria{Position=(int)WeightVectorLabel.Distance,
                         Label =WeightVectorLabel.Distance.ToString(),
                         AspirationLevel =0.0m,
-                        ReserveLevel =200.0m},
+                        ReserveLevel =20000.0m},
 
             new Criteria{Position=(int)WeightVectorLabel.Popularity,
                         Label =WeightVectorLabel.Popularity.ToString(),

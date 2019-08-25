@@ -14,7 +14,7 @@ namespace TripMaker.Plan.Models
 
         public Location Location { get; set; }
 
-        public PlanElementType ElementType { get; set; }
+        public IList<PlanElementType> ElementTypes { get; set; }
 
         public decimal? Rating { get; set; }
 
@@ -22,18 +22,16 @@ namespace TripMaker.Plan.Models
 
         public decimal? Popularity { get; set; }
 
-        public TimeSpan Duration { get; set; }
 
-        public PlanElementCandidate(string placeName, string placeId, Location location, PlanElementType elementType, TimeSpan duration, decimal? rating=null, decimal? price=null, decimal? popularity=null)
+        public PlanElementCandidate(string placeName, string placeId, Location location, IList<PlanElementType> elementTypes,  decimal? rating=null, decimal? price=null, decimal? popularity=null)
         {
             PlaceName = placeName;
             PlaceId = placeId;
             Location = location;
-            ElementType = elementType;
+            ElementTypes = elementTypes;
             Rating = rating;
             Price = price;
             Popularity = popularity;
-            Duration = duration;
 
         }
 

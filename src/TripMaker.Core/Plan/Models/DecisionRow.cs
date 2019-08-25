@@ -5,7 +5,7 @@ using TripMaker.Enums;
 
 namespace TripMaker.Plan.Models
 {
-    public class DecisionRow
+    public class DecisionRow 
     {
         private int NumberOfColumns => Enum.GetNames(typeof(WeightVectorLabel)).Length;
         public PlanElementCandidate Candidate { get; set; }
@@ -23,31 +23,10 @@ namespace TripMaker.Plan.Models
 
         public void SetValue(WeightVectorLabel label, decimal value)
         {
-            DecisionValues[(int)label] = ValidateValue(label, value);
+            DecisionValues[(int)label] = value;
         }
 
-        private decimal ValidateValue(WeightVectorLabel label, decimal value)
-        {
-            switch (label)
-            {
-                case WeightVectorLabel.Price:
-                    return GetInRange(0, 4, value);
-                case WeightVectorLabel.Rating:
-                    return GetInRange(1.0m, 5.0m, value);
-                default:
-                    return GetInRange(null, null, value);
-            }
-        }
 
-        private decimal GetInRange(decimal? from, decimal? to, decimal value)
-        {
-            if (from.HasValue && value < from)
-                return from.Value;
-            else if (to.HasValue && value > to)
-                return to.Value;
-            else
-                return value;
-        }
 
     }
 }

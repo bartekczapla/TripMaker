@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TripMaker.Enums;
+using TripMaker.ExternalServices.Entities.Common;
 using TripMaker.ExternalServices.Interfaces;
 using TripMaker.ExternalServices.Interfaces.GooglePlace;
 using TripMaker.Plan.Interfaces;
@@ -45,7 +46,7 @@ namespace TripMaker.Plan
 
             // 2. Create plan object. Validate desitnation and accomodation.
             var destinationInfo = await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateAllUseful(planForm.PlaceId, planForm.Language));
-            var plan = new Plan(destinationInfo.Result.name, (decimal?)destinationInfo.Result.geometry.location.lat, (decimal?)destinationInfo.Result.geometry.location.lng,
+            var plan = new Plan(destinationInfo.Result.name, destinationInfo.Result.geometry.location.lat, destinationInfo.Result.geometry.location.lng,
                               (decimal?)destinationInfo.Result.rating, (decimal?)destinationInfo.Result.user_ratings_total, destinationInfo.Result.formatted_address);
 
             if (planForm.HasAccomodationBooked)
@@ -54,7 +55,7 @@ namespace TripMaker.Plan
                 plan.PlanAccomodation = new PlanAccomodation(accomodationInfo.Result.geometry.location.lat, accomodationInfo.Result.geometry.location.lng, planForm.AccomodationId,
                                                            accomodationInfo.Result.name, accomodationInfo.Result.formatted_address, (decimal?)accomodationInfo.Result.rating, (decimal?)accomodationInfo.Result.user_ratings_total);
 
-                var distance = CalculateDistance((double)plan.Lat.Value, (double)plan.Lng, plan.PlanAccomodation.Lat, plan.PlanAccomodation.Lng);
+                var distance = CalculateDistance(plan.Lat, plan.Lng, plan.PlanAccomodation.Lat, plan.PlanAccomodation.Lng);
 
                 if(distance > MaximumDistanceToAccomodation) //more than 15km
                     throw new UserFriendlyException($"Odległość między celem podróży a miejscem zakwaterowania nie może być większa nić {(int)(MaximumDistanceToAccomodation/1000)} km");
@@ -69,40 +70,12 @@ namespace TripMaker.Plan
             // 4. Get plan candidates 
             var candidates = await _planElementCandidateFactory.GetCandidates(plan, DecisionArray.WeightVector);
 
-            //TEST
-            var test = new DecisionRow { InitialPosition = 1 };
-            test.SetValue(WeightVectorLabel.Price, 2.0m);
-            test.SetValue(WeightVectorLabel.Popularity, 222.0m);
-            test.SetValue(WeightVectorLabel.Sightseeing, 1.0m);
-            test.SetValue(WeightVectorLabel.Distance, 32.0m);
-            test.SetValue(WeightVectorLabel.Rating, 4.0m);
-
-            DecisionArray.DecisionRows.Add(test);
-
-
-            var test2 = new DecisionRow { InitialPosition = 2 };
-            test2.SetValue(WeightVectorLabel.Price, 4.0m);
-            test2.SetValue(WeightVectorLabel.Popularity, 1112.0m);
-            test2.SetValue(WeightVectorLabel.Relax, 1.0m);
-            test2.SetValue(WeightVectorLabel.Distance, 2.0m);
-            test2.SetValue(WeightVectorLabel.Rating, 2.0m);
-
-            DecisionArray.DecisionRows.Add(test2);
-
-            var test3 = new DecisionRow { InitialPosition = 3 };
-            test3.SetValue(WeightVectorLabel.Price, 1.0m);
-            test3.SetValue(WeightVectorLabel.Popularity, 312.0m);
-            test3.SetValue(WeightVectorLabel.Partying, 1.0m);
-            test3.SetValue(WeightVectorLabel.Distance, 12.0m);
-            test3.SetValue(WeightVectorLabel.Rating, 1.0m);
-
-            DecisionArray.DecisionRows.Add(test3);
-
             //5. Create decision row with values based on candidates
             int init = 1;
+            Location startLocation = planForm.HasAccomodationBooked ? Location.Create(plan.PlanAccomodation.Lat, plan.PlanAccomodation.Lng) : Location.Create(plan.Lat, plan.Lng);
             foreach (var candidate in candidates)
             {
-                DecisionArray.DecisionRows.Add(_decisionRowFactory.Create(candidate, init));
+                DecisionArray.DecisionRows.Add(_decisionRowFactory.Create(candidate, init, startLocation));
                 ++init;
             }
 
