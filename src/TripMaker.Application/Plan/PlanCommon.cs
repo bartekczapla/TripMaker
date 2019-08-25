@@ -37,7 +37,7 @@ namespace TripMaker.Plan
                 EndDate=new DateTime(2019, 9, 4),
                 Language= Enums.LanguageType.Pl,
                 EndTime=new TimeSpan(18, 0, 0),
-                HasAccomodationBooked=true,
+                HasAccomodationBooked=false,
                 AccomodationId= "ChIJ8f4YlmxbFkcR5PbsuSmT_tU",
                 PreferedTravelModes= preferedTravelModes,
                 MaxWalkingKmsPerDay=20,

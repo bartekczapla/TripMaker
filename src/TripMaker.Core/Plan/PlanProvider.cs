@@ -47,7 +47,8 @@ namespace TripMaker.Plan
             var destinationInfo = await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateAllUseful(planForm.PlaceId, planForm.Language));
             var plan = new Plan(destinationInfo.Result.name, (decimal?)destinationInfo.Result.geometry.location.lat, (decimal?)destinationInfo.Result.geometry.location.lng,
                               (decimal?)destinationInfo.Result.rating, (decimal?)destinationInfo.Result.user_ratings_total, destinationInfo.Result.formatted_address);
-            if(planForm.HasAccomodationBooked)
+
+            if (planForm.HasAccomodationBooked)
             {
                 var accomodationInfo= await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateAllUseful(planForm.AccomodationId, planForm.Language));
                 plan.PlanAccomodation = new PlanAccomodation(accomodationInfo.Result.geometry.location.lat, accomodationInfo.Result.geometry.location.lng, planForm.AccomodationId,
@@ -59,11 +60,14 @@ namespace TripMaker.Plan
                     throw new UserFriendlyException($"Odległość między celem podróży a miejscem zakwaterowania nie może być większa nić {(int)(MaximumDistanceToAccomodation/1000)} km");
             }
 
+            plan.PlanForm = planForm;
+
             // 3. Generate weight vector based on user preferences
             DecisionArray.WeightVector = _weightVectorProvider.Generate(planForm);
+            plan.PlanFormWeightVector = PlanFormWeightVector.Create(DecisionArray.WeightVector);
 
             // 4. Get plan candidates 
-            var candidates = await _planElementCandidateFactory.GetCandidates(planForm, DecisionArray.WeightVector);
+            var candidates = await _planElementCandidateFactory.GetCandidates(plan, DecisionArray.WeightVector);
 
             //TEST
             var test = new DecisionRow { InitialPosition = 1 };
@@ -120,8 +124,7 @@ namespace TripMaker.Plan
             }
 
             // 8. Create Plan based on decision array and optimize it
-            plan.PlanForm = planForm;
-            plan.PlanFormWeightVector = PlanFormWeightVector.Create(DecisionArray.WeightVector);
+
 
             plan.Elements = await _planElementsProvider.GenerateAsync(DecisionArray, plan);
 

@@ -10,7 +10,7 @@ namespace TripMaker.Plan.Interfaces
 {
     public interface IPlanElementCandidateFactory : IDomainService
     {
-        Task<IList<PlanElementCandidate>> GetCandidates(PlanForm planForm, WeightVector weightVector);
+        Task<IList<PlanElementCandidate>> GetCandidates(Plan plan, WeightVector weightVector);
 
         //Task<bool> UpdateListAsync(IList<PlanElementCandidate> candidates, IList<PlanElementCandidate> usedCandidates, PlanElementDecision decision, PlanForm planForm, Location previousLocation);
     }

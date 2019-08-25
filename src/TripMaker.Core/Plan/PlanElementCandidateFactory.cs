@@ -49,7 +49,7 @@ namespace TripMaker.Plan
         }
 
 
-        public async Task<IList<PlanElementCandidate>> GetCandidates(PlanForm planForm, WeightVector weightVector)
+        public async Task<IList<PlanElementCandidate>> GetCandidates(Plan plan, WeightVector weightVector)
         {
             var candidates = new List<PlanElementCandidate>();
 

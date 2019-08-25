@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TripMaker.Enums;
 
@@ -9,6 +10,8 @@ namespace TripMaker.Plan.Models
     {
         //0. Price //1. Rating //2. Distance //3. Popularity //4.Entertainment //5. Relax //6. Activity //7. Culture //8. Sightseeing //9. Partying //10. Shopping
         public decimal[] Values;
+        public decimal Total => Values.Sum();
+
         private int NumberOfColumns => Enum.GetNames(typeof(WeightVectorLabel)).Length;
 
         public WeightVector()
@@ -19,6 +22,11 @@ namespace TripMaker.Plan.Models
         public void SetPriority(WeightVectorLabel label, decimal value)
         {
             Values[(int)label] = GetInRange(value);
+        }
+
+        public void AddValue(WeightVectorLabel label, decimal value)
+        {
+            Values[(int)label] += GetInRange(value);
         }
 
         public decimal GetValue(int position)
@@ -34,6 +42,11 @@ namespace TripMaker.Plan.Models
             return Values[(int)label];
         }
 
+        public decimal GetTotalSum()
+        {
+            return Values.Sum();
+        }
+
         private decimal GetInRange(decimal value)
         {
             if (value < 0.00m)
@@ -43,6 +56,8 @@ namespace TripMaker.Plan.Models
             else
                 return value;
         }
+
+
 
 
     }
