@@ -81,7 +81,7 @@ namespace TripMaker.Plan
             //    }
             //}
 
-            return new Plan("test");
+            return null;
         }
 
         public async Task<Plan> GetAsync(int planId)

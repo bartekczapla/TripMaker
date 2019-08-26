@@ -12,10 +12,11 @@ namespace TripMaker.Plan
     {
         public PlanElementCandidate Pick(IList<PlanElementCandidate> candidates, PlanElementType planElementType)
         {
-            if (candidates.Any(x => x.ElementType == planElementType))
-                return candidates.First(x => x.ElementType == planElementType);
-            else
-                return candidates.First(x => x.ElementType == PlanElementType.Nothing); //default start from accomodation
+            return null;
+            //if (candidates.Any(x => x.ElementType == planElementType))
+            //    return candidates.First(x => x.ElementType == planElementType);
+            //else
+            //    return candidates.First(x => x.ElementType == PlanElementType.Nothing); //default start from accomodation
         }
     }
 }
