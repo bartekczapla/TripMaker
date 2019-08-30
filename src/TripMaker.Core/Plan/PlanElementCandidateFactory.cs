@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Abp.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -53,10 +54,26 @@ namespace TripMaker.Plan
         {
             var candidates = new List<PlanElementCandidate>();
 
-            //var googleNearbyRestaurantInput = _googlePlaceNearbySearchInputFactory.Create(previousLocation, planForm.Language, GooglePlaceTypeCategory.Restaurant);
-            //var nearbyResult = await _googlePlaceNearbySearchApiClient.GetAsync(googleNearbyRestaurantInput);
+            var googleNearbyEntertainmentInput = _googlePlaceNearbySearchInputFactory.Create(plan.StartLocation, plan.PlanForm.Language, GooglePlaceTypeCategory.Activity);
+            var nearbyResults = await _googlePlaceNearbySearchApiClient.GetAsync(googleNearbyEntertainmentInput);
+            int counter = 1;
+            foreach(var nr in nearbyResults.results)
+            {
+            
+                var details =await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateAllUseful(nr.place_id));
+                if(details.IsOk)
+                {
+                    var candidate = new PlanElementCandidate(details.Result.name, details.Result.place_id, details.Result.formatted_address, details.Result.geometry.location, details.Result.opening_hours, details.Result.types, details.Result.rating, details.Result.price_level, details.Result.user_ratings_total);
+                    candidates.Add(candidate);
+                }
+                ++counter;
+                if (counter > 3) break;
+            }
 
 
+
+            if(candidates.Count == 0)
+                throw new UserFriendlyException($"Nie znaleziono żadnych potencjalnych kandydatów na elementy planu");
 
             return candidates;
         }

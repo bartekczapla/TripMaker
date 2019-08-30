@@ -17,6 +17,7 @@ using TripMaker.Authorization.Users;
 using TripMaker.Roles.Dto;
 using TripMaker.Users.Dto;
 using Abp.AutoMapper;
+using static TripMaker.Plan.PlanCommon;
 
 namespace TripMaker.Plan
 {
@@ -32,20 +33,9 @@ namespace TripMaker.Plan
 
         public async Task<PlanDto> CreateAsync(CreatePlanInput input)
         {
-            Logger.Info($"Plan input: PlaceName={input.PlaceName}; PlaceId={input.PlaceId}; StartDate={input.StartDate}, StartTime={input.StartTime}");
-            if (input.HasAccomodationBooked != null) Logger.Info($"Accomodation={input.AccomodationId};");
-
-            Logger.Info($"Plan input: PreferedTravelModes={input.PreferedTravelModes}; MaxWalkingKmsPerDay={input.MaxWalkingKmsPerDay}; DistanceTypePreference={input.DistanceTypePreference}");
-
-            Logger.Info($"Plan input: PricePreference={input.PricePreference}; FoodPreference={input.FoodPreference}; AverageSleep={input.AverageSleep}; AtractionPopularityPreference={input.AtractionPopularityPreference}; AtractionDurationPreference={input.AtractionDurationPreference};");
-
-            Logger.Info($"Plan input: SortedPlanElements={input.SortedPlanElements}; PreferedPlanElements={input.PreferedPlanElements};");
-
-            //var input = PlanCommon.CreateTestInput().MapTo<PlanForm>();
-            //var result = await _planManager.CreateAsync(input);
-            //await CurrentUnitOfWork.SaveChangesAsync();
-            //var dto = result.MapTo<PlanDto>();
-
+            var planForm = input.CreatePlanForm();
+            var result = await _planManager.CreateAsync(planForm);
+            var dto = result.MapTo<PlanDto>();
             return new PlanDto();            
         }
 
@@ -54,10 +44,9 @@ namespace TripMaker.Plan
             var inputDto = PlanCommon.CreateTestInput();
             var planForm = inputDto.CreatePlanForm();
             var result = await _planManager.CreateAsync(planForm);
-            //await CurrentUnitOfWork.SaveChangesAsync();
-            //var dto = result.MapTo<PlanDto>();
-
-            return new PlanDto();
+            await CurrentUnitOfWork.SaveChangesAsync();
+            var dto = result.MapTo<PlanDto>();
+            return dto;
         }
 
     }

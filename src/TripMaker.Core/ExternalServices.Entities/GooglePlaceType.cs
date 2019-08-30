@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using TripMaker.Enums;
 
@@ -12,19 +13,81 @@ namespace TripMaker.ExternalServices.Entities
         {
             Name = String.Empty;
             Type = GooglePlaceTypeCategory.None;
+            PlanElementType = PlanElementType.Nothing;
+
         }
 
         public GooglePlaceType(string name, GooglePlaceTypeCategory type)
         {
             Name = name;
             Type = type;
+            switch (type)
+            {
+                case GooglePlaceTypeCategory.None:
+                    PlanElementType = PlanElementType.Nothing;
+                    break;
+                case GooglePlaceTypeCategory.Restaurant:
+                    PlanElementType = PlanElementType.Eating;
+                    break;
+                case GooglePlaceTypeCategory.Food:
+                    PlanElementType = PlanElementType.Eating;
+                    break;
+                case GooglePlaceTypeCategory.Entertainment:
+                    PlanElementType = PlanElementType.Entertainment;
+                    break;
+                case GooglePlaceTypeCategory.Relax:
+                    PlanElementType = PlanElementType.Relax;
+                    break;
+                case GooglePlaceTypeCategory.Activity:
+                    PlanElementType = PlanElementType.Activity;
+                    break;
+                case GooglePlaceTypeCategory.Culture:
+                    PlanElementType = PlanElementType.Culture;
+                    break;
+                case GooglePlaceTypeCategory.Sightseeing:
+                    PlanElementType = PlanElementType.Sightseeing;
+                    break;
+                case GooglePlaceTypeCategory.Partying:
+                    PlanElementType = PlanElementType.Partying;
+                    break;
+                case GooglePlaceTypeCategory.Shopping:
+                    PlanElementType = PlanElementType.Shopping;
+                    break;
+                case GooglePlaceTypeCategory.Address:
+                    PlanElementType = PlanElementType.Nothing;
+                    break;
+                case GooglePlaceTypeCategory.Bank:
+                    PlanElementType = PlanElementType.Nothing;
+                    break;
+                case GooglePlaceTypeCategory.Car_rental:
+                    PlanElementType = PlanElementType.Nothing;
+                    break;
+                case GooglePlaceTypeCategory.Airport:
+                    PlanElementType = PlanElementType.Nothing;
+                    break;
+                case GooglePlaceTypeCategory.City_communication:
+                    PlanElementType = PlanElementType.Nothing;
+                    break;
+                case GooglePlaceTypeCategory.Other_shop:
+                    PlanElementType = PlanElementType.Shopping;
+                    break;
+                default:
+                    PlanElementType = PlanElementType.Nothing;
+                    break;
+            }
         }
         public string Name { get; set; }
         public GooglePlaceTypeCategory Type { get; set; }
+        public PlanElementType PlanElementType { get; set; }
     }
 
     public static class GooglePlaceTypes
     {
+        public static PlanElementType CheckPlanElemntyType(string type)
+        {
+            var result = Table.FirstOrDefault(x => x.Name == type);
+            return result != null ? result.PlanElementType : PlanElementType.Nothing;
+        }
 
         public static ICollection<GooglePlaceType> Table =new Collection<GooglePlaceType>
         {

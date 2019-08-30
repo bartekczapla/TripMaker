@@ -14,16 +14,18 @@ namespace TripMaker.ExternalServices.Core
     public class GooglePlaceDetailsInputFactory : IGooglePlaceDetailsInputFactory
     {
 
-        public GooglePlaceDetailsInput CreateAll(string placeId, LanguageType language)
+        public GooglePlaceDetailsInput CreateAll(string placeId)
         {
+            LanguageType language = LanguageType.Pl;
             var allFields = GoogleFields.Table
                                         .Where(x => x.AllowedServices.Contains(ExternalServicesType.GooglePlaceDetails)).ToList();
 
             return new GooglePlaceDetailsInput(placeId, language, allFields);
         }
 
-        public GooglePlaceDetailsInput CreateAllUseful (string placeId, LanguageType language)
+        public GooglePlaceDetailsInput CreateAllUseful (string placeId)
         {
+            LanguageType language = LanguageType.Pl;
             var allUsefulFields = GoogleFields.Table
                                         .Where(x => x.AllowedServices.Contains(ExternalServicesType.GooglePlaceDetails) &&
                                         (x.Type == GoogleFieldType.Address || x.Type == GoogleFieldType.Details || x.Type == GoogleFieldType.PlaceInfo || x.Type == GoogleFieldType.Reviews))
@@ -32,8 +34,9 @@ namespace TripMaker.ExternalServices.Core
             return new GooglePlaceDetailsInput(placeId, language, allUsefulFields);
         }
 
-        public GooglePlaceDetailsInput CreateBasic(string placeId, LanguageType language)
+        public GooglePlaceDetailsInput CreateBasic(string placeId)
         {
+            LanguageType language = LanguageType.Pl;
             var basicFields = GoogleFields.Table
                                         .Where(x => x.AllowedServices.Contains(ExternalServicesType.GooglePlaceDetails) &&
                                         (x.Type == GoogleFieldType.Address || x.Type == GoogleFieldType.Details ))
@@ -44,6 +47,7 @@ namespace TripMaker.ExternalServices.Core
 
         public GooglePlaceDetailsInput CreatePhotoReference(string placeId)
         {
+            LanguageType language = LanguageType.Pl;
             var basicFields = GoogleFields.Table
                                         .Where(x => x.AllowedServices.Contains(ExternalServicesType.GooglePlaceDetails) &&
                                         (x.Type == GoogleFieldType.Photos ))

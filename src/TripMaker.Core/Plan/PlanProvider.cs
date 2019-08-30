@@ -45,13 +45,13 @@ namespace TripMaker.Plan
             var DecisionArray = new DecisionArray();
 
             // 2. Create plan object. Validate desitnation and accomodation.
-            var destinationInfo = await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateAllUseful(planForm.PlaceId, planForm.Language));
+            var destinationInfo = await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateAllUseful(planForm.PlaceId));
             var plan = new Plan(destinationInfo.Result.name, destinationInfo.Result.geometry.location.lat, destinationInfo.Result.geometry.location.lng,
                               (decimal?)destinationInfo.Result.rating, (decimal?)destinationInfo.Result.user_ratings_total, destinationInfo.Result.formatted_address);
 
             if (planForm.HasAccomodationBooked)
             {
-                var accomodationInfo= await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateAllUseful(planForm.AccomodationId, planForm.Language));
+                var accomodationInfo= await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateAllUseful(planForm.AccomodationId));
                 plan.PlanAccomodation = new PlanAccomodation(accomodationInfo.Result.geometry.location.lat, accomodationInfo.Result.geometry.location.lng, planForm.AccomodationId,
                                                            accomodationInfo.Result.name, accomodationInfo.Result.formatted_address, (decimal?)accomodationInfo.Result.rating, (decimal?)accomodationInfo.Result.user_ratings_total);
 
@@ -72,10 +72,9 @@ namespace TripMaker.Plan
 
             //5. Create decision row with values based on candidates
             int init = 1;
-            Location startLocation = planForm.HasAccomodationBooked ? Location.Create(plan.PlanAccomodation.Lat, plan.PlanAccomodation.Lng) : Location.Create(plan.Lat, plan.Lng);
             foreach (var candidate in candidates)
             {
-                DecisionArray.DecisionRows.Add(_decisionRowFactory.Create(candidate, init, startLocation));
+                DecisionArray.DecisionRows.Add(_decisionRowFactory.Create(candidate, init, plan.StartLocation));
                 ++init;
             }
 

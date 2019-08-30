@@ -20,11 +20,9 @@ namespace TripMaker.Plan
     {
         private readonly IRepository<Plan> _planRepository;
         private readonly IRepository<PlanForm> _planFormRepository;
-        private readonly IRepository<PlanElement> _planElementRepository;
-        private readonly IRepository<PlanRoute> _planRouteRepository;
-        private readonly IRepository<PlanRouteStep> _planRouteStepRepository;
-        private readonly IPlanFormPolicy _planFormPolicy;
-        private readonly IPlanElementsProvider _planElementsProvider;
+        //private readonly IRepository<PlanElement> _planElementRepository;
+        //private readonly IRepository<PlanRoute> _planRouteRepository;
+        //private readonly IRepository<PlanRouteStep> _planRouteStepRepository;
         private readonly IPlanProvider _planProvider;
         public IEventBus EventBus { get; set; }
 
@@ -33,37 +31,32 @@ namespace TripMaker.Plan
             (
             IRepository<Plan> planRepository,
             IRepository<PlanForm> planFormRepository,
-            IRepository<PlanElement> planElementRepository,
-            IRepository<PlanRoute> planRouteRepository,
-            IRepository<PlanRouteStep> planRouteStepRepository,
-
-            IPlanElementsProvider planElementsProvider,
-            IPlanFormPolicy planFormPolicy,
+            //IRepository<PlanElement> planElementRepository,
+            //IRepository<PlanRoute> planRouteRepository,
+            //IRepository<PlanRouteStep> planRouteStepRepository,
             IPlanProvider planProvider
             )
         {
             _planRepository=planRepository;
             _planFormRepository = planFormRepository;
-            _planElementRepository = planElementRepository;
-            _planElementsProvider = planElementsProvider;
-            _planRouteRepository = planRouteRepository;
-            _planRouteStepRepository = planRouteStepRepository;
-            _planFormPolicy = planFormPolicy;
+            //_planElementRepository = planElementRepository;
+            //_planElementsProvider = planElementsProvider;
+            //_planRouteRepository = planRouteRepository;
+            //_planRouteStepRepository = planRouteStepRepository;
+            //_planFormPolicy = planFormPolicy;
             EventBus = NullEventBus.Instance;
             _planProvider = planProvider;
         }
 
         public async Task<Plan> CreateAsync(PlanForm planForm)
         {
-            //await _planFormPolicy.CheckFormValidAsync(planForm); //check if planForm object has valid data
 
             await EventBus.TriggerAsync(new EventSearchPlace(planForm)); //update SearchedPlaces DB
 
             await _planFormRepository.InsertAsync(planForm);
 
-            var plan =await _planProvider.GenerateAsync(planForm); //await _planElementsProvider.GenerateAsync(planForm);
+            var plan =await _planProvider.GenerateAsync(planForm); 
 
-            ////insert plan to DB
             await _planRepository.InsertAsync(plan);
 
             //foreach(var element in plan.Elements)
@@ -81,7 +74,7 @@ namespace TripMaker.Plan
             //    }
             //}
 
-            return null;
+            return plan;
         }
 
         public async Task<Plan> GetAsync(int planId)

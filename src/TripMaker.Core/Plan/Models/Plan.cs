@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using TripMaker.Authorization.Users;
+using TripMaker.ExternalServices.Entities.Common;
 using TripMaker.Plan.Models;
 using TripMaker.Validation;
 
@@ -51,6 +52,8 @@ namespace TripMaker.Plan
         [ForeignKey("PlanId")]
         public virtual ICollection<PlanElement> Elements { get;  set; }
 
+
+
         public Plan(string name, double lat, double lng , decimal? rating = null, decimal? totalUserReviews = null, string address="")
         {
             Name = name;
@@ -63,6 +66,14 @@ namespace TripMaker.Plan
             Elements = new Collection<PlanElement>();
         }
 
+        [NotMapped]
+        public Location StartLocation
+        {
+            get
+            {
+                return PlanForm.HasAccomodationBooked ? Location.Create(PlanAccomodation.Lat, PlanAccomodation.Lng) : Location.Create(Lat, Lng);
+            }
+        }
     }
 }
 
