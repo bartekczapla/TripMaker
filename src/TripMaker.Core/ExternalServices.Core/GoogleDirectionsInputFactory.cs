@@ -4,6 +4,7 @@ using System.Text;
 using TripMaker.Enums;
 using TripMaker.ExternalServices.Entities.Common;
 using TripMaker.ExternalServices.Entities.GoogleDirections;
+using TripMaker.ExternalServices.Helpers;
 using TripMaker.ExternalServices.Interfaces;
 using TripMaker.Plan;
 
@@ -34,15 +35,25 @@ namespace TripMaker.ExternalServices.Core
         // -transit_routing_preference {less_walking, fewer_transfers} 
 
 
-        public GoogleDirectionsInput Create(string originId, string destinationId, LanguageType language, GoogleTravelMode mode)
+        public GoogleDirectionsInput CreateOptimizedWaypoints(Location originLoc, Location destinationLoc, GoogleTravelMode mode, IList<Location> waypoints, double? departure_time = null)
         {
-            return new GoogleDirectionsInput(originId, destinationId, mode, language);
+            LanguageType language = LanguageType.Pl;
+            return new GoogleDirectionsInput(originLoc, destinationLoc, mode, language, waypoints,true, departure_time);
+        }
+
+        public GoogleDirectionsInput Create(string originId, string destinationId, GoogleTravelMode mode, DateTime departureTime)
+        {
+            LanguageType language = LanguageType.Pl;
+            var startSeconds = GooglePlaceCalculator.ConvertToUnixTimestamp(departureTime);
+            return new GoogleDirectionsInput(originId, destinationId, mode, language, startSeconds);
         }
 
 
-        public GoogleDirectionsInput Create(Location origin, Location destination, LanguageType language, GoogleTravelMode mode)
+        public GoogleDirectionsInput Create(Location origin, Location destination, GoogleTravelMode mode, DateTime departureTime)
         {
-            return new GoogleDirectionsInput(origin, destination, mode, language);
+            LanguageType language = LanguageType.Pl;
+            var startSeconds = GooglePlaceCalculator.ConvertToUnixTimestamp(departureTime);
+            return new GoogleDirectionsInput(origin, destination, mode, language, startSeconds);
         }
     }
 }

@@ -14,11 +14,14 @@ namespace TripMaker.Plan.Models
    
         public int InitialPosition { get; set; }
         public int ScorePosition { get; set; }
+        public int OptimizedPosition { get; set; }
+
         public decimal NormalizedScore { get; set; } //znormalizowana ocena pakietów negocjacyjnych
 
         public DecisionRow()
         {
             DecisionValues = new decimal[NumberOfColumns];
+            OptimizedPosition = 999999;
         }
 
         public void SetValue(WeightVectorLabel label, decimal value)

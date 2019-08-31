@@ -62,7 +62,7 @@ namespace TripMaker.Plan
             }
 
             plan.PlanForm = planForm;
-            plan.Assumptions = new PlanAssumptions(planForm); 
+            plan.Assumptions = new PlanAssumptions(planForm);
 
             // 3. Generate weight vector based on user preferences
             DecisionArray.WeightVector = _weightVectorProvider.Generate(planForm);
@@ -75,8 +75,6 @@ namespace TripMaker.Plan
             int init = 1;
             foreach (var candidate in candidates)
             {
-                var tets = candidate.IsOpen(new DateTime(2019,9,2,21,30,0));
-                var tets2 = candidate.IsOpen(new DateTime(2019,8,1,8,0,0));
                 DecisionArray.DecisionRows.Add(_decisionRowFactory.Create(candidate, init, plan.StartLocation));
                 ++init;
             }
@@ -84,7 +82,7 @@ namespace TripMaker.Plan
             // 6. SCORE FUNCTION -> SAW Normalization (3 types - chosen first) and then calculate Score
             var minVector = DecisionArray.GetMinVector();
             var maxVector = DecisionArray.GetMaxVector();
-            foreach(var decisionRow in DecisionArray.DecisionRows)
+            foreach (var decisionRow in DecisionArray.DecisionRows)
             {
                 decisionRow.NormalizedScore = _sawMethod.CalculateNormalizedScore(SawNormalizationMethod.LinearFirstType, DecisionArray.WeightVector, decisionRow.DecisionValues, minVector, maxVector);
             }
@@ -92,15 +90,13 @@ namespace TripMaker.Plan
             // 7. Clasification
             DecisionArray.DecisionRows = DecisionArray.DecisionRows.OrderByDescending(x => x.NormalizedScore).ToList();
             int newPos = 1;
-            foreach(var row in DecisionArray.DecisionRows)
+            foreach (var row in DecisionArray.DecisionRows)
             {
                 row.ScorePosition = newPos;
                 ++newPos;
             }
 
-            // 8. Create Plan based on decision array and optimize it
-
-
+            // 8. Create Plan based on decision rows and optimize routes with travel salesman problem
             plan.Elements = await _planElementsProvider.GenerateAsync(DecisionArray, plan);
 
             return plan;

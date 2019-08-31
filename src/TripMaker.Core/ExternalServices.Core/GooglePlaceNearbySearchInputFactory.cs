@@ -31,8 +31,9 @@ namespace TripMaker.ExternalServices.Core
         //- pagetoken -Returns the next 20 results from a previously run search. Setting a pagetoken parameter will execute a search with the same parameters used previously
 
 
-        public GooglePlaceNearbySearchInput Create(Location location, LanguageType language, GooglePlaceTypeCategory typeCategory)
+        public GooglePlaceNearbySearchInput Create(Location location, GooglePlaceTypeCategory typeCategory)
         {
+            LanguageType language = LanguageType.Pl;
             var types = GooglePlaceTypes.Table.Where(x => x.Type == typeCategory).ToList();
             Random rnd = new Random();
             var index=rnd.Next(types.Count);

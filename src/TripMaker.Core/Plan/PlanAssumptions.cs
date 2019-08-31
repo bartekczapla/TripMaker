@@ -12,17 +12,11 @@ namespace TripMaker.Plan
         public TimeSpan SleepDuration { get; protected set; }
         public TimeSpan SleepingTime { get; protected set; }
 
-        //PlanElement Duration
         public TimeSpan EatingDuration { get; protected set; }
-        public TimeSpan EntertainmentDuration { get; protected set; }
-        public TimeSpan RelaxDuration { get; protected set; }
-        public TimeSpan ActivityDuration { get; protected set; }
-        public TimeSpan CultureDuration { get; protected set; }
-        public TimeSpan SightseeingDuration { get; protected set; }
-        public TimeSpan PartyingDuration { get; protected set; }
-        public TimeSpan ShoppingDuration { get; protected set; }
-
+        public TimeSpan PlanElementDuration { get; protected set; }
+        public int NumberOfMealsPerDay = 3;
         public int RadiusSearch { get; protected set; }
+        public int AssumedNumberOfElement { get; protected set; }
 
         public PlanAssumptions(PlanForm planForm)
         {
@@ -31,7 +25,7 @@ namespace TripMaker.Plan
             switch(numberOfPartyActivity)
             {
                 case 1:
-                    SleepingTime = new TimeSpan(24, 0, 0);
+                    SleepingTime = new TimeSpan(0, 0, 0);
                     break;
                 case 2:
                     SleepingTime = new TimeSpan(1, 0, 0);
@@ -50,34 +44,17 @@ namespace TripMaker.Plan
             if(planForm.AtractionDurationPreference == Enums.PlanFormEnums.AtractionDurationPreference.Fast)
             {
                 EatingDuration = new TimeSpan(1, 0, 0);
-                EntertainmentDuration = new TimeSpan(1, 30, 0);
-                RelaxDuration = new TimeSpan(1, 30, 0);
-                ActivityDuration = new TimeSpan(1, 30, 0);
-                CultureDuration = new TimeSpan(1, 30, 0);
-                SightseeingDuration = new TimeSpan(1, 30, 0);
-                PartyingDuration = new TimeSpan(1, 30, 0);
-                ShoppingDuration = new TimeSpan(1, 30, 0);
+                PlanElementDuration = new TimeSpan(1, 30, 0);
+
             } else if (planForm.AtractionDurationPreference == Enums.PlanFormEnums.AtractionDurationPreference.Medium)
             {
                 EatingDuration = new TimeSpan(1, 30, 0);
-                EntertainmentDuration = new TimeSpan(2, 30, 0);
-                RelaxDuration = new TimeSpan(2, 30, 0);
-                ActivityDuration = new TimeSpan(2, 30, 0);
-                CultureDuration = new TimeSpan(2, 30, 0);
-                SightseeingDuration = new TimeSpan(2, 30, 0);
-                PartyingDuration = new TimeSpan(2, 30, 0);
-                ShoppingDuration = new TimeSpan(2, 30, 0);
+                PlanElementDuration = new TimeSpan(2, 30, 0);
             }
             else if (planForm.AtractionDurationPreference == Enums.PlanFormEnums.AtractionDurationPreference.Slow)
             {
                 EatingDuration = new TimeSpan(2, 0, 0);
-                EntertainmentDuration = new TimeSpan(3, 30, 0);
-                RelaxDuration = new TimeSpan(3, 30, 0);
-                ActivityDuration = new TimeSpan(3, 30, 0);
-                CultureDuration = new TimeSpan(3, 30, 0);
-                SightseeingDuration = new TimeSpan(3, 30, 0);
-                PartyingDuration = new TimeSpan(3, 30, 0);
-                ShoppingDuration = new TimeSpan(3, 30, 0);
+                PlanElementDuration = new TimeSpan(3, 30, 0);
             }
 
             //radius search
@@ -86,6 +63,29 @@ namespace TripMaker.Plan
                 RadiusSearch = 15000;
             else
                 RadiusSearch = 6000;
+
+            //numbersOfElements
+            var subTimeSpan = planForm.EndDateTime.Subtract(planForm.StartDateTime);
+            var subHours = subTimeSpan.Days*24 + subTimeSpan.Hours;
+            var numberOfDays = (planForm.EndDateTime.DayOfYear - planForm.StartDateTime.DayOfYear+1);
+            subHours -= (numberOfDays - 1) * planForm.AverageSleep; // odejmujemy czas na spanie
+            var eatingHours = EatingDuration.Multiply(NumberOfMealsPerDay * numberOfDays).Days*24+EatingDuration.Multiply(NumberOfMealsPerDay * numberOfDays).Hours;
+            subHours -= eatingHours; // odejmujemy czas na jedzenie
+            decimal hoursPerPlanElement = PlanElementDuration.Hours;// ((decimal)PlanElementDuration.Minutes / 60);
+            if (PlanElementDuration.Minutes > 0) hoursPerPlanElement += 0.5m;
+            //Assume that moving is about 10% of plan
+            subHours -= (int)(0.1m * (decimal)subHours);
+
+            var assumedNumberOfElements = (int)((decimal)subHours / hoursPerPlanElement);
+            AssumedNumberOfElement = assumedNumberOfElements;
+        }
+
+        public bool IsSleepAfterMidnight
+        {
+            get 
+            {
+                return TimeSpan.Compare(SleepingTime, new TimeSpan(0,0,0))>=0;
+            }
         }
     }
 }

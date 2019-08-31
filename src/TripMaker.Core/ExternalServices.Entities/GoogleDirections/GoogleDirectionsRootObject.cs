@@ -17,7 +17,7 @@ namespace TripMaker.ExternalServices.Entities.GoogleDirections
         {
             get
             {
-                return InterpreteGoogleStatus.Interprete(status) == Enums.GoogleResultStatus.OK;
+                return (InterpreteGoogleStatus.Interprete(status) == Enums.GoogleResultStatus.OK && routes.Count >0);
             }
         }
     }

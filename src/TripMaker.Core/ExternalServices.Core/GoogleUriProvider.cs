@@ -41,13 +41,13 @@ namespace TripMaker.ExternalServices.Core
             builder.Append($"&language={input.Language.GetString()}");
             builder.Append($"&mode={input.Mode.GetString()}");
 
-            if (input.WaypointsLoc.Any() || input.WaypointsPlaceId.Any())
+            if (input.WaypointsLoc.Any())
             {
                 builder.Append($"&waypoints=");
 
                 if (input.OptimizeWaypoints) builder.Append($"optimize:true|");
 
-                var waypoints = ConvertLocationsToString(input.WaypointsLoc, input.WaypointsPlaceId);
+                var waypoints = ConvertLocationsToString(input.WaypointsLoc);
 
                 builder.Append($"{waypoints}");
             }

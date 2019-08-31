@@ -75,7 +75,28 @@ namespace TripMaker.Plan
 
         }
 
-        public static PlanElement Create(DecisionRow row, int orderNo)
+        public PlanElement(string placeName, string placeId, string formattedAddress, DateTime start, DateTime end, double lat, double lng, int orderNo, decimal? rating, decimal? price, decimal? popularity, PlanElementType type)
+        {
+            PlaceName = placeName;
+            PlaceId = placeId;
+            Start = start;
+            End = end;
+            FormattedAddress = formattedAddress;
+            Lat = lat;
+            Lng = lng;
+            OrderNo = orderNo;
+            Rating = rating;
+            Price = price;
+            Popularity = popularity;
+            ScorePosition = 0;
+            NormalizedScore = 0;
+            PlanElementTypes = new List<PlanElementyTypeEntity>();
+            PlanElementTypes.Add(new PlanElementyTypeEntity(type));
+            OpeningHours = new List<PlanElementOpeningHourEntity>();
+        }
+
+
+        public static PlanElement Create(DecisionRow row, int orderNo, DateTime start, DateTime end)
         {
             var element = new PlanElement
             {
@@ -88,6 +109,8 @@ namespace TripMaker.Plan
                 Rating = row.Candidate.Rating,
                 Price = row.Candidate.Price,
                 Popularity = row.Candidate.Popularity,
+                ScorePosition=row.ScorePosition,
+                NormalizedScore=row.NormalizedScore
             };
 
             element.PlanElementTypes = new List<PlanElementyTypeEntity>(row.Candidate.ElementTypes.Count);

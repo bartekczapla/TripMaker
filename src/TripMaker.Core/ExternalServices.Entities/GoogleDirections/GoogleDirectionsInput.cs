@@ -8,7 +8,19 @@ namespace TripMaker.ExternalServices.Entities.GoogleDirections
 {
     public class GoogleDirectionsInput
     {
-        public GoogleDirectionsInput(Location originLoc, Location destinationLoc, GoogleTravelMode mode, LanguageType language, int? departure_time = null)
+        public GoogleDirectionsInput(Location originLoc, Location destinationLoc, GoogleTravelMode mode, LanguageType language, IList<Location> waypoints, bool optimize, double? departure_time = null)
+        {
+            OriginLoc = originLoc;
+            DestinationLoc = destinationLoc;
+            Mode = mode;
+            WaypointsLoc = new List<Location>();
+            foreach (var w in waypoints) WaypointsLoc.Add(w);
+            WaypointsPlaceId = new List<string>();
+            OptimizeWaypoints = optimize;
+            Departure_time = departure_time;
+        }
+
+        public GoogleDirectionsInput(Location originLoc, Location destinationLoc, GoogleTravelMode mode, LanguageType language, double? departure_time = null)
         {
             OriginLoc = originLoc;
             DestinationLoc = destinationLoc;
@@ -17,9 +29,10 @@ namespace TripMaker.ExternalServices.Entities.GoogleDirections
             WaypointsLoc = new List<Location>();
             WaypointsPlaceId = new List<string>();
             OptimizeWaypoints = true;
+
         }
 
-        public GoogleDirectionsInput(string originPlaceId, string destinationPlaceId, GoogleTravelMode mode, LanguageType language, int? departure_time=null)
+        public GoogleDirectionsInput(string originPlaceId, string destinationPlaceId, GoogleTravelMode mode, LanguageType language, double? departure_time=null)
         {
             OriginPlaceId = originPlaceId;
             DestinationPlaceId = destinationPlaceId;
@@ -39,7 +52,7 @@ namespace TripMaker.ExternalServices.Entities.GoogleDirections
         public GoogleRestrictions Restrictions { get; set; }
         public LanguageType Language { get; set; }
         public string Units { get { return "metric"; } }
-        public int? Departure_time { get; set; }
+        public double? Departure_time { get; set; }
         public TransitRoutingPreference TransitRouting { get; set; } // only to transit
         public IList<Location> WaypointsLoc { get; set; }
         public IList<string> WaypointsPlaceId { get; set; }

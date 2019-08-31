@@ -12,6 +12,6 @@ namespace TripMaker.ExternalServices.Entities.GoogleDirections
         //public OverviewPolyline overview_polyline { get; set; }
         public string summary { get; set; }
         public List<object> warnings { get; set; }
-        public List<object> waypoint_order { get; set; }
+        public List<int> waypoint_order { get; set; }
     }
 }

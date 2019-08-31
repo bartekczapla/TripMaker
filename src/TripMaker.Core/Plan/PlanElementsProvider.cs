@@ -22,170 +22,129 @@ namespace TripMaker.Plan
 
     public class PlanElementsProvider : PlanElementsAssumptions, IPlanElementsProvider
     {
-        private readonly IGooglePlaceDetailsApiClient _googlePlaceDetailsApiClient;
-        private readonly IGooglePlaceSearchApiClient _googlePlaceSearchApiClient;
-        private readonly IGooglePlaceNearbySearchApiClient _googlePlaceNearbySearchApiClient;
-        private readonly IGooglePlacePhotosApiCaller _googlePlacePhotosApiCaller;
         private readonly IGoogleDirectionsApiClient _googleDirectionsApiClient;
-
         private readonly IGoogleDirectionsInputFactory _googleDirectionsInputFactory;
-        private readonly IGoogleDistanceMatrixInputFactory _googleDistanceMatrixInputFactory;
-        private readonly IGooglePlaceDetailsInputFactory _googlePlaceDetailsInputFactory;
-        private readonly IGooglePlaceNearbySearchInputFactory _googlePlaceNearbySearchInputFactory;
-        private readonly IGooglePlaceSearchInputFactory _googlePlaceSearchInputFactory;
+        private readonly IOptimizePlanElementsOrder _optimizePlanElementsOrder;
+        private readonly IPlanElementEatingProvider _planElementEatingProvider;
 
-        private readonly IPlanElementDecisionMaker _planElementDecisionMaker;
-        private readonly IPlanElementCandidateFactory _planElementCandidateFactory;
-        private readonly IPlanElementByUserPreferencesPicker _planElementByUserPreferencesPicker;
 
-        public IEventBus EventBus { get; set; }
-
-        public PlanElementsProvider( IGooglePlaceDetailsApiClient googlePlaceDetailsApiClient, IGooglePlaceSearchApiClient googlePlaceSearchApiClient,
-            IGooglePlaceNearbySearchApiClient googlePlaceNearbySearchApiClient, IGooglePlacePhotosApiCaller googlePlacePhotosApiCaller,
+        public PlanElementsProvider(
             IGoogleDirectionsApiClient googleDirectionsApiClient,
-            IGoogleDirectionsInputFactory googleDirectionsInputFactory, IGoogleDistanceMatrixInputFactory googleDistanceMatrixInputFactory,
-            IGooglePlaceDetailsInputFactory googlePlaceDetailsInputFactory, IGooglePlaceNearbySearchInputFactory googlePlaceNearbySearchInputFactory,
-            IGooglePlaceSearchInputFactory googlePlaceSearchInputFactory, IPlanElementCandidateFactory planElementCandidateFactory,
-            IPlanElementDecisionMaker planElementDecisionMaker, IPlanElementByUserPreferencesPicker planElementByUserPreferencesPicker)
+            IGoogleDirectionsInputFactory googleDirectionsInputFactory,
+            IOptimizePlanElementsOrder optimizePlanElementsOrder,
+            IPlanElementEatingProvider planElementEatingProvider
+            )
         {
-            _googlePlaceDetailsApiClient = googlePlaceDetailsApiClient;
-            _googlePlaceSearchApiClient = googlePlaceSearchApiClient;
-            _googlePlaceNearbySearchApiClient = googlePlaceNearbySearchApiClient;
-            _googlePlacePhotosApiCaller = googlePlacePhotosApiCaller;
             _googleDirectionsApiClient = googleDirectionsApiClient;
-
             _googleDirectionsInputFactory = googleDirectionsInputFactory;
-            _googleDistanceMatrixInputFactory = googleDistanceMatrixInputFactory;
-            _googlePlaceDetailsInputFactory = googlePlaceDetailsInputFactory;
-            _googlePlaceNearbySearchInputFactory = googlePlaceNearbySearchInputFactory;
-            _googlePlaceSearchInputFactory = googlePlaceSearchInputFactory;
-
-            _planElementDecisionMaker = planElementDecisionMaker;
-            _planElementCandidateFactory = planElementCandidateFactory;
-            _planElementByUserPreferencesPicker = planElementByUserPreferencesPicker;
-
-            EventBus = NullEventBus.Instance;
+            _optimizePlanElementsOrder = optimizePlanElementsOrder;
+            _planElementEatingProvider = planElementEatingProvider;
         }
 
         public async Task<IList<PlanElement>> GenerateAsync(DecisionArray decisionArray, Plan plan)
         {
             var elements = new List<PlanElement>();
 
-            int ElementIter = 1;
-            Location previousPlanElementLocation = Location.Create(plan.StartLocation.lat, plan.StartLocation.lng);
+            var optimizedElementsOrder = await _optimizePlanElementsOrder.Optimize(decisionArray, plan, plan.Assumptions.AssumedNumberOfElement); //travel salesman problem optimization
 
-            foreach(var row in decisionArray.DecisionRows)
+            for (int i = 0; i < optimizedElementsOrder.Count; i++)
             {
-                elements.Add(PlanElement.Create(row, ElementIter));
-                ++ElementIter;
+                decisionArray.DecisionRows[i].OptimizedPosition = optimizedElementsOrder[i] + 1;
             }
 
-            //while(DateTime.Compare(plan.PlanForm.StartDateTime, plan.PlanForm.EndDateTime) <= 0)
-            //{
+            //Sort by optimized position
+            decisionArray.DecisionRows = decisionArray.DecisionRows.OrderBy(x => x.OptimizedPosition).ToList();
 
-            //}
+            var iterParams = new PlanElementIteratorParams(plan.StartLocation, plan.PlanForm.StartDateTime, plan.Assumptions);
+
+            while (DateTime.Compare(iterParams.CurrentDateTime, plan.PlanForm.EndDateTime) <= 0)
+            {
+                PlanElement planElement = null;
+                //EATING
+                if (iterParams.IsTimeForMeal())
+                {
+                    var elementEndTime = iterParams.CreateEndDateTime(plan.Assumptions.EatingDuration);
+                    var candidate = await _planElementEatingProvider.GenerateAsync(decisionArray, plan,iterParams.WhichMeal,iterParams);
+                    iterParams.CheckNextMeal();
+                    planElement = new PlanElement(candidate.PlaceName, candidate.PlaceId, candidate.FormattedAddress, iterParams.CurrentDateTime, elementEndTime, candidate.Location.lat, candidate.Location.lng, iterParams.OrderNo, candidate.Rating, candidate.Price, candidate.Popularity, PlanElementType.Eating);
+                }
+                //SLEEPING
+                else if (iterParams.IsTimeForSleep())
+                {
+                    iterParams.IsSleep = true;
+                    var elementEndTime = iterParams.CreateEndDateTime(plan.Assumptions.SleepDuration);
+                    if (plan.PlanForm.HasAccomodationBooked)
+                    {
+                        planElement = new PlanElement(plan.PlanAccomodation.PlaceName, plan.PlanAccomodation.PlaceId, plan.PlanAccomodation.FormattedAddress, iterParams.CurrentDateTime, elementEndTime, plan.PlanAccomodation.Lat, plan.PlanAccomodation.Lng, iterParams.OrderNo, plan.PlanAccomodation.Rating, null, null, PlanElementType.Sleeping);
+                    }
+                    else
+                    {
+                        planElement = new PlanElement(plan.PlanForm.PlaceName, plan.PlanForm.PlaceId, String.Empty, iterParams.CurrentDateTime, elementEndTime, plan.Latitude, plan.Longitude, iterParams.OrderNo, plan.Rating, null, null, PlanElementType.Sleeping);
+                    }
+                }
+                //OTHER PLAN ELEMENTS
+                else
+                {
+                    var foundRow = false;
+                    var elementEndTime = iterParams.CreateEndDateTime(plan.Assumptions.PlanElementDuration);
+                    while (!foundRow)
+                    {
+                        if (iterParams.LeftRows.Any(x => x.Candidate.IsOpen(iterParams.CurrentDateTime))) //first check lefted row which was temporary closed
+                        {
+                            var leftedRow = iterParams.LeftRows.First(x => x.Candidate.IsOpen(iterParams.CurrentDateTime));
+                            planElement = PlanElement.Create(decisionArray.DecisionRows[iterParams.CurrentDecisionRowIndex], iterParams.OrderNo, iterParams.CurrentDateTime, elementEndTime);
+                            foundRow = true;
+                        }
+                        else if (decisionArray.DecisionRows[iterParams.CurrentDecisionRowIndex].Candidate.IsOpen(iterParams.CurrentDateTime)) //decision row is open
+                        {
+
+                            planElement = PlanElement.Create(decisionArray.DecisionRows[iterParams.CurrentDecisionRowIndex], iterParams.OrderNo, iterParams.CurrentDateTime, elementEndTime);
+                            foundRow = true;
+                            iterParams.CurrentDecisionRowIndex += 1;
+                        }
+                        else //decision row is closed
+                        {
+                            iterParams.LeftRows.Add(decisionArray.DecisionRows[iterParams.CurrentDecisionRowIndex]);
+                            iterParams.CurrentDecisionRowIndex += 1;
+                        }
+                    }
+                }
+
+                if (planElement == null)
+                    continue;
+
+
+                //DIRECTIONS
+                var directionsApiInput = _googleDirectionsInputFactory.Create(iterParams.CurrentLocation, iterParams.NextLocation, iterParams.travelMode, iterParams.CurrentDateTime);
+                var directionsApiResult = await _googleDirectionsApiClient.GetAsync(directionsApiInput);
+                if (directionsApiResult.IsOk)
+                {
+                    var route = directionsApiResult.routes.First().legs.First(); //only 1 leg if no waypoints
+                    var planRoute = new PlanRoute(route.distance.value, route.duration.value, iterParams.travelMode);
+
+                    foreach (var step in route.steps) //steps of route
+                    {
+                        planRoute.Steps.Add(new PlanRouteStep(step.distance.value, step.duration.value,
+                                    step.start_location.lat, step.start_location.lng,
+                                  step.end_location.lat, step.end_location.lng,
+                                  InterpreteEnums.InterpreteTravelMode(step.travel_mode),
+                                  step.html_instructions, step.maneuver));
+                    }
+
+                    //update plan element times
+                    planElement.UpdateDateTimeWithRouteDuration(planRoute.TimeDuration);
+                    planElement.EndingRoute = planRoute;
+
+                }
+
+                elements.Add(planElement); //add to plan list
+                iterParams.SetCurrentLocation(planElement.Lat, planElement.Lng); // update currentLocation in iterParams
+                iterParams.CurrentDateTime = planElement.End; //update current time in iterParams
+                ++iterParams.OrderNo; //increase iter)
+                iterParams.ClearIfEndOfCurrentDay();
+            }
 
             return elements;
         }
-
-        //public async Task<Plan> GenerateAsync(PlanForm planForm)
-        //{
-
-        //    while (DateTime.Compare(currentDateTime, endDateTime) <= 0)
-        //    {
-        //        iter += 1;
-
-        //        //declare local variables 
-        //        var planElement = new PlanElement(iter, currentDateTime, currentDateTime);
-
-        //        //decide what to do
-        //        var decision = _planElementDecisionMaker.Decide(currentDateTime, CurrentDayElements);
-
-
-
-        //        //Get Plan Element
-        //        if (decision.ElementType == PlanElementType.Sleeping)
-        //        {
-        //            var candidate = PlanElementCandidate.First(x => x.ElementType == decision.ElementType);
-        //            planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
-        //        }
-        //        else if (decision.ElementType == PlanElementType.Eating || decision.ElementType == PlanElementType.Entertainment || decision.ElementType == PlanElementType.Relax ||
-        //        decision.ElementType == PlanElementType.Activity || decision.ElementType == PlanElementType.Culture || decision.ElementType == PlanElementType.Sightseeing ||
-        //        decision.ElementType == PlanElementType.Partying || decision.ElementType == PlanElementType.Shopping)
-        //        {
-        //            var candidate = _planElementByUserPreferencesPicker.Pick(PlanElementCandidate, decision.ElementType);
-        //            planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
-
-        //            //update both lists
-        //            UsedPlanElementCandidate.Add(candidate);
-        //            PlanElementCandidate.RemoveAll(x => x.PlaceId == candidate.PlaceId && x.PlaceName == candidate.PlaceName);
-
-        //        }
-        //        else //nothing
-        //        {
-        //            var candidate = _planElementByUserPreferencesPicker.Pick(PlanElementCandidate, PlanElementType.Nothing);
-        //            planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
-
-        //        }
-
-        //        //-----------------------------//
-        //        //---- DIRECTIONS ------------//
-
-        //        //travelMode
-        //        var travelMode = GoogleTravelMode.Walking;
-
-        //        //directions between previous and next place
-        //        var directionsApiInput = _googleDirectionsInputFactory.Create(previousPlanElementLocation, Location.Create(planElement.Lat, planElement.Lng), planForm.Language, travelMode);
-        //        var directionsApiResult = await _googleDirectionsApiClient.GetAsync(directionsApiInput);
-
-        //        if (InterpreteGoogleStatus.IsStatusOk(directionsApiResult.status) && directionsApiResult.routes.Any() && directionsApiResult.routes.FirstOrDefault().legs.Any())
-        //        {
-        //            var route = directionsApiResult.routes.First().legs.First(); //only 1 leg if no waypoints
-        //            var planRoute = new PlanRoute(route.distance.value, route.duration.value);
-
-        //            //update planElement time with time take by route
-        //            var routeDuration = TimeSpan.FromSeconds(route.duration.value);
-        //            planElement.UpdateDateTimeWithRouteDuration(routeDuration);
-
-        //            //steps of route
-        //            foreach (var step in route.steps)
-        //            {
-        //                planRoute.Steps.Add(new PlanRouteStep(step.distance.value, step.duration.value,
-        //                                                    step.start_location.lat, step.start_location.lng,
-        //                                                  step.end_location.lat, step.end_location.lng,
-        //                                                  InterpreteEnums.InterpreteTravelMode(step.travel_mode),
-        //                                                  step.html_instructions, step.maneuver));
-        //            }
-
-        //            planElement.EndingRoute = planRoute;
-        //        }
-        //        else
-        //        {
-        //            var planRoute = new PlanRoute(0, 0);
-        //            planElement.EndingRoute = planRoute;
-        //        }
-
-        //        //add to Plan and CurrentDayElements lists
-        //        plan.Elements.Add(planElement);
-        //        CurrentDayElements.Add(planElement);
-
-        //        //update CurrentDateTime
-        //        currentDateTime = planElement.End;
-
-        //        //change previous Location
-        //        previousPlanElementLocation.lat = planElement.Lat;
-        //        previousPlanElementLocation.lng = planElement.Lng;
-
-
-        //        //PlanElement with sleeping indicate end of day
-        //        if (planElement.ElementType == PlanElementType.Sleeping)
-        //        {
-        //            CurrentDayElements.Clear();
-        //        }
-        //    }
-
-            //    return plan;
-            //}
-
-        }
+    }
 }
