@@ -55,13 +55,14 @@ namespace TripMaker.Plan
                 plan.PlanAccomodation = new PlanAccomodation(accomodationInfo.Result.geometry.location.lat, accomodationInfo.Result.geometry.location.lng, planForm.AccomodationId,
                                                            accomodationInfo.Result.name, accomodationInfo.Result.formatted_address, (decimal?)accomodationInfo.Result.rating, (decimal?)accomodationInfo.Result.user_ratings_total);
 
-                var distance = CalculateDistance(plan.Lat, plan.Lng, plan.PlanAccomodation.Lat, plan.PlanAccomodation.Lng);
+                var distance = CalculateDistance(plan.Latitude, plan.Longitude, plan.PlanAccomodation.Lat, plan.PlanAccomodation.Lng);
 
                 if(distance > MaximumDistanceToAccomodation) //more than 15km
                     throw new UserFriendlyException($"Odległość między celem podróży a miejscem zakwaterowania nie może być większa nić {(int)(MaximumDistanceToAccomodation/1000)} km");
             }
 
             plan.PlanForm = planForm;
+            plan.Assumptions = new PlanAssumptions(planForm); 
 
             // 3. Generate weight vector based on user preferences
             DecisionArray.WeightVector = _weightVectorProvider.Generate(planForm);
@@ -74,6 +75,8 @@ namespace TripMaker.Plan
             int init = 1;
             foreach (var candidate in candidates)
             {
+                var tets = candidate.IsOpen(new DateTime(2019,9,2,21,30,0));
+                var tets2 = candidate.IsOpen(new DateTime(2019,8,1,8,0,0));
                 DecisionArray.DecisionRows.Add(_decisionRowFactory.Create(candidate, init, plan.StartLocation));
                 ++init;
             }

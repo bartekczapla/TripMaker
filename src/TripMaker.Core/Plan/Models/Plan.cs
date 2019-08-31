@@ -21,10 +21,15 @@ namespace TripMaker.Plan
         [StringLength(MaxTitleLength)]
         public virtual string Name { get;  set; }
 
-        public virtual double Lat { get; set; }
-        public virtual double Lng { get; set; }
+        public virtual double Latitude { get; set; }
+
+        public virtual double Longitude { get; set; }
+
+        [StringLength(MaxTitleLength)]
         public virtual string Address { get; set; }
+
         public virtual decimal? Rating { get; set; }
+
         public virtual decimal? TotalUserReviews { get; set; }
 
         [ForeignKey("PlanFormId")]
@@ -34,9 +39,6 @@ namespace TripMaker.Plan
         [ForeignKey("UserId")]
         public virtual User User { get;  set; }
         public virtual long? UserId { get;  set; }
-
-        [StringLength(MaxTitleLength)]
-        public virtual string Comment { get;  set; }
 
         [NotMapped]
         public string Photo { get; set; }
@@ -52,17 +54,20 @@ namespace TripMaker.Plan
         [ForeignKey("PlanId")]
         public virtual ICollection<PlanElement> Elements { get;  set; }
 
+        protected Plan()
+        {
 
+        }
 
-        public Plan(string name, double lat, double lng , decimal? rating = null, decimal? totalUserReviews = null, string address="")
+        public Plan(string name, double lat, double lng , decimal? rating , decimal? totalUserReviews , string address)
+            :this()
         {
             Name = name;
-            Lat = lat;
-            Lng = lng;
+            Latitude = lat;
+            Longitude = lng;
             Rating = rating;
             TotalUserReviews = totalUserReviews;
             Address = address;
-            Comment = String.Empty;
             Elements = new Collection<PlanElement>();
         }
 
@@ -71,9 +76,12 @@ namespace TripMaker.Plan
         {
             get
             {
-                return PlanForm.HasAccomodationBooked ? Location.Create(PlanAccomodation.Lat, PlanAccomodation.Lng) : Location.Create(Lat, Lng);
+                return PlanForm.HasAccomodationBooked ? Location.Create(PlanAccomodation.Lat, PlanAccomodation.Lng) : Location.Create(Latitude, Longitude);
             }
         }
+
+        [NotMapped]
+        public PlanAssumptions Assumptions { get; set; }
     }
 }
 

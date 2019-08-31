@@ -39,5 +39,17 @@ namespace TripMaker.ExternalServices.Core
 
             return new GooglePlaceSearchInput(input, location, language, allUsefulFields);
         }
+
+        public GooglePlaceSearchInput CreateUseful(Location location, int radius, GooglePlaceType type)
+        {
+            var allUsefulFields = GoogleFields.Table
+                           .Where(x => x.AllowedServices.Contains(ExternalServicesType.GooglePlaceSearch) &&
+                           (x.Type == GoogleFieldType.Details || x.Type == GoogleFieldType.PlaceInfo || x.Type == GoogleFieldType.Reviews))
+                           .ToList();
+
+            LanguageType language = LanguageType.Pl;
+
+            return new GooglePlaceSearchInput(type.Name, location, radius, allUsefulFields, language);
+        }
     }
 }

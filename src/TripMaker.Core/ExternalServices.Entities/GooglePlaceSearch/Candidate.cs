@@ -15,7 +15,9 @@ namespace TripMaker.ExternalServices.Entities.GooglePlaceSearch
         public List<Photo> photos { get; set; }
         public string place_id { get; set; }
         public PlusCode plus_code { get; set; }
-        public double rating { get; set; }
+        public double? rating { get; set; }
         public List<string> types { get; set; }
+        public int? price_level { get; set; }
+        public double? user_ratings_total { get; set; }
     }
 }

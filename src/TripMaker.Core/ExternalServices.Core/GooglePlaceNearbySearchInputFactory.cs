@@ -39,5 +39,10 @@ namespace TripMaker.ExternalServices.Core
 
             return new GooglePlaceNearbySearchInput(location, language, String.Empty, types[index]);
         }
+
+        public GooglePlaceNearbySearchInput Create(Location location, int radius, GooglePlaceType type)
+        {
+            return new GooglePlaceNearbySearchInput(location, radius, type, LanguageType.Pl);
+        }
     }
 }

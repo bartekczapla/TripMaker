@@ -16,6 +16,8 @@ namespace TripMaker.Plan
 
         public PlanFormDto PlanForm { get; set; }
 
+        public PlanAccomodationDto Accomodation { get; set; }
+
         public  ICollection<PlanElementDto> Elements { get;  set; }
 
     }

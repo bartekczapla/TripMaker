@@ -51,7 +51,7 @@ namespace TripMaker.Plan
 
             if (!value.HasValue)
                 return criteria.ReserveLevel;
-
+            
             if(criteria.IsProfit)
             {
                 return GetInRange(value.Value, criteria.ReserveLevel, criteria.AspirationLevel);

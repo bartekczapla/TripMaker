@@ -1204,6 +1204,46 @@ namespace TripMaker.Migrations
                     b.ToTable("PlanAccomodations");
                 });
 
+            modelBuilder.Entity("TripMaker.Plan.Models.PlanElementOpeningHourEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<TimeSpan?>("Close");
+
+                    b.Property<int?>("DayClose");
+
+                    b.Property<int>("DayOpen");
+
+                    b.Property<TimeSpan>("Open");
+
+                    b.Property<int>("PlanElementId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlanElementId");
+
+                    b.ToTable("PlanElementOpeningHourEntityEntities");
+                });
+
+            modelBuilder.Entity("TripMaker.Plan.Models.PlanElementyTypeEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ElementType");
+
+                    b.Property<int>("PlanElementId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlanElementId");
+
+                    b.ToTable("PlanElementyTypeEntities");
+                });
+
             modelBuilder.Entity("TripMaker.Plan.Models.PlanFormWeightVector", b =>
                 {
                     b.Property<int>("Id")
@@ -1293,14 +1333,12 @@ namespace TripMaker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Address");
-
-                    b.Property<string>("Comment")
+                    b.Property<string>("Address")
                         .HasMaxLength(128);
 
-                    b.Property<decimal?>("Lat");
+                    b.Property<double>("Latitude");
 
-                    b.Property<decimal?>("Lng");
+                    b.Property<double>("Longitude");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1337,15 +1375,18 @@ namespace TripMaker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ElementType");
-
                     b.Property<DateTime>("End");
 
                     b.Property<int?>("EndingRouteId");
 
+                    b.Property<string>("FormattedAddress")
+                        .HasMaxLength(128);
+
                     b.Property<double>("Lat");
 
                     b.Property<double>("Lng");
+
+                    b.Property<decimal>("NormalizedScore");
 
                     b.Property<int>("OrderNo");
 
@@ -1357,7 +1398,13 @@ namespace TripMaker.Migrations
 
                     b.Property<int?>("PlanId");
 
-                    b.Property<double?>("Rating");
+                    b.Property<decimal?>("Popularity");
+
+                    b.Property<decimal?>("Price");
+
+                    b.Property<decimal?>("Rating");
+
+                    b.Property<int>("ScorePosition");
 
                     b.Property<DateTime>("Start");
 
@@ -1712,6 +1759,22 @@ namespace TripMaker.Migrations
                     b.HasOne("TripMaker.Authorization.Users.User", "LastModifierUser")
                         .WithMany()
                         .HasForeignKey("LastModifierUserId");
+                });
+
+            modelBuilder.Entity("TripMaker.Plan.Models.PlanElementOpeningHourEntity", b =>
+                {
+                    b.HasOne("TripMaker.Plan.PlanElement", "PlanElement")
+                        .WithMany("OpeningHours")
+                        .HasForeignKey("PlanElementId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TripMaker.Plan.Models.PlanElementyTypeEntity", b =>
+                {
+                    b.HasOne("TripMaker.Plan.PlanElement", "PlanElement")
+                        .WithMany("PlanElementTypes")
+                        .HasForeignKey("PlanElementId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TripMaker.Plan.Models.PlanRouteStep", b =>

@@ -23,7 +23,16 @@ namespace TripMaker.ExternalServices.Entities.GooglePlaceDetails
         {
             get
             {
-                return InterpreteGoogleStatus.Interprete(status) == Enums.GoogleResultStatus.OK;
+                if (InterpreteGoogleStatus.Interprete(status) != Enums.GoogleResultStatus.OK)
+                    return false;
+
+                if (Result == null)
+                    return false;
+
+                if(Result.geometry == null || Result.geometry.location == null)
+                    return false;
+
+                return true;
             }
         }
     }

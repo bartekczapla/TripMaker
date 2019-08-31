@@ -10,7 +10,6 @@ namespace TripMaker.UserPlans.Dto
 {
     public class UserPlansListDto : EntityDto
     {
-
         public string PlaceName { get; set; }
 
         public string PlaceId { get; set; }
@@ -29,9 +28,9 @@ namespace TripMaker.UserPlans.Dto
 
         public TimeSpan? EndTime { get;  set; }
 
-        public bool HasJourneyBooked { get; set; }
-
         public bool HasAccomodationBooked { get; set; }
+
+        public string AccomodationName { get; set; }
 
         public virtual LanguageType Language { get; set; }
 

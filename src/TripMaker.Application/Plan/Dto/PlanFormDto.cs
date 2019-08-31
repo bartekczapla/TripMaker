@@ -30,7 +30,6 @@ namespace TripMaker.Plan.Dto
 
         public DateTime CreationTime { get; set; }
 
-        public PlanAccomodationDto Accomodation { get; set; }
 
     }
 }

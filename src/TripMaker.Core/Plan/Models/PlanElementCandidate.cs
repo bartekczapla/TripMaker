@@ -32,7 +32,7 @@ namespace TripMaker.Plan.Models
         // public IList<PlanElementReview> Reviews { get; set; }
 
         public PlanElementCandidate(string placeName, string placeId, string formattedAddress, Location location, OpeningHours openingHours,
-                                    IList<string> types,  double? rating=null, double? price=null, double? popularity=null)
+                                    IList<string> types,  double? rating, int? price, double? popularity)
         {
             PlaceName = placeName;
             PlaceId = placeId;
@@ -42,26 +42,54 @@ namespace TripMaker.Plan.Models
             Price = (decimal?)price;
             Popularity = (decimal?)popularity;
             ElementTypes = new List<PlanElementType>(types.Count);
-            foreach (var i in types) ElementTypes.Add(GooglePlaceTypes.CheckPlanElemntyType(i));
-
-            OpeningHours = new List<PlanElementOpeningHours>(7);
-            foreach(var oh in openingHours.periods)
-            {              
-                TimeSpan openHour=new TimeSpan(0,0,0);
-                TimeSpan.TryParse(oh.open.time.Insert(2, ":"), out openHour);
+            foreach (var i in types)
+            {
+                var type = GooglePlaceTypes.CheckPlanElemntyType(i);
+                if(type != PlanElementType.Nothing) ElementTypes.Add(type);
+            }
+                
+            OpeningHours = new List<PlanElementOpeningHours>();
+            if(openingHours == null)
+            {
+                OpeningHours.Add(new PlanElementOpeningHours(0, null, new TimeSpan(0, 0, 0), null));
+            } else
+            {
+                foreach(var oh in openingHours.periods)
+                {              
+                    TimeSpan openHour=new TimeSpan(0,0,0);
+                    TimeSpan.TryParse(oh.open.time.Insert(2, ":"), out openHour);
              
-                if (oh.close != null)
-                {
-                    TimeSpan closeHour;
-                    TimeSpan.TryParse(oh.close.time.Insert(2, ":"), out closeHour);
-                    OpeningHours.Add(new PlanElementOpeningHours(oh.open.day, oh.close.day, openHour, closeHour ));
-                } else
-                {
-                    OpeningHours.Add(new PlanElementOpeningHours(oh.open.day, null, openHour, null));
-                }
+                    if (oh.close != null)
+                    {
+                        TimeSpan closeHour;
+                        TimeSpan.TryParse(oh.close.time.Insert(2, ":"), out closeHour);
+                        OpeningHours.Add(new PlanElementOpeningHours(oh.open.day, oh.close.day, openHour, closeHour ));
+                    } else
+                    {
+                        OpeningHours.Add(new PlanElementOpeningHours(oh.open.day, null, openHour, null));
+                    }
 
                
+                }
             }
+
+
+
+        }
+
+        public bool IsOpen(DateTime checkDate)
+        {
+            if (OpeningHours.Any(x => x.DayOpen == 0 && TimeSpan.Compare(x.Open, new TimeSpan(0, 0, 0)) == 0 && !x.Close.HasValue)) //always open
+                return true;
+
+            var oh = OpeningHours.FirstOrDefault(x => x.DayOpen == (int)checkDate.DayOfWeek);
+            if (oh == null)
+                return false;
+
+            if(!oh.Close.HasValue) 
+                return (TimeSpan.Compare(oh.Open, checkDate.TimeOfDay) <= 0);
+            else
+                return (TimeSpan.Compare(oh.Open, checkDate.TimeOfDay) <= 0) && (TimeSpan.Compare(checkDate.TimeOfDay, oh.Close.Value) <= 0 || oh.DayClose != oh.DayOpen);
 
         }
 

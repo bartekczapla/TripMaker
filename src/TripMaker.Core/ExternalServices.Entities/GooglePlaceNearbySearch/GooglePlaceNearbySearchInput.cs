@@ -19,6 +19,15 @@ namespace TripMaker.ExternalServices.Entities.GooglePlaceNearbySearch
             Rankby = GoogleRankby.Prominence;
         }
 
+        public GooglePlaceNearbySearchInput(Location location, int radius, GooglePlaceType type, LanguageType language)
+        {
+            Location = location;
+            Language = language;
+            Radius = (int)radius;
+            Type = type;
+            Rankby = GoogleRankby.Prominence;
+        }
+
         public GooglePlaceNearbySearchInput(Location location, LanguageType language, string keyword, GooglePlaceType type, int? minprice=null, int? maxprice = null)
         {
             Location = location;

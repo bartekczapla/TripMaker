@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TripMaker.Enums;
+using TripMaker.ExternalServices.Entities;
 using TripMaker.ExternalServices.Entities.Common;
 using TripMaker.ExternalServices.Helpers;
 using TripMaker.ExternalServices.Interfaces;
@@ -14,7 +15,7 @@ using TripMaker.Plan.Models;
 
 namespace TripMaker.Plan
 {
-    public class PlanElementCandidateFactory : PlanElementsAssumptions, IPlanElementCandidateFactory
+    public class PlanElementCandidateFactory : PlanConsts, IPlanElementCandidateFactory
     {
         private readonly IGooglePlaceDetailsApiClient _googlePlaceDetailsApiClient;
         private readonly IGooglePlaceSearchApiClient _googlePlaceSearchApiClient;
@@ -54,25 +55,27 @@ namespace TripMaker.Plan
         {
             var candidates = new List<PlanElementCandidate>();
 
-            var googleNearbyEntertainmentInput = _googlePlaceNearbySearchInputFactory.Create(plan.StartLocation, plan.PlanForm.Language, GooglePlaceTypeCategory.Activity);
+            var googleNearbyEntertainmentInput = _googlePlaceNearbySearchInputFactory.Create(plan.StartLocation, (int)MaximumDistanceToAccomodation, GooglePlaceTypes.Table.Where(x => x.PlanElementType == PlanElementType.Partying).First());
             var nearbyResults = await _googlePlaceNearbySearchApiClient.GetAsync(googleNearbyEntertainmentInput);
             int counter = 1;
-            foreach(var nr in nearbyResults.results)
+            foreach (var nr in nearbyResults.results)
             {
-            
-                var details =await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateAllUseful(nr.place_id));
-                if(details.IsOk)
+
+                var details = await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateAllUseful(nr.place_id));
+                if (details.IsOk)
                 {
                     var candidate = new PlanElementCandidate(details.Result.name, details.Result.place_id, details.Result.formatted_address, details.Result.geometry.location, details.Result.opening_hours, details.Result.types, details.Result.rating, details.Result.price_level, details.Result.user_ratings_total);
                     candidates.Add(candidate);
                 }
                 ++counter;
-                if (counter > 3) break;
+                if (counter > 5) break;
             }
 
 
 
-            if(candidates.Count == 0)
+
+
+            if (candidates.Count == 0)
                 throw new UserFriendlyException($"Nie znaleziono żadnych potencjalnych kandydatów na elementy planu");
 
             return candidates;
@@ -80,6 +83,22 @@ namespace TripMaker.Plan
 
 
 
+        //FIND PLACE
+        //var googleNearbyEntertainmentInput = _googlePlaceSearchInputFactory.CreateUseful(plan.StartLocation, (int)MaximumDistanceToAccomodation, GooglePlaceTypes.Table.Where(x => x.PlanElementType == PlanElementType.Partying).First());
+        //var nearbyResults = await _googlePlaceSearchApiClient.GetAsync(googleNearbyEntertainmentInput);
+        //int counter = 1;
+        //foreach (var nr in nearbyResults.candidates)
+        //{
+
+        //    var details = await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateAllUseful(nr.place_id));
+        //    if (details.IsOk)
+        //    {
+        //        var candidate = new PlanElementCandidate(details.Result.name, details.Result.place_id, details.Result.formatted_address, details.Result.geometry.location, details.Result.opening_hours, details.Result.types, details.Result.rating, details.Result.price_level, details.Result.user_ratings_total);
+        //candidates.Add(candidate);
+        //    }
+        //    ++counter;
+        //    if (counter > 2) break;
+        //}
 
 
 

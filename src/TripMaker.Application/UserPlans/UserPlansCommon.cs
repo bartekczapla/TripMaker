@@ -29,7 +29,7 @@ namespace TripMaker.UserPlans
                     StartTime = plan.PlanForm.StartTime,
                     EndDate = plan.PlanForm.EndDate,
                     EndTime = plan.PlanForm.EndTime,
-                    HasJourneyBooked = plan.PlanForm.HasAccomodationBooked,
+                    AccomodationName = plan.PlanAccomodation?.PlaceName,
                     HasAccomodationBooked = plan.PlanForm.HasAccomodationBooked,
                     Language = plan.PlanForm.Language,
                     CreationTime = plan.PlanForm.CreationTime

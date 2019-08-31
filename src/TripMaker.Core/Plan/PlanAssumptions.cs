@@ -22,6 +22,8 @@ namespace TripMaker.Plan
         public TimeSpan PartyingDuration { get; protected set; }
         public TimeSpan ShoppingDuration { get; protected set; }
 
+        public int RadiusSearch { get; protected set; }
+
         public PlanAssumptions(PlanForm planForm)
         {
             SleepDuration = new TimeSpan(planForm.AverageSleep, 0, 0);
@@ -42,7 +44,7 @@ namespace TripMaker.Plan
                     break;
             }
 
-            LunchTime = SleepingTime.Add(SleepDuration).Add(new TimeSpan((int)((24 - planForm.AverageSleep) / 2), 0, 0));
+            LunchTime = new TimeSpan(14,0,0);
             DinnerTime = new TimeSpan(19, 0, 0);
 
             if(planForm.AtractionDurationPreference == Enums.PlanFormEnums.AtractionDurationPreference.Fast)
@@ -78,8 +80,12 @@ namespace TripMaker.Plan
                 ShoppingDuration = new TimeSpan(3, 30, 0);
             }
 
-
-
+            //radius search
+            var hasVehicleTransport = planForm.PreferedTravelModes.Contains(Enums.GoogleTravelMode.Driving) || planForm.PreferedTravelModes.Contains(Enums.GoogleTravelMode.Transit);
+            if (hasVehicleTransport)
+                RadiusSearch = 15000;
+            else
+                RadiusSearch = 6000;
         }
     }
 }

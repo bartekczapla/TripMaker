@@ -69,105 +69,39 @@ namespace TripMaker.Plan
 
         public async Task<IList<PlanElement>> GenerateAsync(DecisionArray decisionArray, Plan plan)
         {
-            var assumptions = new PlanAssumptions(plan.PlanForm);
             var elements = new List<PlanElement>();
 
+            int ElementIter = 1;
+            Location previousPlanElementLocation = Location.Create(plan.StartLocation.lat, plan.StartLocation.lng);
+
+            foreach(var row in decisionArray.DecisionRows)
+            {
+                elements.Add(PlanElement.Create(row, ElementIter));
+                ++ElementIter;
+            }
+
+            //while(DateTime.Compare(plan.PlanForm.StartDateTime, plan.PlanForm.EndDateTime) <= 0)
+            //{
+
+            //}
 
             return elements;
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //public async Task<Plan> GenerateAsync(PlanForm planForm)
         //{
-        //    var plan = new Plan(planForm.PlaceName, planForm.Id);
-
-        //    //Destination Info
-        //    var destinationInfo = await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateBasic(planForm.PlaceId, planForm.Language));
-
-        //    //Accomodation 
-        //    Accomodation accomodation;
-        //    if(planForm.HasAccomodationBooked && planForm.PlanAccomodation != null)
-        //    {
-        //        var accomodationInfo = await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateBasic(planForm.PlanAccomodation.PlaceId, planForm.Language));
-        //        accomodation = new Accomodation(accomodationInfo.Result.geometry.location, accomodationInfo.Result.place_id, accomodationInfo.Result.name, accomodationInfo.Result.formatted_address);
-        //        //update planForm.PlanAccomodation
-        //        planForm.PlanAccomodation.Lat = accomodation.Location.lat;
-        //        planForm.PlanAccomodation.Lng = accomodation.Location.lng;
-        //        planForm.PlanAccomodation.FormattedAddress = accomodation.FormattedAddress;
-        //        planForm.PlanAccomodation.PlaceName = accomodation.PlaceName;
-        //    }
-        //    else
-        //    {
-        //        //if no accomodation, everyday starting point is taken from destination address
-        //        accomodation = new Accomodation(destinationInfo.Result.geometry.location , destinationInfo.Result.place_id, destinationInfo.Result.name, destinationInfo.Result.formatted_address);
-        //    }
-
-
-        //    //Time iterator
-        //    var currentDateTime = planForm.StartTime.HasValue ? planForm.StartDate.Add(planForm.StartTime.Value) : planForm.StartDate.Add(StartTimeAssumption);
-        //    //End time
-        //    var endDateTime = planForm.EndTime.HasValue ? planForm.EndDate.Add(planForm.EndTime.Value) : planForm.StartDate.Add(EndTimeAssumption);
-
-        //    //List to hold PlanElements from current day
-        //    List<PlanElement> CurrentDayElements = new List<PlanElement>();
-
-        //    //List to hold Plan Element Candidates from api services
-        //    List<PlanElementCandidate> PlanElementCandidate = new List<PlanElementCandidate>();
-        //    List<PlanElementCandidate> UsedPlanElementCandidate = new List<PlanElementCandidate>();
-
-        //    //Add Sleeping to candidates list
-        //    PlanElementCandidate.Add(new PlanElementCandidate(accomodation.PlaceName, accomodation.PlaceId, accomodation.Location, PlanElementType.Sleeping, SleepingDuration));
-
-        //    //starting point from hotel when some error
-        //    PlanElementCandidate.Add(new PlanElementCandidate(accomodation.PlaceName, accomodation.PlaceId, accomodation.Location, PlanElementType.Nothing, DoingNothingTime));
-
-
-        //    //PlanElements iter
-        //    int iter = 1;
-
-        //    //StartElement
-        //    var startElement = new PlanElement(accomodation.FormattedAddress, accomodation.PlaceId, accomodation.Location.lat, accomodation.Location.lng, iter, currentDateTime, currentDateTime, PlanElementType.Moving, null);
-        //    plan.Elements.Add(startElement);
-
-        //    //previous PlanElemnt which hold previous Location for DirectionApi
-        //    Location previousPlanElementLocation = Location.Create(startElement.Lat, startElement.Lng);
 
         //    while (DateTime.Compare(currentDateTime, endDateTime) <= 0)
         //    {
         //        iter += 1;
 
         //        //declare local variables 
-        //        var planElement = new PlanElement(iter, currentDateTime, currentDateTime); 
+        //        var planElement = new PlanElement(iter, currentDateTime, currentDateTime);
 
         //        //decide what to do
         //        var decision = _planElementDecisionMaker.Decide(currentDateTime, CurrentDayElements);
 
-        //        //get candidates
-        //        if(!PlanElementCandidate.Any(x=>x.ElementType == decision.ElementType))
-        //        {
-        //            // var anyChange= await _planElementCandidateFactory.Up(PlanElementCandidate, UsedPlanElementCandidate, decision, planForm, previousPlanElementLocation);
-        //            var anyChange = false;
-        //            //change decision if no change of list
-        //            if (!anyChange)
-        //            {
-        //                decision.ElementType = PlanElementType.Nothing;
-        //            }
-        //        }
+
 
         //        //Get Plan Element
         //        if (decision.ElementType == PlanElementType.Sleeping)
@@ -175,11 +109,11 @@ namespace TripMaker.Plan
         //            var candidate = PlanElementCandidate.First(x => x.ElementType == decision.ElementType);
         //            planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
         //        }
-        //        else if(decision.ElementType == PlanElementType.Eating || decision.ElementType == PlanElementType.Entertainment || decision.ElementType == PlanElementType.Relax || 
-        //        decision.ElementType == PlanElementType.Activity || decision.ElementType == PlanElementType.Culture || decision.ElementType == PlanElementType.Sightseeing || 
+        //        else if (decision.ElementType == PlanElementType.Eating || decision.ElementType == PlanElementType.Entertainment || decision.ElementType == PlanElementType.Relax ||
+        //        decision.ElementType == PlanElementType.Activity || decision.ElementType == PlanElementType.Culture || decision.ElementType == PlanElementType.Sightseeing ||
         //        decision.ElementType == PlanElementType.Partying || decision.ElementType == PlanElementType.Shopping)
         //        {
-        //            var candidate=_planElementByUserPreferencesPicker.Pick(PlanElementCandidate, decision.ElementType);
+        //            var candidate = _planElementByUserPreferencesPicker.Pick(PlanElementCandidate, decision.ElementType);
         //            planElement.UpdateInformation(candidate.PlaceName, candidate.PlaceId, candidate.Location.lat, candidate.Location.lng, candidate.Duration, candidate.ElementType, candidate.Rating);
 
         //            //update both lists
@@ -204,7 +138,7 @@ namespace TripMaker.Plan
         //        var directionsApiInput = _googleDirectionsInputFactory.Create(previousPlanElementLocation, Location.Create(planElement.Lat, planElement.Lng), planForm.Language, travelMode);
         //        var directionsApiResult = await _googleDirectionsApiClient.GetAsync(directionsApiInput);
 
-        //        if(InterpreteGoogleStatus.IsStatusOk(directionsApiResult.status) && directionsApiResult.routes.Any() && directionsApiResult.routes.FirstOrDefault().legs.Any())
+        //        if (InterpreteGoogleStatus.IsStatusOk(directionsApiResult.status) && directionsApiResult.routes.Any() && directionsApiResult.routes.FirstOrDefault().legs.Any())
         //        {
         //            var route = directionsApiResult.routes.First().legs.First(); //only 1 leg if no waypoints
         //            var planRoute = new PlanRoute(route.distance.value, route.duration.value);
@@ -214,12 +148,12 @@ namespace TripMaker.Plan
         //            planElement.UpdateDateTimeWithRouteDuration(routeDuration);
 
         //            //steps of route
-        //            foreach(var step in route.steps)
+        //            foreach (var step in route.steps)
         //            {
-        //                planRoute.Steps.Add(new PlanRouteStep(step.distance.value, step.duration.value, 
+        //                planRoute.Steps.Add(new PlanRouteStep(step.distance.value, step.duration.value,
         //                                                    step.start_location.lat, step.start_location.lng,
-        //                                                  step.end_location.lat, step.end_location.lng, 
-        //                                                  InterpreteEnums.InterpreteTravelMode(step.travel_mode), 
+        //                                                  step.end_location.lat, step.end_location.lng,
+        //                                                  InterpreteEnums.InterpreteTravelMode(step.travel_mode),
         //                                                  step.html_instructions, step.maneuver));
         //            }
 
@@ -250,8 +184,8 @@ namespace TripMaker.Plan
         //        }
         //    }
 
-        //    return plan;
-        //}
+            //    return plan;
+            //}
 
-    }
+        }
 }

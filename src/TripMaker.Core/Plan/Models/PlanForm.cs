@@ -120,5 +120,23 @@ namespace TripMaker.Plan
         {
             return DateTime.Compare(StartDate, Clock.Now) >= 0 && DateTime.Compare(StartDate, EndDate) <= 0;
         }
+
+        [NotMapped]
+        public DateTime StartDateTime
+        {
+            get
+            {
+                return StartDate.Add(StartTime);
+            }
+        }
+
+        [NotMapped]
+        public DateTime EndDateTime
+        {
+            get
+            {
+                return EndDate.Add(EndTime);
+            }
+        }
     }
 }

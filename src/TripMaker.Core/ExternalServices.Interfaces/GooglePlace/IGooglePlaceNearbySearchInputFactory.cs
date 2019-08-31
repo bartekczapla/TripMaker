@@ -13,5 +13,7 @@ namespace TripMaker.ExternalServices.Interfaces
     public interface IGooglePlaceNearbySearchInputFactory : IDomainService
     {
         GooglePlaceNearbySearchInput Create(Location location, LanguageType language, GooglePlaceTypeCategory typeCategory);
+
+        GooglePlaceNearbySearchInput Create(Location location, int radius, GooglePlaceType type);
     }
 }
