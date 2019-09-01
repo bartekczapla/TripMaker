@@ -9,7 +9,7 @@ namespace TripMaker.ExternalServices.Helpers
         public static double ConvertToUnixTimestamp(DateTime date)
         {
             DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            TimeSpan diff = date.ToUniversalTime() - origin;
+            TimeSpan diff = date.ToUniversalTime().Subtract(origin);
             return Math.Floor(diff.TotalSeconds);
         }
     }

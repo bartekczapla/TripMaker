@@ -35,8 +35,8 @@ namespace TripMaker.ExternalServices.Core
             }
             else
             {
-                builder.Append($"&origin={input.OriginLoc.lat},{input.OriginLoc.lng}");
-                builder.Append($"&destination={input.DestinationLoc.lat},{input.DestinationLoc.lng}");
+                builder.Append($"&origin={input.OriginLoc.lat.ToString(System.Globalization.CultureInfo.InvariantCulture)},{input.OriginLoc.lng.ToString(System.Globalization.CultureInfo.InvariantCulture)}");
+                builder.Append($"&destination={input.DestinationLoc.lat.ToString(System.Globalization.CultureInfo.InvariantCulture)},{input.DestinationLoc.lng.ToString(System.Globalization.CultureInfo.InvariantCulture)}");
             }
             builder.Append($"&language={input.Language.GetString()}");
             builder.Append($"&mode={input.Mode.GetString()}");
@@ -139,11 +139,11 @@ namespace TripMaker.ExternalServices.Core
 
             if (input.Location != null && input.Radius == null)
             {
-                builder.Append($"&locationbias=point:{input.Location.lat},{input.Location.lng}");
+                builder.Append($"&locationbias=point:{input.Location.lat.ToString(System.Globalization.CultureInfo.InvariantCulture)},{input.Location.lng.ToString(System.Globalization.CultureInfo.InvariantCulture)}");
             }
             else if (input.Location != null && input.Radius != null)
             {
-                builder.Append($"&locationbias=circle:{input.Radius}@{input.Location.lat},{input.Location.lng}");
+                builder.Append($"&locationbias=circle:{input.Radius}@{input.Location.lat.ToString(System.Globalization.CultureInfo.InvariantCulture)},{input.Location.lng.ToString(System.Globalization.CultureInfo.InvariantCulture)}");
             }
 
             return builder.ToString();
@@ -153,7 +153,7 @@ namespace TripMaker.ExternalServices.Core
         {
             StringBuilder builder = new StringBuilder();
             builder.Append($"{Output}?key={GoogleApiKey}");
-            builder.Append($"&location={input.Location.lat},{input.Location.lng}");
+            builder.Append($"&location={(input.Location.lat).ToString(System.Globalization.CultureInfo.InvariantCulture)},{input.Location.lng.ToString(System.Globalization.CultureInfo.InvariantCulture)}");
 
             if (input.Radius != null)
             {
@@ -167,8 +167,13 @@ namespace TripMaker.ExternalServices.Core
 
             if (!String.IsNullOrWhiteSpace(input.Keyword)) builder.Append($"&keyword={EncodeString(input.Keyword)}");
 
-            if (!String.IsNullOrWhiteSpace(input.Type.Name)) builder.Append($"&type={input.Type.Name}");
 
+            if (input.Type != null)
+            {
+                if(!String.IsNullOrWhiteSpace(input.Type.Name))
+                    builder.Append($"&type={input.Type.Name}");
+            }
+               
             if (input.Minprice != null) builder.Append($"&minprice={input.Minprice}");
 
             if (input.Maxprice != null) builder.Append($"&maxprice={input.Maxprice}");

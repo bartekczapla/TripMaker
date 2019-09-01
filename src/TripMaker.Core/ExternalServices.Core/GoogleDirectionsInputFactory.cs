@@ -52,8 +52,11 @@ namespace TripMaker.ExternalServices.Core
         public GoogleDirectionsInput Create(Location origin, Location destination, GoogleTravelMode mode, DateTime departureTime)
         {
             LanguageType language = LanguageType.Pl;
-            var startSeconds = GooglePlaceCalculator.ConvertToUnixTimestamp(departureTime);
-            return new GoogleDirectionsInput(origin, destination, mode, language, startSeconds);
+            var startSeconds =  GooglePlaceCalculator.ConvertToUnixTimestamp(departureTime);
+            if(startSeconds < 0)
+                return new GoogleDirectionsInput(origin, destination, mode, language);
+            else
+                return new GoogleDirectionsInput(origin, destination, mode, language, startSeconds);
         }
     }
 }

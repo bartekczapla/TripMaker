@@ -93,5 +93,21 @@ namespace TripMaker.Plan.Models
 
         }
 
+        public DateTime GetCloseDateTime(DateTime startDate, DateTime dateAfterClose)
+        {
+            //zakladam ze w ten dzien otwarte bylo bo sprawdzane przed ta funkcja
+            var currentDay = OpeningHours.FirstOrDefault(x => x.DayOpen == (int)startDate.DayOfWeek);
+
+            if (currentDay.DayClose == null)
+                return new DateTime(startDate.Year, startDate.Month, startDate.Day, 23, 59, 59);
+            else
+            {
+                if(currentDay.DayClose.Value> currentDay.DayOpen)
+                    return new DateTime(startDate.Year, startDate.Month, startDate.Day).AddDays(1).Add(currentDay.Close.Value);
+                else
+                    return new DateTime(startDate.Year, startDate.Month, startDate.Day).Add(currentDay.Close.Value);
+            }
+        }
+
     }
 }

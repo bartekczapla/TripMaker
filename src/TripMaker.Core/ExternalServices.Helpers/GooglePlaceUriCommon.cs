@@ -38,7 +38,7 @@ namespace TripMaker.ExternalServices.Helpers
 
         public static string ConvertLocationsToString(IList<Location> locations)
         {
-            var result = String.Join("|", locations.Select(x => $"{x.lat},{x.lng}").ToArray());
+            var result = String.Join("|", locations.Select(x => $"{x.lat.ToString(System.Globalization.CultureInfo.InvariantCulture)},{x.lng.ToString(System.Globalization.CultureInfo.InvariantCulture)}").ToArray());
             return result;
         }
 

@@ -31,13 +31,13 @@ namespace TripMaker.Plan
             return new CreatePlanInput
             {
                 PlaceName= "Kraków",
-                PlaceId= "ChIJ0RhONcBEFkcRv4pHdrW2a7Q",
-                StartDate=new DateTime(2019, 9, 1),
-                StartTime=new TimeSpan(8, 0, 0),
-                EndDate=new DateTime(2019, 9, 4),
+                PlaceId= "ChIJxzsjlcBaFkcRsMRsBFenXyY",
+                StartDate=new DateTime(2019, 10, 3),
+                StartTime=new TimeSpan(9, 0, 0),
+                EndDate=new DateTime(2019, 10, 5),
                 Language= Enums.LanguageType.Pl,
                 EndTime=new TimeSpan(18, 0, 0),
-                HasAccomodationBooked=false,
+                HasAccomodationBooked=true,
                 AccomodationId= "ChIJ8f4YlmxbFkcR5PbsuSmT_tU",
                 PreferedTravelModes= preferedTravelModes,
                 MaxWalkingKmsPerDay=20,

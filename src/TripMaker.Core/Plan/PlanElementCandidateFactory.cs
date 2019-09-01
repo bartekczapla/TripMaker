@@ -18,36 +18,21 @@ namespace TripMaker.Plan
     public class PlanElementCandidateFactory : PlanConsts, IPlanElementCandidateFactory
     {
         private readonly IGooglePlaceDetailsApiClient _googlePlaceDetailsApiClient;
-        private readonly IGooglePlaceSearchApiClient _googlePlaceSearchApiClient;
         private readonly IGooglePlaceNearbySearchApiClient _googlePlaceNearbySearchApiClient;
-        private readonly IGooglePlacePhotosApiCaller _googlePlacePhotosApiCaller;
-        private readonly IGoogleDirectionsApiClient _googleDirectionsApiClient;
-
-        private readonly IGoogleDirectionsInputFactory _googleDirectionsInputFactory;
-        private readonly IGoogleDistanceMatrixInputFactory _googleDistanceMatrixInputFactory;
         private readonly IGooglePlaceDetailsInputFactory _googlePlaceDetailsInputFactory;
         private readonly IGooglePlaceNearbySearchInputFactory _googlePlaceNearbySearchInputFactory;
-        private readonly IGooglePlaceSearchInputFactory _googlePlaceSearchInputFactory;
 
-        public PlanElementCandidateFactory(IGooglePlaceDetailsApiClient googlePlaceDetailsApiClient, IGooglePlaceSearchApiClient googlePlaceSearchApiClient,
-            IGooglePlaceNearbySearchApiClient googlePlaceNearbySearchApiClient, IGooglePlacePhotosApiCaller googlePlacePhotosApiCaller,
-            IGoogleDirectionsApiClient googleDirectionsApiClient,
-            IGoogleDirectionsInputFactory googleDirectionsInputFactory, IGoogleDistanceMatrixInputFactory googleDistanceMatrixInputFactory,
-            IGooglePlaceDetailsInputFactory googlePlaceDetailsInputFactory, IGooglePlaceNearbySearchInputFactory googlePlaceNearbySearchInputFactory,
-            IGooglePlaceSearchInputFactory googlePlaceSearchInputFactory,
-            IPlanElementDecisionMaker planElementDecisionMaker)
+        public PlanElementCandidateFactory(
+            IGooglePlaceDetailsApiClient googlePlaceDetailsApiClient, 
+            IGooglePlaceNearbySearchApiClient googlePlaceNearbySearchApiClient, 
+            IGooglePlaceDetailsInputFactory googlePlaceDetailsInputFactory,
+            IGooglePlaceNearbySearchInputFactory googlePlaceNearbySearchInputFactory
+            )
         {
             _googlePlaceDetailsApiClient = googlePlaceDetailsApiClient;
-            _googlePlaceSearchApiClient = googlePlaceSearchApiClient;
             _googlePlaceNearbySearchApiClient = googlePlaceNearbySearchApiClient;
-            _googlePlacePhotosApiCaller = googlePlacePhotosApiCaller;
-            _googleDirectionsApiClient = googleDirectionsApiClient;
-
-            _googleDirectionsInputFactory = googleDirectionsInputFactory;
-            _googleDistanceMatrixInputFactory = googleDistanceMatrixInputFactory;
             _googlePlaceDetailsInputFactory = googlePlaceDetailsInputFactory;
             _googlePlaceNearbySearchInputFactory = googlePlaceNearbySearchInputFactory;
-            _googlePlaceSearchInputFactory = googlePlaceSearchInputFactory;
         }
 
 
@@ -55,25 +40,64 @@ namespace TripMaker.Plan
         {
             var candidates = new List<PlanElementCandidate>();
 
-            var googleNearbyEntertainmentInput = _googlePlaceNearbySearchInputFactory.Create(plan.StartLocation, (int)MaximumDistanceToAccomodation, GooglePlaceTypes.Table.Where(x => x.PlanElementType == PlanElementType.Partying).First());
-            var nearbyResults = await _googlePlaceNearbySearchApiClient.GetAsync(googleNearbyEntertainmentInput);
-            int counter = 1;
-            foreach (var nr in nearbyResults.results)
+            PlanElementType[] planElementTypes = new PlanElementType[]
             {
+                PlanElementType.Entertainment,
+                PlanElementType.Relax,
+                PlanElementType.Activity,
+                PlanElementType.Culture,
+                PlanElementType.Sightseeing,
+                PlanElementType.Partying,
+                PlanElementType.Shopping,
+            };
 
-                var details = await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateAllUseful(nr.place_id));
-                if (details.IsOk)
+
+            foreach(var planElementType in planElementTypes)
+            {
+                var googlePlaceTypes = GooglePlaceTypes.Table.Where(x => x.PlanElementType == planElementType).ToList();
+
+                foreach (var type in googlePlaceTypes)
                 {
-                    var candidate = new PlanElementCandidate(details.Result.name, details.Result.place_id, details.Result.formatted_address, details.Result.geometry.location, details.Result.opening_hours, details.Result.types, details.Result.rating, details.Result.price_level, details.Result.user_ratings_total);
-                    candidates.Add(candidate);
+                    var nearbySearchInput = _googlePlaceNearbySearchInputFactory.Create(plan.StartLocation, (int)MaximumDistanceToAccomodation, type);
+                    var nearbyResults = await _googlePlaceNearbySearchApiClient.GetAsync(nearbySearchInput);
+                    int counter = 1;
+                    foreach (var nr in nearbyResults.results)
+                    {
+
+                        var details = await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateAllUseful(nr.place_id));
+                        if (details.IsOk)
+                        {
+                            var candidate = new PlanElementCandidate(details.Result.name, details.Result.place_id, details.Result.formatted_address, details.Result.geometry.location, details.Result.opening_hours, details.Result.types, details.Result.rating, details.Result.price_level, details.Result.user_ratings_total);
+                            if (!candidates.Any(x => x.PlaceId == candidate.PlaceId)) candidates.Add(candidate);
+                        }
+                        ++counter;
+                    }
+
+                    WeightVectorLabel weightVectorLabel = WeightVector.TranslateLabel(planElementType);
+
+                    if ((plan.PlanForm.IsOverOneWeek || weightVector.GetLabelValue(weightVectorLabel) >= 0.1m) && nearbyResults.IsMoreResults)
+                    {
+                        var nearbyResults2 = await _googlePlaceNearbySearchApiClient.GetNextPageTokenAsync(nearbyResults.next_page_token);
+                        foreach (var nr in nearbyResults2.results)
+                        {
+
+                            var details = await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateAllUseful(nr.place_id));
+                            if (details.IsOk)
+                            {
+                                var candidate = new PlanElementCandidate(details.Result.name, details.Result.place_id, details.Result.formatted_address, details.Result.geometry.location, details.Result.opening_hours, details.Result.types, details.Result.rating, details.Result.price_level, details.Result.user_ratings_total);
+
+                                if (!candidates.Any(x=>x.PlaceId == candidate.PlaceId))candidates.Add(candidate);
+                            }
+                            ++counter;
+                        }
+                    }
+
                 }
-                ++counter;
-                if (counter > 5) break;
+
+                if (candidates.Count > 35)
+                    break;
+
             }
-
-
-
-
 
             if (candidates.Count == 0)
                 throw new UserFriendlyException($"Nie znaleziono żadnych potencjalnych kandydatów na elementy planu");
@@ -81,193 +105,5 @@ namespace TripMaker.Plan
             return candidates;
         }
 
-
-
-        //FIND PLACE
-        //var googleNearbyEntertainmentInput = _googlePlaceSearchInputFactory.CreateUseful(plan.StartLocation, (int)MaximumDistanceToAccomodation, GooglePlaceTypes.Table.Where(x => x.PlanElementType == PlanElementType.Partying).First());
-        //var nearbyResults = await _googlePlaceSearchApiClient.GetAsync(googleNearbyEntertainmentInput);
-        //int counter = 1;
-        //foreach (var nr in nearbyResults.candidates)
-        //{
-
-        //    var details = await _googlePlaceDetailsApiClient.GetAsync(_googlePlaceDetailsInputFactory.CreateAllUseful(nr.place_id));
-        //    if (details.IsOk)
-        //    {
-        //        var candidate = new PlanElementCandidate(details.Result.name, details.Result.place_id, details.Result.formatted_address, details.Result.geometry.location, details.Result.opening_hours, details.Result.types, details.Result.rating, details.Result.price_level, details.Result.user_ratings_total);
-        //candidates.Add(candidate);
-        //    }
-        //    ++counter;
-        //    if (counter > 2) break;
-        //}
-
-
-
-        //public async Task<bool> UpdateListAsync(IList<PlanElementCandidate> candidates, IList<PlanElementCandidate> usedCandidates, PlanElementDecision decision, PlanForm planForm, Location previousLocation)
-        //{
-        //    if (decision.ElementType == PlanElementType.Eating)
-        //    {
-        //        var googleNearbyRestaurantInput = _googlePlaceNearbySearchInputFactory.Create(previousLocation, planForm.Language, GooglePlaceTypeCategory.Restaurant);
-        //        var nearbyResult = await _googlePlaceNearbySearchApiClient.GetAsync(googleNearbyRestaurantInput);
-        //        if (!InterpreteGoogleStatus.IsStatusOk(nearbyResult.status)) //if request error, add already usedCandidates
-        //        {
-        //            return false;
-        //        }
-
-        //        var anyChange = false;
-        //        foreach(var item in nearbyResult.results)
-        //        {
-        //            if(!usedCandidates.Any(x=>x.PlaceId == item.place_id)) //place hasnot been used
-        //            {
-        //                anyChange = true;
-        //                candidates.Add(new PlanElementCandidate(item.name, item.place_id, Location.Create(item.geometry.location.lat, item.geometry.location.lng), PlanElementType.Eating, EatingDuration));
-        //            }
-        //        }
-        //        return anyChange;
-        //    }
-        //    else if (decision.ElementType == PlanElementType.Entertainment)
-        //    {
-        //        var googleNearbyEntertainmentInput = _googlePlaceNearbySearchInputFactory.Create(previousLocation, planForm.Language, GooglePlaceTypeCategory.Entertainment);
-        //        var nearbyResult = await _googlePlaceNearbySearchApiClient.GetAsync(googleNearbyEntertainmentInput);
-        //        if (!InterpreteGoogleStatus.IsStatusOk(nearbyResult.status)) //if request error, add already usedCandidates
-        //        {
-        //            return false;
-        //        }
-
-        //        var anyChange = false;
-        //        foreach (var item in nearbyResult.results)
-        //        {
-        //            if (!usedCandidates.Any(x => x.PlaceId == item.place_id)) //place hasnot been used
-        //            {
-        //                anyChange = true;
-        //                candidates.Add(new PlanElementCandidate(item.name, item.place_id, Location.Create(item.geometry.location.lat, item.geometry.location.lng), PlanElementType.Entertainment, EntertainmentDuration));
-        //            }
-        //        }
-        //        return anyChange;
-        //    }
-        //    else if (decision.ElementType == PlanElementType.Relax)
-        //    {
-        //        var googleNearbyInput = _googlePlaceNearbySearchInputFactory.Create(previousLocation, planForm.Language, GooglePlaceTypeCategory.Relax);
-        //        var nearbyResult = await _googlePlaceNearbySearchApiClient.GetAsync(googleNearbyInput);
-        //        if (!InterpreteGoogleStatus.IsStatusOk(nearbyResult.status)) //if request error, add already usedCandidates
-        //        {
-        //            return false;
-        //        }
-
-        //        var anyChange = false;
-        //        foreach (var item in nearbyResult.results)
-        //        {
-        //            if (!usedCandidates.Any(x => x.PlaceId == item.place_id)) //place hasnot been used
-        //            {
-        //                anyChange = true;
-        //                candidates.Add(new PlanElementCandidate(item.name, item.place_id, Location.Create(item.geometry.location.lat, item.geometry.location.lng), PlanElementType.Relax, RelaxDuration));
-        //            }
-        //        }
-        //        return anyChange;
-        //    }
-        //    else if (decision.ElementType == PlanElementType.Activity)
-        //    {
-        //        var googleNearbyInput = _googlePlaceNearbySearchInputFactory.Create(previousLocation, planForm.Language, GooglePlaceTypeCategory.Activity);
-        //        var nearbyResult = await _googlePlaceNearbySearchApiClient.GetAsync(googleNearbyInput);
-        //        if (!InterpreteGoogleStatus.IsStatusOk(nearbyResult.status)) //if request error, add already usedCandidates
-        //        {
-        //            return false;
-        //        }
-
-        //        var anyChange = false;
-        //        foreach (var item in nearbyResult.results)
-        //        {
-        //            if (!usedCandidates.Any(x => x.PlaceId == item.place_id)) //place hasnot been used
-        //            {
-        //                anyChange = true;
-        //                candidates.Add(new PlanElementCandidate(item.name, item.place_id, Location.Create(item.geometry.location.lat, item.geometry.location.lng), PlanElementType.Activity, ActivityDuration));
-        //            }
-        //        }
-        //        return anyChange;
-        //    }
-        //    else if (decision.ElementType == PlanElementType.Culture)
-        //    {
-        //        var googleNearbyInput = _googlePlaceNearbySearchInputFactory.Create(previousLocation, planForm.Language, GooglePlaceTypeCategory.Culture);
-        //        var nearbyResult = await _googlePlaceNearbySearchApiClient.GetAsync(googleNearbyInput);
-        //        if (!InterpreteGoogleStatus.IsStatusOk(nearbyResult.status)) //if request error, add already usedCandidates
-        //        {
-        //            return false;
-        //        }
-
-        //        var anyChange = false;
-        //        foreach (var item in nearbyResult.results)
-        //        {
-        //            if (!usedCandidates.Any(x => x.PlaceId == item.place_id)) //place hasnot been used
-        //            {
-        //                anyChange = true;
-        //                candidates.Add(new PlanElementCandidate(item.name, item.place_id, Location.Create(item.geometry.location.lat, item.geometry.location.lng), PlanElementType.Culture, CultureDuration));
-        //            }
-        //        }
-        //        return anyChange;
-        //    }
-        //    else if (decision.ElementType == PlanElementType.Sightseeing)
-        //    {
-        //        var googleNearbyInput = _googlePlaceNearbySearchInputFactory.Create(previousLocation, planForm.Language, GooglePlaceTypeCategory.Sightseeing);
-        //        var nearbyResult = await _googlePlaceNearbySearchApiClient.GetAsync(googleNearbyInput);
-        //        if (!InterpreteGoogleStatus.IsStatusOk(nearbyResult.status)) //if request error, add already usedCandidates
-        //        {
-        //            return false;
-        //        }
-
-        //        var anyChange = false;
-        //        foreach (var item in nearbyResult.results)
-        //        {
-        //            if (!usedCandidates.Any(x => x.PlaceId == item.place_id)) //place hasnot been used
-        //            {
-        //                anyChange = true;
-        //                candidates.Add(new PlanElementCandidate(item.name, item.place_id, Location.Create(item.geometry.location.lat, item.geometry.location.lng), PlanElementType.Sightseeing, SightseeingDuration));
-        //            }
-        //        }
-        //        return anyChange;
-        //    }
-        //    else if (decision.ElementType == PlanElementType.Partying)
-        //    {
-        //        var googleNearbyInput = _googlePlaceNearbySearchInputFactory.Create(previousLocation, planForm.Language, GooglePlaceTypeCategory.Partying);
-        //        var nearbyResult = await _googlePlaceNearbySearchApiClient.GetAsync(googleNearbyInput);
-        //        if (!InterpreteGoogleStatus.IsStatusOk(nearbyResult.status)) //if request error, add already usedCandidates
-        //        {
-        //            return false;
-        //        }
-
-        //        var anyChange = false;
-        //        foreach (var item in nearbyResult.results)
-        //        {
-        //            if (!usedCandidates.Any(x => x.PlaceId == item.place_id)) //place hasnot been used
-        //            {
-        //                anyChange = true;
-        //                candidates.Add(new PlanElementCandidate(item.name, item.place_id, Location.Create(item.geometry.location.lat, item.geometry.location.lng), PlanElementType.Partying, PartyingDuration));
-        //            }
-        //        }
-        //        return anyChange;
-        //    }
-        //    else if (decision.ElementType == PlanElementType.Shopping)
-        //    {
-        //        var googleNearbyInput = _googlePlaceNearbySearchInputFactory.Create(previousLocation, planForm.Language, GooglePlaceTypeCategory.Shopping);
-        //        var nearbyResult = await _googlePlaceNearbySearchApiClient.GetAsync(googleNearbyInput);
-        //        if (!InterpreteGoogleStatus.IsStatusOk(nearbyResult.status)) //if request error, add already usedCandidates
-        //        {
-        //            return false;
-        //        }
-
-        //        var anyChange = false;
-        //        foreach (var item in nearbyResult.results)
-        //        {
-        //            if (!usedCandidates.Any(x => x.PlaceId == item.place_id)) //place hasnot been used
-        //            {
-        //                anyChange = true;
-        //                candidates.Add(new PlanElementCandidate(item.name, item.place_id, Location.Create(item.geometry.location.lat, item.geometry.location.lng), PlanElementType.Shopping, ShoppingDuration));
-        //            }
-        //        }
-        //        return anyChange;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-        //}
     }
 }

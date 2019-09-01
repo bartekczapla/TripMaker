@@ -57,7 +57,28 @@ namespace TripMaker.Plan.Models
                 return value;
         }
 
+        public static WeightVectorLabel TranslateLabel(PlanElementType type)
+        {
+            switch(type)
+            {
+                case PlanElementType.Activity:
+                    return WeightVectorLabel.Activity;
+                case PlanElementType.Culture:
+                    return WeightVectorLabel.Culture;
+                case PlanElementType.Entertainment:
+                    return WeightVectorLabel.Entertainment;
+                case PlanElementType.Partying:
+                    return WeightVectorLabel.Partying;
+                case PlanElementType.Relax:
+                    return WeightVectorLabel.Relax;
+                case PlanElementType.Shopping:
+                    return WeightVectorLabel.Shopping;
+                case PlanElementType.Sightseeing:
+                default:
+                    return WeightVectorLabel.Sightseeing;
 
+            }
+        }
 
 
     }

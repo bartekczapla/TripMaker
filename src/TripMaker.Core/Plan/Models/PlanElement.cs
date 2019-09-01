@@ -109,8 +109,10 @@ namespace TripMaker.Plan
                 Rating = row.Candidate.Rating,
                 Price = row.Candidate.Price,
                 Popularity = row.Candidate.Popularity,
-                ScorePosition=row.ScorePosition,
-                NormalizedScore=row.NormalizedScore
+                ScorePosition=row.ScorePosition, 
+                NormalizedScore=row.NormalizedScore,
+                Start=start,
+                End=end
             };
 
             element.PlanElementTypes = new List<PlanElementyTypeEntity>(row.Candidate.ElementTypes.Count);

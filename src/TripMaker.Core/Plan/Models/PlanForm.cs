@@ -138,5 +138,14 @@ namespace TripMaker.Plan
                 return EndDate.Add(EndTime);
             }
         }
+
+        [NotMapped]
+        public bool IsOverOneWeek
+        {
+            get
+            {
+                return EndDateTime.Subtract(StartDateTime).Days >= 7;
+            }
+        }
     }
 }

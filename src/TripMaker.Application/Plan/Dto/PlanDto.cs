@@ -26,7 +26,7 @@ namespace TripMaker.Plan
 
         public PlanFormDto PlanForm { get; set; }
 
-        public PlanAccomodationDto Accomodation { get; set; }
+        public PlanAccomodationDto PlanAccomodation { get; set; }
 
         public PlanFormWeightVectorDto PlanFormWeightVector { get; set; }
 
