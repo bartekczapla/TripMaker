@@ -35,8 +35,9 @@ namespace TripMaker.Plan
         {
             var planForm = input.CreatePlanForm();
             var result = await _planManager.CreateAsync(planForm);
+            await CurrentUnitOfWork.SaveChangesAsync();
             var dto = result.MapTo<PlanDto>();
-            return new PlanDto();            
+            return dto;            
         }
 
         public async Task<PlanDto> GetTestPlanAsync()
@@ -49,5 +50,12 @@ namespace TripMaker.Plan
             return dto;
         }
 
+        public async Task<PlanDto> GetDetails()
+        {
+            var result = await _planManager.GetAsync(77);
+            var dto = result.MapTo<PlanDto>();
+
+            return dto;
+        }
     }
 }

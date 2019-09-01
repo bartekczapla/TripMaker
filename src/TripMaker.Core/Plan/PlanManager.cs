@@ -13,6 +13,7 @@ using TripMaker.Plan.Interfaces;
 using TripMaker.Plan.Models;
 using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
+using TripMaker.PlacePhotos;
 
 namespace TripMaker.Plan
 {
@@ -20,6 +21,7 @@ namespace TripMaker.Plan
     {
         private readonly IRepository<Plan> _planRepository;
         private readonly IRepository<PlanForm> _planFormRepository;
+        private readonly IPlacePhotoManager _placePhotoManager;
         //private readonly IRepository<PlanElement> _planElementRepository;
         //private readonly IRepository<PlanRoute> _planRouteRepository;
         //private readonly IRepository<PlanRouteStep> _planRouteStepRepository;
@@ -31,6 +33,7 @@ namespace TripMaker.Plan
             (
             IRepository<Plan> planRepository,
             IRepository<PlanForm> planFormRepository,
+            IPlacePhotoManager placePhotoManager,
             //IRepository<PlanElement> planElementRepository,
             //IRepository<PlanRoute> planRouteRepository,
             //IRepository<PlanRouteStep> planRouteStepRepository,
@@ -46,6 +49,7 @@ namespace TripMaker.Plan
             //_planFormPolicy = planFormPolicy;
             EventBus = NullEventBus.Instance;
             _planProvider = planProvider;
+            _placePhotoManager = placePhotoManager;
         }
 
         public async Task<Plan> CreateAsync(PlanForm planForm)
@@ -58,6 +62,8 @@ namespace TripMaker.Plan
             var plan =await _planProvider.GenerateAsync(planForm); 
 
             await _planRepository.InsertAsync(plan);
+
+            plan.Photo = await _placePhotoManager.GetPhotos(plan.PlanForm.PlaceId);
 
             //foreach(var element in plan.Elements)
             //{
@@ -80,19 +86,23 @@ namespace TripMaker.Plan
         public async Task<Plan> GetAsync(int planId)
         {
             var plan = await _planRepository
-                .GetAll()
-                .Include(e=>e.PlanForm)
-                .Include(e => e.Elements)
-                .ThenInclude(r=>r.EndingRoute)
-                .ThenInclude(r => r.Steps)
-                .Where(e => e.Id == planId)
-                .FirstOrDefaultAsync();
+                                .GetAll()
+                                .Include(e=>e.PlanFormWeightVector)
+                                .Include(e => e.PlanAccomodation)
+                                .Include(e => e.PlanForm)
+                                .Include(e => e.Elements)
+                                .ThenInclude(r => r.EndingRoute)
+                                .ThenInclude(r => r.Steps)
+                                .Where(e => e.Id == planId)
+                                .FirstOrDefaultAsync();
 
             plan.Elements.OrderBy(e => e.OrderNo);
 
+            plan.Photo = await _placePhotoManager.GetPhotos(plan.PlanForm.PlaceId);
+
             if (plan == null)
             {
-                throw new UserFriendlyException($"Could not found the plan with id: {planId}");
+                throw new UserFriendlyException($"Nie udało znaleźć się planu z id: {planId}");
             }
 
             return plan;

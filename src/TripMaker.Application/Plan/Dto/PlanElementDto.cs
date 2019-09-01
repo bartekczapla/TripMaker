@@ -14,6 +14,8 @@ namespace TripMaker.Plan.Dto
 
         public  string PlaceId { get;  set; }
 
+        public string FormattedAddress { get; set; }
+
         public  double Lat { get;  set; }
 
         public  double Lng { get;  set; }
@@ -24,14 +26,22 @@ namespace TripMaker.Plan.Dto
 
         public  DateTime End { get;  set; }
 
-        public  PlanElementType ElementType { get;  set; }
+        public ICollection<PlanElementyTypeEntityDto> PlanElementTypes { get; set; }
 
-        public  double? Rating { get;  set; }
+        public ICollection<PlanElementOpeningHourEntityDto> OpeningHours { get; set; }
 
-        public  int? PlanId { get;  set; }
+        public double? Rating { get;  set; }
+
+        public decimal? Price { get; set; }
+
+        public int? PlanId { get;  set; }
+
+        public decimal? Popularity { get; set; }
 
         public PlanRouteDto EndingRoute { get; set; }
 
+        public int ScorePosition { get; set; }
 
+        public decimal NormalizedScore { get; set; }
     }
 }

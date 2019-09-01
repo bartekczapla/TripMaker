@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TripMaker.Enums;
+using TripMaker.Enums.PlanFormEnums;
 
 namespace TripMaker.Plan.Dto
 {
@@ -22,14 +23,40 @@ namespace TripMaker.Plan.Dto
 
         public TimeSpan? EndTime { get; set; }
 
-        public bool HasJourneyBooked { get; set; }
-
         public bool HasAccomodationBooked { get; set; }
+
+        public string AccomodationId { get; set; }
 
         public LanguageType Language { get; set; }
 
         public DateTime CreationTime { get; set; }
 
+        public IList<GoogleTravelMode> PreferedTravelModes { get; set; }
+
+        public string PreferedTravelModesString { get; set; }
+
+        public int MaxWalkingKmsPerDay { get; set; }
+
+        public DistanceTypePreference DistanceTypePreference { get; set; }
+
+        public PricePreference PricePreference { get; set; }
+
+        public FoodPreference FoodPreference { get; set; }
+
+        public int AverageSleep { get; set; }
+
+        public AtractionPopularityPreference AtractionPopularityPreference { get; set; }
+
+        public AtractionDurationPreference AtractionDurationPreference { get; set; }
+
+        public IList<PlanElementType> SortedPlanElements { get; set; }
+
+        public string SortedPlanElementsString { get; set; }
+
+        public IList<PlanElementType> PreferedPlanElements { get; set; }
+
+        public string PreferedPlanElementsString { get; set; }
 
     }
 }
+

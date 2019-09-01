@@ -42,6 +42,7 @@ namespace TripMaker.UserPlans
             var plans = await _planRepository
                         .GetAll()
                         .Include(e => e.PlanForm)
+                        .Include(e=>e.PlanAccomodation)
                         .Where(e => e.UserId == userId)
                         .OrderByDescending(e => e.PlanForm.CreationTime)
                         .ToListAsync();
@@ -58,20 +59,24 @@ namespace TripMaker.UserPlans
         public async Task<Plan.Plan> GetDetailsAsync(int planId)
         {
             var plan = await _planRepository
-                .GetAll()
-                .Include(e => e.PlanForm)
-                .Include(e => e.Elements)
-                .ThenInclude(r => r.EndingRoute)
-                .ThenInclude(r => r.Steps)
-                .Where(e => e.Id == planId)
-                .FirstOrDefaultAsync();
-
-            plan.Elements.OrderBy(e => e.OrderNo);
+                        .GetAll()
+                      .Include(e => e.PlanFormWeightVector)
+                      .Include(e => e.PlanAccomodation)
+                      .Include(e => e.PlanForm)
+                      .Include(e => e.Elements)
+                      .ThenInclude(r => r.EndingRoute)
+                      .ThenInclude(r => r.Steps)
+                      .Where(e => e.Id == planId)
+                      .FirstOrDefaultAsync();
 
             if (plan == null)
             {
                 throw new UserFriendlyException($"Could not found the plan with id: {planId}");
             }
+
+            plan.Elements.OrderBy(e => e.OrderNo);
+
+            plan.Photo = await _placePhotoManager.GetPhotos(plan.PlanForm.PlaceId);
 
             return plan;
         }

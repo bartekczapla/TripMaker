@@ -20,6 +20,10 @@ namespace TripMaker.Plan.Dto
 
         public string FormattedAddress { get; set; }
 
+        public decimal? Rating { get; set; }
+
+        public decimal? TotalUserReviews { get; set; }
+
         public PlanAccomodationDto(double lat, double lng, string placeId, string placeName, string formattedAddress)
         {
             Lat = lat;

@@ -1287,6 +1287,8 @@ namespace TripMaker.Migrations
 
                     b.Property<int>("Duration");
 
+                    b.Property<int>("TravelMode");
+
                     b.HasKey("Id");
 
                     b.ToTable("PlanRoutes");

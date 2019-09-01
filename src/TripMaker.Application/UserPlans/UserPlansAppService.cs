@@ -37,14 +37,17 @@ namespace TripMaker.UserPlans
 
             var plans = await _userPlansManager.GetAllUserPlansAsync(user.Id);
 
-            return new ListResultDto<UserPlansListDto>(UserPlansCommon.MapResult(plans));
+            var dto= new ListResultDto<UserPlansListDto>(UserPlansCommon.MapResult(plans));
+            return dto;
         }
 
         public async Task<PlanDto> GetDetailAsync(EntityDto<int> input)
         {
             var result = await _userPlansManager.GetDetailsAsync(input.Id);
 
-            return result.MapTo<PlanDto>();
+            var dto= result.MapTo<PlanDto>();
+
+            return dto;
         }
     }
 }

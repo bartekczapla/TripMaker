@@ -10,15 +10,30 @@ namespace TripMaker.Plan
     [AutoMapFrom(typeof(Plan))]
     public class PlanDto : EntityDto
     {
-        public string Destination { get;  set; }
+        public string Name { get;  set; }
+
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
+
+        public string Address { get; set; }
 
         public int? PlanFormId { get;  set; }
+
+        public decimal? Rating { get; set; }
+
+        public decimal? TotalUserReviews { get; set; }
 
         public PlanFormDto PlanForm { get; set; }
 
         public PlanAccomodationDto Accomodation { get; set; }
 
+        public PlanFormWeightVectorDto PlanFormWeightVector { get; set; }
+
         public  ICollection<PlanElementDto> Elements { get;  set; }
+
+        public string Photo { get; set; }
 
     }
 }
+
