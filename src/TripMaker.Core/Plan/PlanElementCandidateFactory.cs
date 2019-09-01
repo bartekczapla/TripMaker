@@ -38,6 +38,7 @@ namespace TripMaker.Plan
 
         public async Task<IList<PlanElementCandidate>> GetCandidates(Plan plan, WeightVector weightVector)
         {
+            var test = true;
             var candidates = new List<PlanElementCandidate>();
 
             PlanElementType[] planElementTypes = new PlanElementType[]
@@ -73,6 +74,9 @@ namespace TripMaker.Plan
                         ++counter;
                     }
 
+                    if (test && candidates.Count > 15)
+                        return candidates;
+
                     WeightVectorLabel weightVectorLabel = WeightVector.TranslateLabel(planElementType);
 
                     if ((plan.PlanForm.IsOverOneWeek || weightVector.GetLabelValue(weightVectorLabel) >= 0.1m) && nearbyResults.IsMoreResults)
@@ -92,9 +96,12 @@ namespace TripMaker.Plan
                         }
                     }
 
+                    if( test && candidates.Count > 15)
+                        return candidates;
+
                 }
 
-                if (candidates.Count > 35)
+                if (test && candidates.Count > 15)
                     break;
 
             }

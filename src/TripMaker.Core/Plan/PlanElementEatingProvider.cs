@@ -40,6 +40,7 @@ namespace TripMaker.Plan
 
         public async Task<PlanElementCandidate> GenerateAsync(DecisionArray decisionArray, Plan plan, int whichMeal, PlanElementIteratorParams iterParams)
         {
+            var test = true;
             //choose type based on preferences
             var type = (plan.PlanForm.FoodPreference == FoodPreference.OnlyRestaurant || (plan.PlanForm.FoodPreference == FoodPreference.Mixed && whichMeal == 2)) ? GooglePlaceTypeCategory.Restaurant : GooglePlaceTypeCategory.Food;
             var candidates = new List<PlanElementCandidate>();
@@ -54,6 +55,9 @@ namespace TripMaker.Plan
                 if (details.IsOk)
                 {
                     var candidate = new PlanElementCandidate(details.Result.name, details.Result.place_id, details.Result.formatted_address, details.Result.geometry.location, details.Result.opening_hours, details.Result.types, details.Result.rating, details.Result.price_level, details.Result.user_ratings_total);
+                    if (test)
+                        return candidate;
+
                     candidates.Add(candidate);
                 }
                 ++counter;

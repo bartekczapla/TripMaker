@@ -18,16 +18,27 @@ namespace TripMaker.Plan.Interfaces
             Assumptions = assumptions;
             CurrentDecisionRowIndex = 0;
             LeftRows = new List<DecisionRow>();
-            if (TimeSpan.Compare(startDateTime.TimeOfDay, assumptions.LunchTime.Subtract(new TimeSpan(2, 0, 0))) >= 0) WasBreakfast = true;
-
+            if (TimeSpan.Compare(startDateTime.TimeOfDay, assumptions.LunchTime.Subtract(new TimeSpan(2, 0, 0))) >= 0)
+            {
+                WasBreakfast = true;
+            } else
+            {
+                WasBreakfast = false;
+            }
             if (TimeSpan.Compare(startDateTime.TimeOfDay, assumptions.DinnerTime.Subtract(new TimeSpan(2, 0, 0))) >= 0)
             {
                 WasLunch = true;
+            } else
+            {
+                WasLunch = false;
             }
 
             if (TimeSpan.Compare(startDateTime.TimeOfDay, assumptions.SleepingTime.Subtract(new TimeSpan(2, 0, 0))) >= 0)
             {
                 WasDinner = true;
+            } else
+            {
+                WasDinner = false;
             }
         }
 
@@ -65,10 +76,10 @@ namespace TripMaker.Plan.Interfaces
             var timeOfDay = CurrentDateTime.TimeOfDay;
             if(Assumptions.IsSleepAfterMidnight)
             {
-                return TimeSpan.Compare(timeOfDay, Assumptions.SleepingTime) >= 0 && TimeSpan.Compare(timeOfDay, new TimeSpan(4, 0, 0)) <= 0;
+                return TimeSpan.Compare(timeOfDay, Assumptions.SleepingTime) >= 0 && TimeSpan.Compare(timeOfDay, Assumptions.SleepingTime.Add(new TimeSpan(4,30,0))) <= 0;
             } else
             {
-                return TimeSpan.Compare(timeOfDay, Assumptions.SleepingTime) >= 0 || TimeSpan.Compare(timeOfDay, new TimeSpan(0, 0, 0)) >=0;
+                return TimeSpan.Compare(timeOfDay, Assumptions.SleepingTime) >= 0 || (TimeSpan.Compare(timeOfDay, new TimeSpan(0, 0, 0)) >=0 && TimeSpan.Compare(timeOfDay,new TimeSpan(3,30,0))<=0);
             }
         }
 

@@ -48,9 +48,11 @@ namespace TripMaker.Plan
 
             var optimizedElementsOrder = await _optimizePlanElementsOrder.Optimize(decisionArray, plan, plan.Assumptions.AssumedNumberOfElement); //travel salesman problem optimization
 
-            for (int i = 0; i < optimizedElementsOrder.Count; i++)
+            var optimizedPosition = 1;
+            foreach(var optimizedIter in optimizedElementsOrder)
             {
-                decisionArray.DecisionRows[i].OptimizedPosition = optimizedElementsOrder[i] + 1;
+                decisionArray.DecisionRows[optimizedIter].OptimizedPosition = optimizedPosition;
+                ++optimizedPosition;
             }
 
             //Sort by optimized position

@@ -84,7 +84,7 @@ namespace TripMaker.Plan
         {
             get 
             {
-                return TimeSpan.Compare(SleepingTime, new TimeSpan(0,0,0))>=0;
+                return TimeSpan.Compare(SleepingTime, new TimeSpan(0,0,0))>=0 && TimeSpan.Compare(SleepingTime,new TimeSpan(4,30,0))<0;
             }
         }
     }

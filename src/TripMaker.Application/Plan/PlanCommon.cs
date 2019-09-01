@@ -14,31 +14,31 @@ namespace TripMaker.Plan
             preferedTravelModes.Add(GoogleTravelMode.Walking);
 
             var prefered = new List<PlanElementType>();
-            prefered.Add(PlanElementType.Entertainment);
-            prefered.Add(PlanElementType.Entertainment);
+            prefered.Add(PlanElementType.Culture);
+            prefered.Add(PlanElementType.Culture);
 
             prefered.Add(PlanElementType.Sightseeing);
 
             var sorted= new List<PlanElementType>();
-            sorted.Add(PlanElementType.Entertainment);
+            sorted.Add(PlanElementType.Culture);
             sorted.Add(PlanElementType.Sightseeing);
             sorted.Add(PlanElementType.Activity);
-            sorted.Add(PlanElementType.Culture);
+            sorted.Add(PlanElementType.Entertainment);
             sorted.Add(PlanElementType.Relax);
             sorted.Add(PlanElementType.Partying);
             sorted.Add(PlanElementType.Shopping);
 
             return new CreatePlanInput
             {
-                PlaceName= "Kraków",
-                PlaceId= "ChIJxzsjlcBaFkcRsMRsBFenXyY",
-                StartDate=new DateTime(2019, 10, 3),
-                StartTime=new TimeSpan(9, 0, 0),
-                EndDate=new DateTime(2019, 10, 5),
+                PlaceName= "Paryż",
+                PlaceId= "ChIJD7fiBh9u5kcRYJSMaMOCCwQ",
+                StartDate=new DateTime(2019, 9, 15),
+                StartTime=new TimeSpan(13, 0, 0),
+                EndDate=new DateTime(2019, 9, 17),
                 Language= Enums.LanguageType.Pl,
-                EndTime=new TimeSpan(18, 0, 0),
+                EndTime=new TimeSpan(9, 0, 0),
                 HasAccomodationBooked=true,
-                AccomodationId= "ChIJ8f4YlmxbFkcR5PbsuSmT_tU",
+                AccomodationId= "ChIJ0f0UBWVv5kcRgbSDqFRn5iw",
                 PreferedTravelModes= preferedTravelModes,
                 MaxWalkingKmsPerDay=20,
                 DistanceTypePreference= DistanceTypePreference.MediumDistances,
